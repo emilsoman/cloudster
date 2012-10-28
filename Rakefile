@@ -17,10 +17,10 @@ Jeweler::Tasks.new do |gem|
   gem.name = "cloudster"
   gem.homepage = "http://github.com/emilsoman/cloudster"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{Cloudster exposes simple helper methods to provision your AWS cloud.}
+  gem.description = %Q{Cloudster uses the AWS APIs to provision stacks on Amazon Cloud.}
   gem.email = "emil.soman@gmail.com"
-  gem.authors = ["Emil S"]
+  gem.authors = ["Emil Soman"]
   # dependencies defined in Gemfile
 end
 Jeweler::RubygemsDotOrgTasks.new
