@@ -8,7 +8,7 @@ source "http://rubygems.org"
 gem "fog"
 gem "json"
 group :development do
-  gem "rspec", "~> 2.8.0"
+  gem "rspec"
   gem "rdoc", "~> 3.12"
   gem "bundler"
   gem "jeweler", "~> 1.8.4"

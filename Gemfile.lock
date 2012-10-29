@@ -59,4 +59,4 @@ DEPENDENCIES
   jeweler (~> 1.8.4)
   json
   rdoc (~> 3.12)
-  rspec (~> 2.8.0)
+  rspec
