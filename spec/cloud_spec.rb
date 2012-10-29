@@ -24,13 +24,23 @@ describe Cloudster::Cloud do
       cloud = Cloudster::Cloud.new(:access_key_id => 'test', :secret_access_key => 'test')
       expect { cloud.provision(:description => 'test') }.to raise_error(ArgumentError, 'Missing required argument: resources,stack_name' )
     end
-    it "should create an instance of cloud formation and trigger stack creation" do
+    it "should trigger stack creation" do
       cloud_formation = double('CloudFormation')
       Fog::AWS::CloudFormation.should_receive(:new).with(:aws_access_key_id => 'test', :aws_secret_access_key => 'test').and_return cloud_formation
       ec2 = Cloudster::Ec2.new(:key_name => 'testkey', :image_id => 'image_id', name: 'name')
       cloud = Cloudster::Cloud.new(:access_key_id => 'test', :secret_access_key => 'test')
       cloud_formation.should_receive('create_stack').with('stack_name', 'TemplateBody' => cloud.template(:resources => [ec2], :description => 'testDescription'))
       cloud.provision(:resources => [ec2], :stack_name => 'stack_name', :description => 'testDescription')
+    end
+  end
+
+  describe '#events' do
+    it "should trigger 'describe stack events' request" do
+      cloud_formation = double('CloudFormation')
+      Fog::AWS::CloudFormation.should_receive(:new).with(:aws_access_key_id => 'test', :aws_secret_access_key => 'test').and_return cloud_formation
+      cloud = Cloudster::Cloud.new(:access_key_id => 'test', :secret_access_key => 'test')
+      cloud_formation.should_receive('describe_stack_events').with('stack_name')
+      cloud.events(:stack_name => 'stack_name')
     end
   end
 end

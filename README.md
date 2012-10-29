@@ -42,6 +42,10 @@ And most importantly :
 
         stack.provision(:resources => [app_server, app_server_2], :stack_name => 'TestStack', :description => 'Description of the stack')
 
+- You can get the events of a stack using :
+
+        stack.events(:stack_name => 'TestStack')
+
 
 ##License
 

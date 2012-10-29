@@ -108,7 +108,7 @@ module Cloudster
     # ==== Returns
     # * response<~Excon::Response>:
     #   * body<~Hash>:
-    def self.events(options = {})
+    def events(options = {})
       return @cloud_formation.describe_stack_events(options[:stack_name])
     end
 
