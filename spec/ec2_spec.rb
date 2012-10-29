@@ -9,13 +9,13 @@ describe Cloudster::Ec2 do
       expect { Cloudster::Ec2.new() }.to raise_error(ArgumentError, 'Missing required argument: name,key_name,image_id')
     end
     it "should not raise argument error if all arguments are provided" do
-      expect { Cloudster::Ec2.new(:key_name => 'testkey', :image_id => 'image_id', name: 'name') }.to_not raise_error
+      expect { Cloudster::Ec2.new(:key_name => 'testkey', :image_id => 'image_id', :name => 'name', :instance_type => 't1.micro') }.to_not raise_error
     end
   end
   describe '#template' do
     it "should return a ruby hash for the resource cloudformation template" do
-      ec2 = Cloudster::Ec2.new(:key_name => 'testkey', :image_id => 'image_id', name: 'name')
-      ec2.template.should == {'Resources' => {'name' => {'Type' => 'AWS::EC2::Instance', 'Properties' => {"KeyName" => 'testkey', "ImageId" => 'image_id'} }}}
+      ec2 = Cloudster::Ec2.new(:key_name => 'testkey', :image_id => 'image_id', :name => 'name', :instance_type => 't1.micro' )
+      ec2.template.should == {'Resources' => {'name' => {'Type' => 'AWS::EC2::Instance', 'Properties' => {"KeyName" => 'testkey', "ImageId" => 'image_id', "InstanceType" => 't1.micro'} }}}
     end
   end
   describe '.template' do
@@ -23,8 +23,8 @@ describe Cloudster::Ec2 do
       expect { Cloudster::Ec2.template() }.to raise_error(ArgumentError, 'Missing required argument: name,key_name,image_id')
     end
     it "should return a ruby hash for the resource cloudformation template" do
-      hash = Cloudster::Ec2.template(:key_name => 'testkey', :image_id => 'image_id', name: 'name')
-      hash.should == {'Resources' => {'name' => {'Type' => 'AWS::EC2::Instance', 'Properties' => {"KeyName" => 'testkey', "ImageId" => 'image_id'} }}}
+      hash = Cloudster::Ec2.template(:key_name => 'testkey', :image_id => 'image_id', :name => 'name', :instance_type => 't1.micro')
+      hash.should == {'Resources' => {'name' => {'Type' => 'AWS::EC2::Instance', 'Properties' => {"KeyName" => 'testkey', "ImageId" => 'image_id', "InstanceType" => 't1.micro'} }}}
     end
   end
 end

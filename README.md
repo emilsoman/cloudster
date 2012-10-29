@@ -16,7 +16,8 @@ Create AWS EC2 resources as shown here:
 
     app_server = Cloudster::Ec2.new(:name => 'AppServer',
       :key_name => 'mykey',
-      :image_id => 'ami_image_id'
+      :image_id => 'ami_image_id',
+      :instance_type => 't1.micro'
     )
     app_server_2 = Cloudster::Ec2.new(:name => 'AppServer',
       :key_name => 'mykey',
