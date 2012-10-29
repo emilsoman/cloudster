@@ -1,4 +1,4 @@
-# Cloudster [![Build Status](https://travis-ci.org/emilsoman/cloudster.png)](https://travis-ci.org/emilsoman/cloudster)
+# Cloudster [![Build Status](https://travis-ci.org/emilsoman/cloudster.png)](https://travis-ci.org/emilsoman/cloudster) [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/emilsoman/cloudster)
 
 Cloudster exposes simple helper methods to provision your AWS cloud.
 Cloudster uses the AWS APIs to provision stacks on Amazon Cloud.
@@ -49,4 +49,4 @@ And most importantly :
 
 MIT
 
-*Free Software, Sweet Child !*
+*Free Software, Forever . YEAH !*
