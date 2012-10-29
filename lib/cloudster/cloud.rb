@@ -5,41 +5,52 @@ module Cloudster
     # Initialize a Cloud instance
     #
     # ==== Notes
-    # options parameter must include values for :resources
+    # options parameter must include values for :access_key_id and
+    # :secret_access_key in order to create a connection
+    #
+    # ==== Parameters
+    # * options<~Hash>
+    #   * :access_key_id : A string containing the AWS access key ID.
+    #   * :secret_access_key : A string containing the AWS secret access key.
     #
     # ==== Examples
     #   cloud = Cloudster::Cloud.new(
-    #    :resources => [
-    #       #Cloudster resource instances ..
-    #     ]
+    #    :access_key_id => 'aws_access_key_id'
+    #    :secret_access_key => 'aws_secret_access_key',
     #   )
-    #
-    # ==== Parameters
-    # * options<~Hash> - :resources : An array of Cloudster resource instances.  Defaults to {}.
     def initialize(options = {})
-      require_options(options, [:resources])
-      @resources = options[:resources]
+      require_options(options, [:access_key_id, :secret_access_key])
+      access_key_id = options[:access_key_id]
+      secret_access_key = options[:secret_access_key]
+      @cloud_formation = Fog::AWS::CloudFormation.new(:aws_access_key_id => access_key_id, :aws_secret_access_key => secret_access_key)
     end
 
     # Generates CloudFormation Template for the stack
     #
     # ==== Examples
     #   cloud = Cloudster::Cloud.new(
-    #    :resources => [
-    #       #Cloudster resource instances ..
-    #     ]
+    #    :access_key_id => 'aws_access_key_id'
+    #    :secret_access_key => 'aws_secret_access_key',
     #   )
-    #   cloud.template(:description => 'This is the description for the stack template')
+    #
+    #   cloud.template(:resources => [<AWS RESOURCES ARRAY>], :description => 'This is the description for the stack template')
+    #
+    # ==== Notes
+    # options parameter must include values for :resources
     #
     # ==== Parameters
-    # * options<~Hash> - :description : A string which will be used as the Description of the CloudFormation template.
+    # * options<~Hash> - 
+    #   * :resources : An array of Cloudster resource instances.  Defaults to {}.
+    #   * :description : A string which will be used as the Description of the CloudFormation template.
     #
     # ==== Returns
     # * JSON cloud formation template 
     def template(options = {})
+      require_options(options, [:resources])
+      resources = options[:resources]
       description = options[:description] || 'This stack is created by Cloudster'
       resource_template = {}
-      @resources.each do |resource|
+      resources.each do |resource|
         resource_template.merge!(resource.template['Resources'])
       end
 
@@ -54,27 +65,51 @@ module Cloudster
     #
     # ==== Examples
     #   cloud = Cloudster::Cloud.new(
-    #    :resources => [
-    #       #Cloudster resource instances ..
-    #     ]
+    #    :access_key_id => 'aws_access_key_id'
+    #    :secret_access_key => 'aws_secret_access_key',
     #   )
-    #   cloud.template(:description => 'This is the description for the stack template')
+    #
+    #   cloud.provision(:resources => [<AWS RESOURCES ARRRAY>],
+    #     :stack_name => 'Shitty Stack',
+    #     :description => 'This is the description for the stack template')
     #
     # ==== Notes
-    # options parameter must include values for :stack_name for naming the stack , :access_key_id and
-    # :secret_access_key in order to create a connection
+    # options parameter must include values for :resources and :stack_name
     #
     # ==== Parameters
-    # * options<~Hash> - :description : A string which will be used as the Description of the CloudFormation template.
+    # * options<~Hash>
+    #   * :resources : An array of Cloudster resource instances.  Defaults to {}.
+    #   * :stack_name : A string which will be used to name the CloudFormation stack.
+    #   * :description : A string which will be used as the Description of the CloudFormation template.
     #
     # ==== Returns
     # * response<~Excon::Response>:
     #   * body<~Hash>:
     #     * 'StackId'<~String> - Id of the new stack
     def provision(options = {})
-      require_options(options, [:stack_name, :access_key_id, :secret_access_key])
-      cloud_formation = Fog::AWS::CloudFormation.new(:aws_access_key_id => options[:access_key_id], :aws_secret_access_key => options[:secret_access_key])
-      return cloud_formation.create_stack(options[:stack_name], 'TemplateBody' => template)
+      require_options(options, [:resources, :stack_name])
+      return @cloud_formation.create_stack(options[:stack_name], 'TemplateBody' => template(:resources => options[:resources], 
+                                                                                            :description => options[:description]))
+    end
+
+    # Get events related to a stack
+    #
+    # ==== Examples
+    #   cloud = Cloudster::Cloud.new(
+    #    :access_key_id => 'aws_access_key_id'
+    #    :secret_access_key => 'aws_secret_access_key',
+    #   )
+    #   cloud.events(:stack_name => 'ShittyStack')
+    #
+    # ==== Parameters
+    # * options<~Hash>
+    #   * :stack_name : A string which will contain the name of the stack for which the events will be fetched.
+    #
+    # ==== Returns
+    # * response<~Excon::Response>:
+    #   * body<~Hash>:
+    def self.events(options = {})
+      return @cloud_formation.describe_stack_events(options[:stack_name])
     end
 
   end

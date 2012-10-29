@@ -25,7 +25,8 @@ Create AWS EC2 resources as shown here:
 
 Create a stack out of the resources :
 
-    stack = Cloudster::Cloud.new(:resources => [app_server, app_server_2])
+    stack = Cloudster::Cloud.new(:access_key_id => 'accesskeyid',
+                                :secret_access_key => 'topsecretaccesskey')
 Now you can do stuff like :
 
 - Get the CloudFormation template for a resource in Ruby Hash :
@@ -33,16 +34,13 @@ Now you can do stuff like :
         app_server.template
 - Get the CloudFormation template for the stack :
     
-        stack.template(:description => 'Description of the stack')
+        stack.template(:resources => [app_server, app_server_2], :description => 'Description of the stack')
     
 And most importantly :
 
 - Provision the stack :
 
-        stack.provision(:stack_name => 'Shitty stack',
-          :access_key_id => 'accesskeyid',
-          :secret_access_key => 'topsecretaccesskey')
-
+        stack.provision(:resources => [app_server, app_server_2], :stack_name => 'TestStack', :description => 'Description of the stack')
 
 
 ##License
