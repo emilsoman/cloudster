@@ -1,4 +1,4 @@
-# Cloudster
+# Cloudster [![Build Status](https://travis-ci.org/emilsoman/cloudster.png)](https://travis-ci.org/[YOUR_GITHUB_USERNAME]/[YOUR_PROJECT_NAME])
 
 Cloudster exposes simple helper methods to provision your AWS cloud.
 Cloudster uses the AWS APIs to provision stacks on Amazon Cloud.
