@@ -14,7 +14,7 @@ describe Cloudster::Cloud do
       ec2 = Cloudster::Ec2.new(:key_name => 'testkey', :image_id => 'image_id', name: 'name')
       ec2_1 = Cloudster::Ec2.new(:key_name => 'testkey1', :image_id => 'image_id1', name: 'name1')
       cloud = Cloudster::Cloud.new(:resources => [ec2, ec2_1])
-      cloud.template(:description => 'test template').should == {"AWSTemplateFormatVersion"=>"2010-09-09", "Description"=>"test template", "Resources"=>{"Resources"=>{"name"=>{"Type"=>"AWS::EC2::Instance", "Properties"=>{"KeyName"=>"testkey", "ImageId"=>"image_id"}}, "name1"=>{"Type"=>"AWS::EC2::Instance", "Properties"=>{"KeyName"=>"testkey1", "ImageId"=>"image_id1"}}}}}.to_json
+      cloud.template(:description => 'test template').should == {"AWSTemplateFormatVersion"=>"2010-09-09", "Description"=>"test template", "Resources"=>{"name"=>{"Type"=>"AWS::EC2::Instance", "Properties"=>{"KeyName"=>"testkey", "ImageId"=>"image_id"}}, "name1"=>{"Type"=>"AWS::EC2::Instance", "Properties"=>{"KeyName"=>"testkey1", "ImageId"=>"image_id1"}}}}.to_json
     end
   end
 

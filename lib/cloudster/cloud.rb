@@ -38,9 +38,9 @@ module Cloudster
     # * JSON cloud formation template 
     def template(options = {})
       description = options[:description] || 'This stack is created by Cloudster'
-      resource_template = { 'Resources' => {}}
+      resource_template = {}
       @resources.each do |resource|
-        resource_template['Resources'].merge!(resource.template['Resources'])
+        resource_template.merge!(resource.template['Resources'])
       end
 
       cloud_template = {'AWSTemplateFormatVersion' => '2010-09-09',
