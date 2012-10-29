@@ -92,6 +92,37 @@ module Cloudster
                                                                                             :description => options[:description]))
     end
 
+    # Updates already created stack
+    #
+    # ==== Examples
+    #   cloud = Cloudster::Cloud.new(
+    #    :access_key_id => 'aws_access_key_id'
+    #    :secret_access_key => 'aws_secret_access_key',
+    #   )
+    #
+    #   cloud.update(:resources => [<AWS RESOURCES ARRRAY>],
+    #     :stack_name => 'Shitty Stack',
+    #     :description => 'This is the description for the stack template')
+    #
+    # ==== Notes
+    # options parameter must include values for :resources and :stack_name
+    #
+    # ==== Parameters
+    # * options<~Hash>
+    #   * :resources : An array of Cloudster resource instances.  Defaults to {}.
+    #   * :stack_name : A string which is the name of the CloudFormation stack which will be updated.
+    #   * :description : A string which will be used as the Description of the CloudFormation template.
+    #
+    # ==== Returns
+    # * response<~Excon::Response>:
+    #   * body<~Hash>:
+    #     * 'StackId'<~String> - Id of the new stack
+    def update(options = {})
+      require_options(options, [:resources, :stack_name])
+      return @cloud_formation.update_stack(options[:stack_name], 'TemplateBody' => template(:resources => options[:resources], 
+                                                                                            :description => options[:description]))
+    end
+
     # Get events related to a stack
     #
     # ==== Examples

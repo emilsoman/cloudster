@@ -37,11 +37,13 @@ Now you can do stuff like :
     
         stack.template(:resources => [app_server, app_server_2], :description => 'Description of the stack')
     
-And most importantly :
-
 - Provision the stack :
 
         stack.provision(:resources => [app_server, app_server_2], :stack_name => 'TestStack', :description => 'Description of the stack')
+
+- Update the stack :
+
+        stack.update(:resources => [app_server, app_server_2], :stack_name => 'TestStack', :description => 'Description of the stack')
 
 - You can get the events of a stack using :
 
