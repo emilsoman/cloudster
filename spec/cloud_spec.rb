@@ -13,8 +13,47 @@ describe Cloudster::Cloud do
     it "should return a ruby hash for the stack cloudformation template" do
       ec2 = Cloudster::Ec2.new(:key_name => 'testkey', :image_id => 'image_id', name: 'name')
       ec2_1 = Cloudster::Ec2.new(:key_name => 'testkey1', :image_id => 'image_id1', name: 'name1')
+      elb = Cloudster::Elb.new(:name => 'ELB', :instance_names => ['name','name1'])
       cloud = Cloudster::Cloud.new(:access_key_id => 'test', :secret_access_key => 'test')
-      cloud.template(:resources => [ec2, ec2_1], :description => 'test template').should == {"AWSTemplateFormatVersion"=>"2010-09-09", "Description"=>"test template", "Resources"=>{"name"=>{"Type"=>"AWS::EC2::Instance", "Properties"=>{"KeyName"=>"testkey", "ImageId"=>"image_id"}}, "name1"=>{"Type"=>"AWS::EC2::Instance", "Properties"=>{"KeyName"=>"testkey1", "ImageId"=>"image_id1"}}}}.to_json
+      cloud.template(:resources => [ec2, ec2_1, elb], :description => 'test template').should == {"AWSTemplateFormatVersion"=>"2010-09-09", 
+        "Description"=>"test template",
+        "Resources"=>{
+          "name"=>{
+            "Type"=>"AWS::EC2::Instance",
+            "Properties"=>{
+              "KeyName"=>"testkey",
+              "ImageId"=>"image_id"}
+            },
+           "name1"=>{
+             "Type"=>"AWS::EC2::Instance",
+             "Properties"=>{
+                "KeyName"=>"testkey1", 
+                "ImageId"=>"image_id1"
+                 }
+            },
+           "ELB" => {
+              "Type" => "AWS::ElasticLoadBalancing::LoadBalancer",
+              "Properties" => {
+                "AvailabilityZones" => {
+                  "Fn::GetAZs" => ""
+                 },
+                "Listeners" => [{
+                  "LoadBalancerPort" => "80",
+                  "InstancePort" => "80",
+                  "Protocol" => "HTTP"
+                 }],
+               "HealthCheck" => {
+                 "Target" => {
+                   "Fn::Join" => ["",["HTTP:","80","/"]]
+                  },
+                 "HealthyThreshold" => "3",
+                 "UnhealthyThreshold" => "5",
+                 "Interval" => "30", "Timeout" => "5" 
+               },
+               "Instances" => [{ "Ref" => "name"}, {"Ref" => "name1"}]}
+            }
+          }
+      }.to_json
     end
   end
 
@@ -28,9 +67,10 @@ describe Cloudster::Cloud do
       cloud_formation = double('CloudFormation')
       Fog::AWS::CloudFormation.should_receive(:new).with(:aws_access_key_id => 'test', :aws_secret_access_key => 'test').and_return cloud_formation
       ec2 = Cloudster::Ec2.new(:key_name => 'testkey', :image_id => 'image_id', name: 'name')
+      elb = Cloudster::Elb.new(:name => 'ELB', :instance_names => ['name','name1'])
       cloud = Cloudster::Cloud.new(:access_key_id => 'test', :secret_access_key => 'test')
-      cloud_formation.should_receive('create_stack').with('stack_name', 'TemplateBody' => cloud.template(:resources => [ec2], :description => 'testDescription'))
-      cloud.provision(:resources => [ec2], :stack_name => 'stack_name', :description => 'testDescription')
+      cloud_formation.should_receive('create_stack').with('stack_name', 'TemplateBody' => cloud.template(:resources => [ec2, elb], :description => 'testDescription'))
+      cloud.provision(:resources => [ec2, elb], :stack_name => 'stack_name', :description => 'testDescription')
     end
   end
 

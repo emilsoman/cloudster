@@ -19,9 +19,12 @@ Create AWS EC2 resources as shown here:
       :image_id => 'ami_image_id',
       :instance_type => 't1.micro'
     )
-    app_server_2 = Cloudster::Ec2.new(:name => 'AppServer',
+    app_server_2 = Cloudster::Ec2.new(:name => 'AppServer2',
       :key_name => 'mykey',
       :image_id => 'ami_image_id'
+    )
+    load_balancer = Cloudster::Elb.new(:name => 'LoadBalancer',
+      :instance_names => ['AppServer', 'AppServer2']
     )
 
 Create a stack out of the resources :
@@ -35,15 +38,11 @@ Now you can do stuff like :
         app_server.template
 - Get the CloudFormation template for the stack :
     
-        stack.template(:resources => [app_server, app_server_2], :description => 'Description of the stack')
+        stack.template(:resources => [app_server, app_server_2, load_balancer], :description => 'Description of the stack')
     
 - Provision the stack :
 
-        stack.provision(:resources => [app_server, app_server_2], :stack_name => 'TestStack', :description => 'Description of the stack')
-
-- Update the stack :
-
-        stack.update(:resources => [app_server, app_server_2], :stack_name => 'TestStack', :description => 'Description of the stack')
+        stack.provision(:resources => [app_server, app_server_2, load_balancer], :stack_name => 'TestStack', :description => 'Description of the stack')
 
 - You can get the events of a stack using :
 

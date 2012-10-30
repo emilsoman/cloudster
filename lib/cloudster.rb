@@ -5,4 +5,5 @@ require 'fog'
 require 'cloudster/options_manager'
 include OptionsManager
 require 'cloudster/ec2'
+require 'cloudster/elb'
 require 'cloudster/cloud'
