@@ -29,7 +29,7 @@ Create AWS EC2 resources as shown here:
 
 Create a stack out of the resources :
 
-    stack = Cloudster::Cloud.new(:access_key_id => 'accesskeyid',
+    cloud = Cloudster::Cloud.new(:access_key_id => 'accesskeyid',
                                 :secret_access_key => 'topsecretaccesskey')
 Now you can do stuff like :
 
@@ -38,23 +38,23 @@ Now you can do stuff like :
         app_server.template
 - Get the CloudFormation template for the stack :
     
-        stack.template(:resources => [app_server, app_server_2, load_balancer], :description => 'Description of the stack')
+        cloud.template(:resources => [app_server, app_server_2, load_balancer], :description => 'Description of the stack')
     
 - Provision the stack :
 
-        stack.provision(:resources => [app_server, app_server_2, load_balancer], :stack_name => 'TestStack', :description => 'Description of the stack')
+        cloud.provision(:resources => [app_server, app_server_2, load_balancer], :stack_name => 'TestStack', :description => 'Description of the stack')
 
 - Update the stack :
 
-        stack.update(:resources => [app_server, app_server_2], :stack_name => 'TestStack', :description => 'Description of the stack')
+        cloud.update(:resources => [app_server, app_server_2], :stack_name => 'TestStack', :description => 'Description of the stack')
 
 - Delete the stack and it's attached resources :
 
-        stack.delete(:stack_name => 'TestStack')
+        cloud.delete(:stack_name => 'TestStack')
 
 - Describe the events of a stack using :
 
-        stack.events(:stack_name => 'TestStack')
+        cloud.events(:stack_name => 'TestStack')
 
 
 
