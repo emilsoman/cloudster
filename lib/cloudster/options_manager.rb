@@ -1,5 +1,5 @@
 module OptionsManager
-  def require_options(options = {}, required_params)
+  def require_options(options, required_params)
     missing_args = []
     required_params.each do |param|
       missing_args << param.to_s if  options[param].nil?
