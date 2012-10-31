@@ -44,9 +44,17 @@ Now you can do stuff like :
 
         stack.provision(:resources => [app_server, app_server_2, load_balancer], :stack_name => 'TestStack', :description => 'Description of the stack')
 
+- Update the stack :
+
+        stack.update(:resources => [app_server, app_server_2], :stack_name => 'TestStack', :description => 'Description of the stack')
+
 - You can get the events of a stack using :
 
         stack.events(:stack_name => 'TestStack')
+
+- You can delete the stack and it's attached resources :
+
+        stack.delete(:stack_name => 'TestStack')
 
 
 ##License

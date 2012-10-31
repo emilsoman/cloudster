@@ -143,5 +143,26 @@ module Cloudster
       return @cloud_formation.describe_stack_events(options[:stack_name])
     end
 
+    # Deletes a stack and the attached resources
+    #
+    # ==== Examples
+    #   cloud = Cloudster::Cloud.new(
+    #    :access_key_id => 'aws_access_key_id'
+    #    :secret_access_key => 'aws_secret_access_key',
+    #   )
+    #   cloud.delete(:stack_name => 'ShittyStack')
+    #
+    # ==== Parameters
+    # * options<~Hash>
+    #   * :stack_name : A string which will contain the name of the stack for which will be deleted
+    #
+    # ==== Returns
+    # * response<~Excon::Response>:
+    #   * body<~Hash>:
+    def delete(options = {})
+      require_options(options, [:stack_name])
+      return @cloud_formation.delete_stack(options[:stack_name])
+    end
+
   end
 end
