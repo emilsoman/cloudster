@@ -11,8 +11,8 @@ describe Cloudster::Cloud do
   end
   describe '#template' do
     it "should return a ruby hash for the stack cloudformation template" do
-      ec2 = Cloudster::Ec2.new(:key_name => 'testkey', :image_id => 'image_id', name: 'name')
-      ec2_1 = Cloudster::Ec2.new(:key_name => 'testkey1', :image_id => 'image_id1', name: 'name1')
+      ec2 = Cloudster::Ec2.new(:key_name => 'testkey', :image_id => 'image_id', :name => 'name')
+      ec2_1 = Cloudster::Ec2.new(:key_name => 'testkey1', :image_id => 'image_id1', :name => 'name1')
       rds = Cloudster::Rds.new(:name => 'MySqlDB', :storage_size => '10') 
       elb = Cloudster::Elb.new(:name => 'ELB', :instance_names => ['name','name1'])
       cloud = Cloudster::Cloud.new(:access_key_id => 'test', :secret_access_key => 'test')
@@ -70,14 +70,14 @@ describe Cloudster::Cloud do
 
   describe '#provision' do
     it "should raise argument error if resources not provided" do
-      ec2 = Cloudster::Ec2.new(:key_name => 'testkey', :image_id => 'image_id', name: 'name')
+      ec2 = Cloudster::Ec2.new(:key_name => 'testkey', :image_id => 'image_id', :name => 'name')
       cloud = Cloudster::Cloud.new(:access_key_id => 'test', :secret_access_key => 'test')
       expect { cloud.provision(:description => 'test') }.to raise_error(ArgumentError, 'Missing required argument: resources,stack_name' )
     end
     it "should trigger stack creation" do
       cloud_formation = double('CloudFormation')
       Fog::AWS::CloudFormation.should_receive(:new).with(:aws_access_key_id => 'test', :aws_secret_access_key => 'test').and_return cloud_formation
-      ec2 = Cloudster::Ec2.new(:key_name => 'testkey', :image_id => 'image_id', name: 'name')
+      ec2 = Cloudster::Ec2.new(:key_name => 'testkey', :image_id => 'image_id', :name => 'name')
       elb = Cloudster::Elb.new(:name => 'ELB', :instance_names => ['name','name1'])
       rds = Cloudster::Rds.new(:name => 'MySqlDB', :storage_size => '10') 
       cloud = Cloudster::Cloud.new(:access_key_id => 'test', :secret_access_key => 'test')
@@ -88,14 +88,14 @@ describe Cloudster::Cloud do
 
   describe '#update' do
     it "should raise argument error if resources not provided" do
-      ec2 = Cloudster::Ec2.new(:key_name => 'testkey', :image_id => 'image_id', name: 'name')
+      ec2 = Cloudster::Ec2.new(:key_name => 'testkey', :image_id => 'image_id', :name => 'name')
       cloud = Cloudster::Cloud.new(:access_key_id => 'test', :secret_access_key => 'test')
       expect { cloud.update(:description => 'test') }.to raise_error(ArgumentError, 'Missing required argument: resources,stack_name' )
     end
     it "should trigger stack update" do
       cloud_formation = double('CloudFormation')
       Fog::AWS::CloudFormation.should_receive(:new).with(:aws_access_key_id => 'test', :aws_secret_access_key => 'test').and_return cloud_formation
-      ec2 = Cloudster::Ec2.new(:key_name => 'testkey', :image_id => 'image_id', name: 'name')
+      ec2 = Cloudster::Ec2.new(:key_name => 'testkey', :image_id => 'image_id', :name => 'name')
       cloud = Cloudster::Cloud.new(:access_key_id => 'test', :secret_access_key => 'test')
       cloud_formation.should_receive('update_stack').with('stack_name', 'TemplateBody' => cloud.template(:resources => [ec2], :description => 'testDescription'))
       cloud.update(:resources => [ec2], :stack_name => 'stack_name', :description => 'testDescription')
