@@ -48,13 +48,14 @@ Now you can do stuff like :
 
         stack.update(:resources => [app_server, app_server_2], :stack_name => 'TestStack', :description => 'Description of the stack')
 
-- You can get the events of a stack using :
+- Delete the stack and it's attached resources :
+
+        stack.delete(:stack_name => 'TestStack')
+
+- Describe the events of a stack using :
 
         stack.events(:stack_name => 'TestStack')
 
-- You can delete the stack and it's attached resources :
-
-        stack.delete(:stack_name => 'TestStack')
 
 
 ##License
