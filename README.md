@@ -12,37 +12,46 @@ Cloudster uses the AWS APIs to provision stacks on Amazon Cloud.
 
 ## Usage
 
-Create AWS EC2 resources as shown here:
+Create AWS resources as shown here:
 
     app_server = Cloudster::Ec2.new(:name => 'AppServer',
       :key_name => 'mykey',
       :image_id => 'ami_image_id',
       :instance_type => 't1.micro'
     )
+
     app_server_2 = Cloudster::Ec2.new(:name => 'AppServer2',
       :key_name => 'mykey',
       :image_id => 'ami_image_id'
     )
+
     load_balancer = Cloudster::Elb.new(:name => 'LoadBalancer',
       :instance_names => ['AppServer', 'AppServer2']
     )
 
-Create a stack out of the resources :
+    database = Cloudster::Rds.new(
+        :name => 'MySqlDB',
+        :instance_class => 'db.t1.micro',
+        :storage_class => '100',
+        :username => 'admin',
+        :password => 'admin123',
+        :engine => 'MySQL'
+    )
 
-    cloud = Cloudster::Cloud.new(:access_key_id => 'accesskeyid',
-                                :secret_access_key => 'topsecretaccesskey')
-Now you can do stuff like :
+Make a cloud :
+
+    cloud = Cloudster::Cloud.new(:access_key_id => 'accesskeyid', :secret_access_key => 'topsecretaccesskey')
 
 - Get the CloudFormation template for a resource in Ruby Hash :
     
         app_server.template
 - Get the CloudFormation template for the stack :
     
-        cloud.template(:resources => [app_server, app_server_2, load_balancer], :description => 'Description of the stack')
+        cloud.template(:resources => [app_server, app_server_2, load_balancer, database], :description => 'Description of the stack')
     
 - Provision the stack :
 
-        cloud.provision(:resources => [app_server, app_server_2, load_balancer], :stack_name => 'TestStack', :description => 'Description of the stack')
+        cloud.provision(:resources => [app_server, app_server_2, load_balancer, database], :stack_name => 'TestStack', :description => 'Description of the stack')
 
 - Update the stack :
 
