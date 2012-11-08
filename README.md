@@ -3,9 +3,6 @@
 Cloudster exposes simple helper methods to provision your AWS cloud.
 Cloudster uses the AWS APIs to provision stacks on Amazon Cloud.
 
-
-- This gem is under active development. Currently supports only a basic EC2 resource .
-
 ##Installation
 
     gem install cloudster
