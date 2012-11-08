@@ -69,3 +69,4 @@ Make a cloud :
 MIT
 
 *Free Software, Forever . YEAH !*
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/40ad8dd622b6c86465ebbb8572ac4aa9 "githalytics.com")](http://githalytics.com/emilsoman/cloudster)
