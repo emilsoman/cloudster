@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "cloudster"
-  s.version = "2.4.0"
+  s.version = "2.5.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Emil Soman"]
-  s.date = "2012-11-08"
+  s.date = "2012-11-09"
   s.description = "Cloudster uses the AWS APIs to provision stacks on Amazon Cloud."
   s.email = "emil.soman@gmail.com"
   s.extra_rdoc_files = [
@@ -28,11 +28,14 @@ Gem::Specification.new do |s|
     "VERSION",
     "cloudster.gemspec",
     "lib/cloudster.rb",
+    "lib/cloudster/chef_client.rb",
     "lib/cloudster/cloud.rb",
+    "lib/cloudster/deep_merge.rb",
     "lib/cloudster/ec2.rb",
     "lib/cloudster/elb.rb",
     "lib/cloudster/options_manager.rb",
     "lib/cloudster/rds.rb",
+    "spec/chef_client_spec.rb",
     "spec/cloud_spec.rb",
     "spec/ec2_spec.rb",
     "spec/elb_spec.rb",

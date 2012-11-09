@@ -17,11 +17,21 @@ Create AWS resources as shown here:
       :instance_type => 't1.micro'
     )
 
+    chef_client = Cloudster::ChefClient.new(
+     :instance_name => 'AppServer',
+     :validation_key => 'asd3e33880889098asdnmnnasd8900890a8sdmasdjna9s880808asdnmnasd90-a',
+     :server_url => 'http://10.50.60.70:4000',
+     :node_name => 'project.environment.appserver_1'
+    )
+
+    chef_client.add_to(app_server)
+
     app_server_2 = Cloudster::Ec2.new(:name => 'AppServer2',
       :key_name => 'mykey',
       :image_id => 'ami_image_id'
     )
 
+    #Add your app servers to the ElasticLoadBalancer
     load_balancer = Cloudster::Elb.new(:name => 'LoadBalancer',
       :instance_names => ['AppServer', 'AppServer2']
     )

@@ -2,6 +2,7 @@ module Cloudster
   #==Ec2 resource
   class Ec2
 
+    attr_accessor :template, :name
     # Initialize an Ec2 instance
     #
     # ==== Notes
@@ -43,7 +44,7 @@ module Cloudster
     # ==== Returns
     # * Ruby hash version of the Cloud Formation template for the resource instance
     def template
-      Ec2.template({:name =>@name, :key_name => @key_name, :image_id => @image_id, :instance_type => @instance_type})
+      @template ||= Ec2.template({:name =>@name, :key_name => @key_name, :image_id => @image_id, :instance_type => @instance_type})
     end
 
     # Class method that returns a Ruby hash version of the Cloud Formation template
