@@ -31,8 +31,9 @@
         <h1>Cloudster <a href="https://travis-ci.org/emilsoman/cloudster"><img src="https://travis-ci.org/emilsoman/cloudster.png" alt="Build Status"></a> <a href="https://codeclimate.com/github/emilsoman/cloudster"><img src="https://codeclimate.com/badge.png" alt="Code Climate"></a> <a href="https://gemnasium.com/emilsoman/cloudster"><img src="https://gemnasium.com/emilsoman/cloudster.png" alt="Dependency Status"></a>
 </h1>
 
-<p>Cloudster exposes simple helper methods to provision your AWS cloud.
-Cloudster uses the AWS APIs to provision stacks on Amazon Cloud.</p>
+<p>Cloudster is a Ruby gem that was born to cut the learning curve involved in writing your own CloudFormation templates. If you don't know what 
+a CloudFormation template is, but know about the AWS Cloud offerings, you can still use cloudster to provision your stack. Still in infancy , cloudster 
+can create a very basic stack like a breeze. All kinds of contribution welcome !</p>
 
 <h2>Installation</h2>
 
@@ -41,7 +42,7 @@ Cloudster uses the AWS APIs to provision stacks on Amazon Cloud.</p>
 
 <h2>Usage</h2>
 
-<p>Create AWS resources as shown here:</p>
+<p>Create AWS resources :</p>
 
 <pre><code>app_server = Cloudster::Ec2.new(:name =&gt; 'AppServer',
   :key_name =&gt; 'mykey',
@@ -82,19 +83,19 @@ database = Cloudster::Rds.new(
 <pre><code>cloud = Cloudster::Cloud.new(:access_key_id =&gt; 'accesskeyid', :secret_access_key =&gt; 'topsecretaccesskey')
 </code></pre>
 
-<ul>
-<li>
-<p>Get the CloudFormation template for a resource in Ruby Hash :</p>
-
-<pre><code>app_server.template
-</code></pre>
-</li>
-<li>
 <p>Get the CloudFormation template for the stack :</p>
 
-<pre><code>cloud.template(:resources =&gt; [app_server, app_server_2, load_balancer, database], :description =&gt; 'Description of the stack')
+<pre><code>    cloud.template(:resources =&gt; [app_server, app_server_2, load_balancer, database], :description =&gt; 'Description of the stack')
 </code></pre>
-</li>
+
+<p>Get the CloudFormation template for a resource as a Ruby Hash :</p>
+
+<pre><code>    app_server.template
+</code></pre>
+
+<p>Cloudster can also do things on the AWS Cloud :</p>
+
+<ul>
 <li>
 <p>Provision the stack :</p>
 
@@ -114,17 +115,60 @@ database = Cloudster::Rds.new(
 </code></pre>
 </li>
 <li>
-<p>Describe the events of a stack using :</p>
+<p>Describe the events of a stack :</p>
 
 <pre><code>cloud.events(:stack_name =&gt; 'TestStack')
 </code></pre>
 </li>
-</ul><h2>License</h2>
+</ul><hr><h1>Contribute !</h1>
+
+<p>Got some love for Cloudster? That's great!</p>
+
+<h2>Found a bug?</h2>
+
+<p>Log the bug in the <a href="https://github.com/emilsoman/cloudster/issues">issue tracker</a>. Be sure to include all relevant information, like
+the versions of Cloudster and Ruby you're using. A <a href="http://gist.github.com/">gist</a>
+of the code that caused the issue as well as any error messages are also very
+helpful.</p>
+
+<h2>Need help?</h2>
+
+<p>You can use the <a href="https://github.com/emilsoman/cloudster/issues">Issues</a> page to ask a new question. This is how you do it: 
+1. Click on New Issue
+2. Type in your question
+3. Add a "question" label to the issue</p>
+
+<h2>Have a patch?</h2>
+
+<p>Bugs and feature requests that include patches are much more likely to
+get attention. Here are some guidelines that will help ensure your patch
+can be applied as quickly as possible:</p>
+
+<ol>
+<li><p><strong>Use <a href="http://git-scm.com">Git</a> and <a href="http://github.com">GitHub</a>:</strong>
+The easiest way to get setup is to fork the
+<a href="http://github.com/emilsoman/cloudster/">cloudster repo</a>.</p></li>
+<li><p><strong>Write unit tests:</strong> If you add or modify functionality, it must
+include unit tests. I use RSpec to test cloudster. If you are not an
+RSpec expert, if you let me know, I can help you write the specs.</p></li>
+<li><p><strong>Update the <code>README</code>:</strong> If the patch adds or modifies a major feature,
+modify the <code>README.md</code> file to reflect that. Again if you're not an
+expert with Markdown syntax, it's really easy to learn. Check out <a href="http://dillinger.io/">Dillinger</a> to
+try it out.</p></li>
+<li><p><strong>Push it:</strong> Once you're ready, push your changes to a topic branch
+and add a note to the ticket with the URL to your branch. Or, say
+something like, "you can find the patch on johndoe/foobranch". I also
+gladly accept Github <a href="http://help.github.com/pull-requests/">pull requests</a>.</p></li>
+</ol><p><strong>NOTE:</strong> <em>I will take in whatever I can get.</em> If you prefer to
+attach diffs in comments on issues, that's fine; but do know
+that <em>someone</em> will need to take the diff through the process described
+above and this can hold things up considerably.</p>
+
+<h2>License</h2>
 
 <p>MIT</p>
 
-<p><em>Free Software, Forever . YEAH !</em>
-<a href="http://githalytics.com/emilsoman/cloudster"><img src="https://cruel-carlota.pagodabox.com/eafd00c3c74c7362ed850f6a50120c30" alt="githalytics.com alpha" title="githalytics.com"></a></p>
+<p><em>Free Software, Forever . YEAH !</em></p>
       </section>
     </div>
 
