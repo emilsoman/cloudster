@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <title>Cloudster by emilsoman</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>Cloudster</h1>
+        <h2>Cloudster gem - Ruby interface to CloudFormation</h2>
+
+        <section id="downloads">
+          <a href="https://github.com/emilsoman/cloudster/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/emilsoman/cloudster/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/emilsoman/cloudster" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1>Cloudster <a href="https://travis-ci.org/emilsoman/cloudster"><img src="https://travis-ci.org/emilsoman/cloudster.png" alt="Build Status"></a> <a href="https://codeclimate.com/github/emilsoman/cloudster"><img src="https://codeclimate.com/badge.png" alt="Code Climate"></a> <a href="https://gemnasium.com/emilsoman/cloudster"><img src="https://gemnasium.com/emilsoman/cloudster.png" alt="Dependency Status"></a>
+</h1>
+
+<p>Cloudster exposes simple helper methods to provision your AWS cloud.
+Cloudster uses the AWS APIs to provision stacks on Amazon Cloud.</p>
+
+<h2>Installation</h2>
+
+<pre><code>gem install cloudster
+</code></pre>
+
+<h2>Usage</h2>
+
+<p>Create AWS resources as shown here:</p>
+
+<pre><code>app_server = Cloudster::Ec2.new(:name =&gt; 'AppServer',
+  :key_name =&gt; 'mykey',
+  :image_id =&gt; 'ami_image_id',
+  :instance_type =&gt; 't1.micro'
+)
+
+chef_client = Cloudster::ChefClient.new(
+ :validation_key =&gt; 'asd3e33880889098asdnmnnasd8900890a8sdmasdjna9s880808asdnmnasd90-a',
+ :server_url =&gt; 'http://10.50.60.70:4000',
+ :node_name =&gt; 'project.environment.appserver_1'
+)
+
+chef_client.add_to(app_server)
+
+app_server_2 = Cloudster::Ec2.new(:name =&gt; 'AppServer2',
+  :key_name =&gt; 'mykey',
+  :image_id =&gt; 'ami_image_id'
+)
+
+#Add your app servers to the ElasticLoadBalancer
+load_balancer = Cloudster::Elb.new(:name =&gt; 'LoadBalancer',
+  :instance_names =&gt; ['AppServer', 'AppServer2']
+)
+
+database = Cloudster::Rds.new(
+    :name =&gt; 'MySqlDB',
+    :instance_class =&gt; 'db.t1.micro',
+    :storage_class =&gt; '100',
+    :username =&gt; 'admin',
+    :password =&gt; 'admin123',
+    :engine =&gt; 'MySQL'
+)
+</code></pre>
+
+<p>Make a cloud :</p>
+
+<pre><code>cloud = Cloudster::Cloud.new(:access_key_id =&gt; 'accesskeyid', :secret_access_key =&gt; 'topsecretaccesskey')
+</code></pre>
+
+<ul>
+<li>
+<p>Get the CloudFormation template for a resource in Ruby Hash :</p>
+
+<pre><code>app_server.template
+</code></pre>
+</li>
+<li>
+<p>Get the CloudFormation template for the stack :</p>
+
+<pre><code>cloud.template(:resources =&gt; [app_server, app_server_2, load_balancer, database], :description =&gt; 'Description of the stack')
+</code></pre>
+</li>
+<li>
+<p>Provision the stack :</p>
+
+<pre><code>cloud.provision(:resources =&gt; [app_server, app_server_2, load_balancer, database], :stack_name =&gt; 'TestStack', :description =&gt; 'Description of the stack')
+</code></pre>
+</li>
+<li>
+<p>Update the stack :</p>
+
+<pre><code>cloud.update(:resources =&gt; [app_server, app_server_2], :stack_name =&gt; 'TestStack', :description =&gt; 'Description of the stack')
+</code></pre>
+</li>
+<li>
+<p>Delete the stack and it's attached resources :</p>
+
+<pre><code>cloud.delete(:stack_name =&gt; 'TestStack')
+</code></pre>
+</li>
+<li>
+<p>Describe the events of a stack using :</p>
+
+<pre><code>cloud.events(:stack_name =&gt; 'TestStack')
+</code></pre>
+</li>
+</ul><h2>License</h2>
+
+<p>MIT</p>
+
+<p><em>Free Software, Forever . YEAH !</em>
+<a href="http://githalytics.com/emilsoman/cloudster"><img src="https://cruel-carlota.pagodabox.com/eafd00c3c74c7362ed850f6a50120c30" alt="githalytics.com alpha" title="githalytics.com"></a></p>
+      </section>
+    </div>
+
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-36099649-3");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
