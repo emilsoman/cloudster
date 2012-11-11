@@ -1,7 +1,8 @@
 # Cloudster [![Build Status](https://travis-ci.org/emilsoman/cloudster.png)](https://travis-ci.org/emilsoman/cloudster) [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/emilsoman/cloudster) [![Dependency Status](https://gemnasium.com/emilsoman/cloudster.png)](https://gemnasium.com/emilsoman/cloudster)
 
-Cloudster exposes simple helper methods to provision your AWS cloud.
-Cloudster uses the AWS APIs to provision stacks on Amazon Cloud.
+Cloudster is a Ruby gem that was born to cut the learning curve involved in writing your own CloudFormation templates. If you don't know what 
+a CloudFormation template is, but know about the AWS Cloud offerings, you can still use cloudster to provision your stack. Still in infancy , cloudster 
+can create a very basic stack like a breeze. All kinds of contribution welcome !
 
 ##Installation
 
@@ -9,7 +10,7 @@ Cloudster uses the AWS APIs to provision stacks on Amazon Cloud.
 
 ## Usage
 
-Create AWS resources as shown here:
+Create AWS resources :
 
     app_server = Cloudster::Ec2.new(:name => 'AppServer',
       :key_name => 'mykey',
@@ -48,13 +49,16 @@ Make a cloud :
 
     cloud = Cloudster::Cloud.new(:access_key_id => 'accesskeyid', :secret_access_key => 'topsecretaccesskey')
 
-- Get the CloudFormation template for a resource in Ruby Hash :
-    
-        app_server.template
-- Get the CloudFormation template for the stack :
+Get the CloudFormation template for the stack :
     
         cloud.template(:resources => [app_server, app_server_2, load_balancer, database], :description => 'Description of the stack')
-    
+
+Get the CloudFormation template for a resource as a Ruby Hash :
+
+        app_server.template
+ 
+Cloudster can also do things on the AWS Cloud :
+
 - Provision the stack :
 
         cloud.provision(:resources => [app_server, app_server_2, load_balancer, database], :stack_name => 'TestStack', :description => 'Description of the stack')
@@ -67,10 +71,56 @@ Make a cloud :
 
         cloud.delete(:stack_name => 'TestStack')
 
-- Describe the events of a stack using :
+- Describe the events of a stack :
 
         cloud.events(:stack_name => 'TestStack')
 
+# Contribute !
+
+Got some love for Cloudster? That's great!
+
+## Found a bug?
+
+Log the bug in the [issue tracker](https://github.com/emilsoman/cloudster/issues). Be sure to include all relevant information, like
+the versions of Cloudster and Ruby you're using. A [gist](http://gist.github.com/)
+of the code that caused the issue as well as any error messages are also very
+helpful.
+
+## Need help?
+
+You can use the [Issues](https://github.com/emilsoman/cloudster/issues) page to ask a new question. This is how you do it: 
+1. Click on New Issue
+2. Type in your question
+3. Add a "question" label to the issue
+
+## Have a patch?
+
+Bugs and feature requests that include patches are much more likely to
+get attention. Here are some guidelines that will help ensure your patch
+can be applied as quickly as possible:
+
+1. **Use [Git](http://git-scm.com) and [GitHub](http://github.com):**
+   The easiest way to get setup is to fork the
+   [cloudster repo](http://github.com/emilsoman/cloudster/).
+
+2. **Write unit tests:** If you add or modify functionality, it must
+   include unit tests. I use RSpec to test cloudster. If you are not an
+   RSpec expert, if you let me know, I can help you write the specs.
+
+3. **Update the `README`:** If the patch adds or modifies a major feature,
+   modify the `README.md` file to reflect that. Again if you're not an
+   expert with Markdown syntax, it's really easy to learn. Check out [Dillinger](http://dillinger.io/) to
+   try it out.
+
+4. **Push it:** Once you're ready, push your changes to a topic branch
+   and add a note to the ticket with the URL to your branch. Or, say
+   something like, "you can find the patch on johndoe/foobranch". I also
+   gladly accept Github [pull requests](http://help.github.com/pull-requests/).
+
+__NOTE:__ _I will take in whatever I can get._ If you prefer to
+attach diffs in comments on issues, that's fine; but do know
+that _someone_ will need to take the diff through the process described
+above and this can hold things up considerably.
 
 
 ##License
@@ -78,4 +128,3 @@ Make a cloud :
 MIT
 
 *Free Software, Forever . YEAH !*
-[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/eafd00c3c74c7362ed850f6a50120c30 "githalytics.com")](http://githalytics.com/emilsoman/cloudster)
