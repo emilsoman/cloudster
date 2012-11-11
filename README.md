@@ -75,6 +75,8 @@ Cloudster can also do things on the AWS Cloud :
 
         cloud.events(:stack_name => 'TestStack')
 
+----------------
+
 # Contribute !
 
 Got some love for Cloudster? That's great!
