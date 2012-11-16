@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Emil Soman"]
-  s.date = "2012-11-09"
+  s.date = "2012-11-16"
   s.description = "Cloudster uses the AWS APIs to provision stacks on Amazon Cloud."
   s.email = "emil.soman@gmail.com"
   s.extra_rdoc_files = [
