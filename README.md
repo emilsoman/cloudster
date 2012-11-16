@@ -21,7 +21,9 @@ Create AWS resources :
     chef_client = Cloudster::ChefClient.new(
      :validation_key => 'asd3e33880889098asdnmnnasd8900890a8sdmasdjna9s880808asdnmnasd90-a',
      :server_url => 'http://10.50.60.70:4000',
-     :node_name => 'project.environment.appserver_1'
+     :node_name => 'project.environment.appserver_1',
+     :environment => 'production',
+     :interval => 1800
     )
 
     chef_client.add_to(app_server)
@@ -33,7 +35,8 @@ Create AWS resources :
 
     #Add your app servers to the ElasticLoadBalancer
     load_balancer = Cloudster::Elb.new(:name => 'LoadBalancer',
-      :instance_names => ['AppServer', 'AppServer2']
+      :instance_names => ['AppServer', 'AppServer2'],
+      :listeners => [{:port => 80, :instance_port => 8080, :protocol => 'HTTP'}]
     )
 
     database = Cloudster::Rds.new(
