@@ -5,14 +5,14 @@ module Cloudster
     # Initialize an ChefClient configuration
     #
     # ==== Notes
-    # options parameter must include values for :instance_name, :validation_key, :server_url and :node_name
+    # options parameter must include values for :validation_key, :server_url and :node_name
     #
     # ==== Examples
     #   chef_client = Cloudster::ChefClient.new(
-    #    :instance_name => 'AppServer',
     #    :validation_key => 'asd3e33880889098asdnmnnasd8900890a8sdmasdjna9s880808asdnmnasd90-a',
     #    :server_url => 'http://10.50.60.70:4000',
-    #    :node_name => 'project.environment.appserver_1'
+    #    :node_name => 'project.environment.appserver_1',
+    #    :interval => 1800
     #   )
     #
     # ==== Parameters
@@ -21,11 +21,13 @@ module Cloudster
     #     * :validation_key: String containing the key used for validating this client with the server. This can be taken from the chef-server validation.pem file. Mandatory field
     #     * :server_url: String containing the fully qualified domain name of the chef-server. Mandatory field
     #     * :node_name: String containing the name for the chef node. It has to be unique across all nodes in the particular chef client-server ecosystem. Mandatory field
+    #     * :interval: Integer containing the interval(in seconds) between chef-client runs. Degault value : 1800 seconds
     def initialize(options = {})
       require_options(options, [:validation_key, :server_url, :node_name])
       @validation_key = options[:validation_key]
       @server_url = options[:server_url]
       @node_name = options[:node_name]
+      @interval = options[:interval] || 1800
     end
 
     # Merges the required CloudFormation template for installing the Chef Client to the template of the EC2 instance
@@ -97,25 +99,20 @@ module Cloudster
                 "cat << EOF > /etc/chef/solo.rb\n",
                 "file_cache_path \"/tmp/chef-solo\"\n",
                 "cookbook_path \"/tmp/chef-solo/cookbooks\"\n",
+                "node_name \"#{@node_name}\"\n",
                 "EOF\n",
                 "cat << EOF > /etc/chef/chef.json\n",
                 "{\n",
-                "\"chef_server\": {\n",
-                "  \"server_url\": \"http://localhost:4000\",\n",
-                "  \"webui_enabled\": true,\n",
-                "  \"node_name\": \"#{@node_name}\"\n",
+                "\"chef_client\": {\n",
+                "  \"server_url\": \"#{@server_url}\",\n",
+                "  \"interval\": \"#{@interval}\"\n",
                 "},\n",
                 "\"run_list\": [\"recipe[chef-client::config]\", \"recipe[chef-client]\"]\n",
                 "}\n",
                 "EOF\n",
-
+                "echo \"#{@validation_key}\" > /etc/chef/validation.pem\n",
                 "# Bootstrap chef\n",
-                "chef-solo -c /etc/chef/solo.rb -j /etc/chef/chef.json -r http://s3.amazonaws.com/chef-solo/bootstrap-latest.tar.gz  > /tmp/chef_solo.log 2>&1 || error_exit 'Failed to bootstrap chef client'\n",
-
-                "# Fixup the server URL in client.rb\n",
-                "echo \"#{@validation_key}\" > /etc/chef/validation.pem 2>&1 || error_exit 'Failed to get Chef Server validation key'\n",
-                "sed -i 's|http://localhost:4000|", @server_url , "|g' /etc/chef/client.rb\n",
-                "chef-client -i 20 > /tmp/chef_client.log 2>&1 || error_exit 'Failed to initialize host via chef client' \n"
+                "chef-solo -c /etc/chef/solo.rb -j /etc/chef/chef.json -r http://s3.amazonaws.com/chef-solo/bootstrap-latest.tar.gz  > /tmp/chef_solo.log 2>&1 || error_exit 'Failed to bootstrap chef client'\n"
             ]]}}
             }
           }

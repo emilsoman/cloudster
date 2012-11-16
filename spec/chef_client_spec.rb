@@ -12,7 +12,7 @@ describe Cloudster::ChefClient do
   describe '#add_to' do
     it "should add chef client configuration to ec2 template" do
       ec2 = Cloudster::Ec2.new(:key_name => 'testkey', :image_id => 'image_id', :name => 'AppServer', :instance_type => 't1.micro' )
-      chef_client = Cloudster::ChefClient.new(:validation_key => 'somekey', :server_url => 'testurl', :node_name => 'uniquename')
+      chef_client = Cloudster::ChefClient.new(:validation_key => 'somekey', :server_url => 'testurl', :node_name => 'uniquename', :interval => 30)
       chef_client.add_to ec2
       ec2.template.should == 
         {
@@ -26,28 +26,31 @@ describe Cloudster::ChefClient do
                 "UserData"=>{
                   "Fn::Base64"=>{
                     "Fn::Join"=>["", [
-                      "#!/bin/bash -v\n", 
-                      "function error_exit\n", 
-                      "{\n", "  exit 1\n", "}\n",
+                      "#!/bin/bash -v\n",
+                      "function error_exit\n",
+                      "{\n",
+                      "  exit 1\n",
+                      "}\n",
+
                       "mkdir /etc/chef\n",
                       "cat << EOF > /etc/chef/solo.rb\n",
                       "file_cache_path \"/tmp/chef-solo\"\n",
                       "cookbook_path \"/tmp/chef-solo/cookbooks\"\n",
-                      "EOF\n", "cat << EOF > /etc/chef/chef.json\n",
-                      "{\n", "\"chef_server\": {\n",
-                      "  \"server_url\": \"http://localhost:4000\",\n",
-                      "  \"webui_enabled\": true,\n",
-                      "  \"node_name\": \"uniquename\"\n",
+                      "node_name \"uniquename\"\n",
+                      "EOF\n",
+                      "cat << EOF > /etc/chef/chef.json\n",
+                      "{\n",
+                      "\"chef_client\": {\n",
+                      "  \"server_url\": \"testurl\",\n",
+                      "  \"interval\": \"30\"\n",
                       "},\n",
                       "\"run_list\": [\"recipe[chef-client::config]\", \"recipe[chef-client]\"]\n",
                       "}\n",
                       "EOF\n",
+                      "echo \"somekey\" > /etc/chef/validation.pem\n",
                       "# Bootstrap chef\n",
-                      "chef-solo -c /etc/chef/solo.rb -j /etc/chef/chef.json -r http://s3.amazonaws.com/chef-solo/bootstrap-latest.tar.gz  > /tmp/chef_solo.log 2>&1 || error_exit 'Failed to bootstrap chef client'\n",
-                      "# Fixup the server URL in client.rb\n",
-                      "echo \"somekey\" > /etc/chef/validation.pem 2>&1 || error_exit 'Failed to get Chef Server validation key'\n",
-                      "sed -i 's|http://localhost:4000|", "testurl", "|g' /etc/chef/client.rb\n",
-                      "chef-client -i 20 > /tmp/chef_client.log 2>&1 || error_exit 'Failed to initialize host via chef client' \n"
+                      "chef-solo -c /etc/chef/solo.rb -j /etc/chef/chef.json -r http://s3.amazonaws.com/chef-solo/bootstrap-latest.tar.gz  > /tmp/chef_solo.log 2>&1 || error_exit 'Failed to bootstrap chef client'\n"
+
                     ]]
                   }
                 }
