@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Emil Soman"]
   s.date = "2012-11-16"
-  s.description = "Cloudster uses the AWS APIs to provision stacks on Amazon Cloud."
+  s.description = "Cloudster is a Ruby gem that was born to cut the learning curve involved \n    in writing your own CloudFormation templates. If you don't know what a CloudFormation template is, \n    but know about the AWS Cloud offerings, you can still use cloudster to provision your stack. \n    Still in infancy , cloudster can create a very basic stack like a breeze. All kinds of contribution welcome !"
   s.email = "emil.soman@gmail.com"
   s.extra_rdoc_files = [
     "LICENSE.txt",
@@ -46,7 +46,7 @@ Gem::Specification.new do |s|
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
   s.rubygems_version = "1.8.24"
-  s.summary = "Cloudster exposes simple helper methods to provision your AWS cloud."
+  s.summary = "Cloudster gem - a Ruby interface for provisioning your Amazon Cloud."
 
   if s.respond_to? :specification_version then
     s.specification_version = 3

@@ -17,8 +17,11 @@ Jeweler::Tasks.new do |gem|
   gem.name = "cloudster"
   gem.homepage = "http://github.com/emilsoman/cloudster"
   gem.license = "MIT"
-  gem.summary = %Q{Cloudster exposes simple helper methods to provision your AWS cloud.}
-  gem.description = %Q{Cloudster uses the AWS APIs to provision stacks on Amazon Cloud.}
+  gem.summary = %Q{Cloudster gem - a Ruby interface for provisioning your Amazon Cloud.}
+  gem.description = %Q{Cloudster is a Ruby gem that was born to cut the learning curve involved 
+    in writing your own CloudFormation templates. If you don't know what a CloudFormation template is, 
+    but know about the AWS Cloud offerings, you can still use cloudster to provision your stack. 
+    Still in infancy , cloudster can create a very basic stack like a breeze. All kinds of contribution welcome !}
   gem.email = "emil.soman@gmail.com"
   gem.authors = ["Emil Soman"]
   # dependencies defined in Gemfile
