@@ -22,7 +22,6 @@ Create AWS resources :
      :validation_key => 'asd3e33880889098asdnmnnasd8900890a8sdmasdjna9s880808asdnmnasd90-a',
      :server_url => 'http://10.50.60.70:4000',
      :node_name => 'project.environment.appserver_1',
-     :environment => 'production',
      :interval => 1800
     )
 
