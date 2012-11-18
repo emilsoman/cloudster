@@ -20,9 +20,9 @@ module Cloudster
     #   )
     def initialize(options = {})
       require_options(options, [:access_key_id, :secret_access_key])
-      access_key_id = options[:access_key_id]
-      secret_access_key = options[:secret_access_key]
-      @cloud_formation = Fog::AWS::CloudFormation.new(:aws_access_key_id => access_key_id, :aws_secret_access_key => secret_access_key)
+      @access_key_id = options[:access_key_id]
+      @secret_access_key = options[:secret_access_key]
+      @cloud_formation = Fog::AWS::CloudFormation.new(:aws_access_key_id => @access_key_id, :aws_secret_access_key => @secret_access_key)
     end
 
     # Generates CloudFormation Template for the stack
@@ -163,6 +163,112 @@ module Cloudster
       require_options(options, [:stack_name])
       return @cloud_formation.delete_stack(options[:stack_name])
     end
+
+    # Returns all RDS(database) endpoints in a stack
+    #
+    # ==== Examples
+    #   cloud = Cloudster::Cloud.new(
+    #    :access_key_id => 'aws_access_key_id'
+    #    :secret_access_key => 'aws_secret_access_key',
+    #   )
+    #   cloud.get_database_endpoints(:stack_name => 'ShittyStack')
+    #
+    # ==== Parameters
+    # * options<~Hash>
+    #   * :stack_name : A string which will contain the name of the stack
+    #
+    # ==== Returns
+    # * Array of hashes, example: [{:address => 'simcoprod01.cu7u2t4uz396.us-east-1.rds.amazonaws.com', :port => '3306'}]
+    def get_database_endpoints(options = {})
+      rds_physical_ids = get_rds_resource_ids(resources(options))
+      return [] if rds_physical_ids.empty?
+      rds = Fog::AWS::RDS.new(:aws_access_key_id => @access_key_id, :aws_secret_access_key => @secret_access_key)
+      endpoints = []
+      rds_physical_ids.each do |rds_physical_id|
+        endpoint = rds.describe_db_instances(rds_physical_id).body["DescribeDBInstancesResult"]["DBInstances"][0]["Endpoint"] rescue nil
+        endpoints << {:address => endpoint["Address"], :port => endpoint["Port"]} unless endpoint.nil?
+      end
+      return endpoints
+    end
+
+    # Returns an array containing a list of Resources in a stack
+    #
+    # ==== Examples
+    #   cloud = Cloudster::Cloud.new(
+    #    :access_key_id => 'aws_access_key_id'
+    #    :secret_access_key => 'aws_secret_access_key',
+    #   )
+    #   cloud.resources(:stack_name => 'RDSStack')
+    #
+    # ==== Parameters
+    # * options<~Hash>
+    #   * :stack_name : A string which will contain the name of the stack
+    #
+    # ==== Returns
+    # * Array of hashes, example: [{"Timestamp"=>2012-11-16 14:31:55 UTC, "ResourceStatus"=>"CREATE_COMPLETE", "StackId"=>"arn:aws::asd", "LogicalResourceId"=>"TestDB", "StackName"=>"RDSStack", "PhysicalResourceId"=>"rtad", "ResourceType"=>"AWS::RDS::DBInstance"}]
+    def resources(options = {})
+      require_options(options, [:stack_name])
+      return @cloud_formation.describe_stack_resources('StackName' => options[:stack_name]).body["StackResources"] rescue []
+    end
+
+    # Describes the attributes of a Stack
+    #
+    # ==== Examples
+    #   cloud = Cloudster::Cloud.new(
+    #    :access_key_id => 'aws_access_key_id'
+    #    :secret_access_key => 'aws_secret_access_key',
+    #   )
+    #   cloud.describe(:stack_name => 'RDSStack')
+    #
+    # ==== Parameters
+    # * options<~Hash>
+    #   * :stack_name : A string which will contain the name of the stack
+    #
+    # ==== Returns
+    # * Hash containing description of the stack
+    def describe(options = {})
+      require_options(options, [:stack_name])
+      return @cloud_formation.describe_stacks('StackName' => options[:stack_name]).body["Stacks"][0] rescue nil
+    end
+
+    # Returns the status of the stack
+    #
+    # ==== Examples
+    #   cloud = Cloudster::Cloud.new(
+    #    :access_key_id => 'aws_access_key_id'
+    #    :secret_access_key => 'aws_secret_access_key',
+    #   )
+    #   cloud.status(:stack_name => 'RDSStack')
+    #
+    # ==== Parameters
+    # * options<~Hash>
+    #   * :stack_name : A string which will contain the name of the stack
+    #
+    # ==== Returns
+    # * One of these strings :
+    #   * CREATE_IN_PROGRESS
+    #   * CREATE_FAILED
+    #   * CREATE_COMPLETE
+    #   * ROLLBACK_IN_PROGRESS
+    #   * ROLLBACK_FAILED
+    #   * ROLLBACK_COMPLETE
+    #   * DELETE_IN_PROGRESS
+    #   * DELETE_FAILED
+    def status(options = {})
+      require_options(options, [:stack_name])
+      description = describe(options)
+      return description["StackStatus"] rescue nil
+    end
+
+    private
+      #Returns an array containing the Physical Resource Id's of RDS resources
+      def get_rds_resource_ids(resources)
+        rds_physical_ids = []
+        resources.each do |resource|
+          rds_physical_ids << resource["PhysicalResourceId"] if resource["ResourceType"] == "AWS::RDS::DBInstance"
+        end
+        return rds_physical_ids
+      end
 
   end
 end
