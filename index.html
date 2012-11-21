@@ -47,7 +47,8 @@ can create a very basic stack like a breeze. All kinds of contribution welcome !
 <pre><code>app_server = Cloudster::Ec2.new(:name =&gt; 'AppServer',
   :key_name =&gt; 'mykey',
   :image_id =&gt; 'ami_image_id',
-  :instance_type =&gt; 't1.micro'
+  :instance_type =&gt; 't1.micro',
+  :security_groups =&gt; ["TopSecurityGroup"]
 )
 
 chef_client = Cloudster::ChefClient.new(
