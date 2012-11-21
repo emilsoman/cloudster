@@ -13,7 +13,8 @@ module Cloudster
     #    :name => 'AppServer',
     #    :key_name => 'mykey',
     #    :image_id => 'ami_image_id',
-    #    :instance_type => 't1.micro'
+    #    :instance_type => 't1.micro',
+    #    :security_groups => ["TopSecurityGroup"]
     #   )
     #
     # ==== Parameters
@@ -22,12 +23,14 @@ module Cloudster
     #     * :key_name: String containing the name of the keypair to be used for SSH
     #     * :image_id: String containing the AMI image id to be used while creating the Ec2 resource
     #     * :instance_type: String containing instance type ( Example : t1.micro )
+    #     * :security_groups: Array containing names of existing SecurityGroups already defined using AWS console
     def initialize(options = {})
       require_options(options, [:name, :key_name, :image_id])
       @name = options[:name]
       @key_name = options[:key_name]
       @image_id = options[:image_id]
       @instance_type = options[:instance_type]
+      @security_groups = options[:security_groups]
     end
 
     # Returns a Ruby hash version of the Cloud Formation template for the resource instance
@@ -37,14 +40,15 @@ module Cloudster
     #    :name => 'AppServer',
     #    :key_name => 'mykey',
     #    :image_id => 'ami_image_id',
-    #    :instance_type => 't1.micro'
+    #    :instance_type => 't1.micro',
+    #    :security_groups => ["SecurityGroup"]
     #   )
     #   ec2.template
     #
     # ==== Returns
     # * Ruby hash version of the Cloud Formation template for the resource instance
     def template
-      @template ||= Ec2.template({:name =>@name, :key_name => @key_name, :image_id => @image_id, :instance_type => @instance_type})
+      @template ||= Ec2.template({:name =>@name, :key_name => @key_name, :image_id => @image_id, :instance_type => @instance_type, :security_groups => @security_groups})
     end
 
     # Class method that returns a Ruby hash version of the Cloud Formation template
@@ -64,6 +68,7 @@ module Cloudster
     #     * :key_name: String containing the name of the keypair to be used for SSH
     #     * :image_id: String containing the AMI image id to be used while creating the Ec2 resource
     #     * :instance_type: String containing instance type ( Example : t1.micro )
+    #     * :security_groups: Array containing names of existing SecurityGroups already defined using AWS console
     #
     # ==== Returns
     # * Ruby hash version of the Cloud Formation template
@@ -72,6 +77,10 @@ module Cloudster
       properties = {}
       properties.merge!({"KeyName" => options[:key_name], "ImageId" => options[:image_id]})
       properties.merge!({"InstanceType" => options[:instance_type]}) unless options[:instance_type].nil?
+      unless options[:security_groups].nil?
+        security_groups = options[:security_groups].to_a
+        properties.merge!({"SecurityGroups" => security_groups})
+      end
       template = {'Resources' => { 
                         options[:name] => { 
                           'Type' => 'AWS::EC2::Instance',

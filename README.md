@@ -15,7 +15,8 @@ Create AWS resources :
     app_server = Cloudster::Ec2.new(:name => 'AppServer',
       :key_name => 'mykey',
       :image_id => 'ami_image_id',
-      :instance_type => 't1.micro'
+      :instance_type => 't1.micro',
+      :security_groups => ["TopSecurityGroup"]
     )
 
     chef_client = Cloudster::ChefClient.new(
