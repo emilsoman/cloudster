@@ -191,6 +191,35 @@ module Cloudster
       return endpoints
     end
 
+    # Returns all EC2 dns names in a stack
+    #
+    # ==== Examples
+    #   cloud = Cloudster::Cloud.new(
+    #    :access_key_id => 'aws_access_key_id'
+    #    :secret_access_key => 'aws_secret_access_key',
+    #   )
+    #   cloud.get_ec2_details(:stack_name => 'ShittyStack')
+    #
+    # ==== Parameters
+    # * options<~Hash>
+    #   * :stack_name : A string which will contain the name of the stack
+    #
+    # ==== Returns
+    # * A hash of instance details where the key is the logical instance name and value is the instance detail
+    def get_ec2_details(options = {})
+      stack_resources = resources(options)
+      ec2_resource_ids = get_ec2_resource_ids(stack_resources)
+      ec2 = Fog::Compute::AWS.new(:aws_access_key_id => @access_key_id, :aws_secret_access_key => @secret_access_key)
+      ec2_details = {}
+      ec2_resource_ids.each do |key, value|
+        ec2_instance_details = ec2.describe_instances('instance-id' => value)
+        ec2_details[key] = ec2_instance_details.body["reservationSet"][0]["instancesSet"][0]
+      end 
+      return ec2_details
+    rescue
+      return nil
+    end
+
     # Returns an array containing a list of Resources in a stack
     #
     # ==== Examples
@@ -268,6 +297,17 @@ module Cloudster
           rds_physical_ids << resource["PhysicalResourceId"] if resource["ResourceType"] == "AWS::RDS::DBInstance"
         end
         return rds_physical_ids
+      end
+
+      #Returns an array containing the physical ids of EC2 resources
+      def get_ec2_resource_ids(stack_resources)
+        ec2_resource_ids = {}
+        stack_resources.each do |resource|
+          key = resource["LogicalResourceId"] if resource["ResourceType"] == "AWS::EC2::Instance"
+          value = resource["PhysicalResourceId"] if resource["ResourceType"] == "AWS::EC2::Instance"
+          ec2_resource_ids[key] = value
+        end
+        return ec2_resource_ids
       end
 
   end
