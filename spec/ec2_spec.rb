@@ -16,7 +16,6 @@ describe Cloudster::Ec2 do
     it "should return a ruby hash for the resource cloudformation template" do
       ec2 = Cloudster::Ec2.new(:key_name => 'testkey', :image_id => 'image_id', :name => 'name', :instance_type => 't1.micro', :security_groups => ["testSecurityGroup1", "testSecurityGroup2"] )
       ec2.template.should == {'Resources' => {'name' => {'Type' => 'AWS::EC2::Instance', 'Properties' => {"KeyName" => 'testkey', "ImageId" => 'image_id', "InstanceType" => 't1.micro', "SecurityGroups" => ["testSecurityGroup1", "testSecurityGroup2"]} }}}
-      puts ec2.template.to_json
     end
   end
   describe '.template' do
