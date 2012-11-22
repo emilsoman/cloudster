@@ -11,7 +11,7 @@ describe Cloudster::Rds do
   end
   describe '#template' do
     it "should return a ruby hash for the resource cloudformation template" do
-      rds = Cloudster::Rds.new(:name => 'MySqlDB', :storage_size => '10') 
+      rds = Cloudster::Rds.new(:name => 'MySqlDB', :storage_size => '10', :multi_az => true) 
       template = {'Resources' => { 
                     'MySqlDB' => {
                       "Type" => "AWS::RDS::DBInstance",
@@ -20,7 +20,8 @@ describe Cloudster::Rds do
                         "MasterUsername" => 'root',
                         "MasterUserPassword" => 'root',
                         "DBInstanceClass" => 'db.t1.micro',
-                        "AllocatedStorage" => '10'
+                        "AllocatedStorage" => '10',
+                        "MultiAZ" => true
                       }
                     }
                   }
@@ -42,7 +43,8 @@ describe Cloudster::Rds do
                         "MasterUsername" => 'root',
                         "MasterUserPassword" => 'root',
                         "DBInstanceClass" => 'db.t1.micro',
-                        "AllocatedStorage" => '10'
+                        "AllocatedStorage" => '10',
+                        "MultiAZ" => false
                       }
                     }
                   }

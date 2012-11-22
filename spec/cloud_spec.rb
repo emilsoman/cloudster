@@ -39,7 +39,8 @@ describe Cloudster::Cloud do
                 "MasterUsername" => 'root',
                 "MasterUserPassword" => 'root',
                 "DBInstanceClass" => 'db.t1.micro',
-                "AllocatedStorage" => '10'
+                "AllocatedStorage" => '10',
+                "MultiAZ" => false
               }
             },
            "ELB" => {

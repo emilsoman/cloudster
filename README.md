@@ -45,7 +45,8 @@ Create AWS resources :
         :storage_class => '100',
         :username => 'admin',
         :password => 'admin123',
-        :engine => 'MySQL'
+        :engine => 'MySQL',
+        :multi_az => true
     )
 
 Make a cloud :
