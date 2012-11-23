@@ -180,7 +180,7 @@ module Cloudster
     # ==== Returns
     # * Array of hashes, example: [{:address => 'simcoprod01.cu7u2t4uz396.us-east-1.rds.amazonaws.com', :port => '3306'}]
     def get_database_endpoints(options = {})
-      rds_physical_ids = get_rds_resource_ids(resources(options))
+      rds_physical_ids = get_resource_ids(resources(options), "AWS::RDS::DBInstance").values
       return [] if rds_physical_ids.empty?
       rds = Fog::AWS::RDS.new(:aws_access_key_id => @access_key_id, :aws_secret_access_key => @secret_access_key)
       endpoints = []
@@ -191,7 +191,34 @@ module Cloudster
       return endpoints
     end
 
-    # Returns all EC2 dns names in a stack
+    # Get details of all RDS resources in a stack
+    #
+    # ==== Examples
+    #   cloud = Cloudster::Cloud.new(
+    #    :access_key_id => 'aws_access_key_id'
+    #    :secret_access_key => 'aws_secret_access_key',
+    #   )
+    #   cloud.get_rds_details(:stack_name => 'ShittyStack')
+    #
+    # ==== Parameters
+    # * options<~Hash>
+    #   * :stack_name : A string which will contain the name of the stack
+    #
+    # ==== Returns
+    # * A hash of RDS details where the key is the logical name and value is the RDS detail
+    def get_rds_details(options = {})
+      stack_resources = resources(options)
+      rds_resource_ids = get_resource_ids(stack_resources, "AWS::RDS::DBInstance")
+      rds = Fog::AWS::RDS.new(:aws_access_key_id => @access_key_id, :aws_secret_access_key => @secret_access_key)
+      rds_details = {}
+      rds_resource_ids.each do |key, value|
+        rds_instance_details = rds.describe_db_instances(value)
+        rds_details[key] = rds_instance_details.body["DescribeDBInstancesResult"]["DBInstances"][0] rescue nil
+      end 
+      return rds_details
+    end
+
+    # Get details of all EC2 instances in a stack
     #
     # ==== Examples
     #   cloud = Cloudster::Cloud.new(
@@ -208,16 +235,41 @@ module Cloudster
     # * A hash of instance details where the key is the logical instance name and value is the instance detail
     def get_ec2_details(options = {})
       stack_resources = resources(options)
-      ec2_resource_ids = get_ec2_resource_ids(stack_resources)
+      ec2_resource_ids = get_resource_ids(stack_resources, "AWS::EC2::Instance")
       ec2 = Fog::Compute::AWS.new(:aws_access_key_id => @access_key_id, :aws_secret_access_key => @secret_access_key)
       ec2_details = {}
       ec2_resource_ids.each do |key, value|
         ec2_instance_details = ec2.describe_instances('instance-id' => value)
-        ec2_details[key] = ec2_instance_details.body["reservationSet"][0]["instancesSet"][0]
+        ec2_details[key] = ec2_instance_details.body["reservationSet"][0]["instancesSet"][0] rescue nil
       end 
       return ec2_details
-    rescue
-      return nil
+    end
+
+    # Get details of all Elastic Load Balancers in the stack
+    #
+    # ==== Examples
+    #   cloud = Cloudster::Cloud.new(
+    #    :access_key_id => 'aws_access_key_id'
+    #    :secret_access_key => 'aws_secret_access_key',
+    #   )
+    #   cloud.get_elb_details(:stack_name => 'ShittyStack')
+    #
+    # ==== Parameters
+    # * options<~Hash>
+    #   * :stack_name : A string which will contain the name of the stack
+    #
+    # ==== Returns
+    # * A hash containing elb details where the key is the logical name and value contains the details
+    def get_elb_details(options = {})
+      stack_resources = resources(options)
+      elb_resource_ids = get_resource_ids(stack_resources, "AWS::ElasticLoadBalancing::LoadBalancer")
+      elb = Fog::AWS::ELB.new(:aws_access_key_id => @access_key_id, :aws_secret_access_key => @secret_access_key)
+      elb_details = {}
+      elb_resource_ids.each do |key, value|
+        elb_instance_details = elb.describe_load_balancers("LoadBalancerNames" => [value])
+        elb_details[key] = elb_instance_details.body["DescribeLoadBalancersResult"]["LoadBalancerDescriptions"][0] rescue nil
+      end 
+      return elb_details
     end
 
     # Returns an array containing a list of Resources in a stack
@@ -290,24 +342,18 @@ module Cloudster
     end
 
     private
-      #Returns an array containing the Physical Resource Id's of RDS resources
-      def get_rds_resource_ids(resources)
-        rds_physical_ids = []
-        resources.each do |resource|
-          rds_physical_ids << resource["PhysicalResourceId"] if resource["ResourceType"] == "AWS::RDS::DBInstance"
-        end
-        return rds_physical_ids
-      end
 
-      #Returns an array containing the physical ids of EC2 resources
-      def get_ec2_resource_ids(stack_resources)
-        ec2_resource_ids = {}
+      #Returns a hash {<logical_resource_id> => <physical_resource_id>}
+      def get_resource_ids(stack_resources, resource_type)
+        resource_ids = {}
         stack_resources.each do |resource|
-          key = resource["LogicalResourceId"] if resource["ResourceType"] == "AWS::EC2::Instance"
-          value = resource["PhysicalResourceId"] if resource["ResourceType"] == "AWS::EC2::Instance"
-          ec2_resource_ids[key] = value
+          if resource["ResourceType"] == resource_type
+            key = resource["LogicalResourceId"]
+            value = resource["PhysicalResourceId"]
+            resource_ids[key] = value
+          end
         end
-        return ec2_resource_ids
+        return resource_ids
       end
 
   end
