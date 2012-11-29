@@ -77,7 +77,8 @@ database = Cloudster::Rds.new(
     :storage_class =&gt; '100',
     :username =&gt; 'admin',
     :password =&gt; 'admin123',
-    :engine =&gt; 'MySQL'
+    :engine =&gt; 'MySQL',
+    :multi_az =&gt; true
 )
 </code></pre>
 
@@ -123,7 +124,63 @@ database = Cloudster::Rds.new(
 <pre><code>cloud.events(:stack_name =&gt; 'TestStack')
 </code></pre>
 </li>
-</ul><hr><h1>Contribute !</h1>
+<li>
+<p>Describe the attributes of a stack :</p>
+
+<pre><code>cloud.describe(:stack_name =&gt; 'TestStack')
+</code></pre>
+</li>
+<li>
+<p>Describe all resources of a stack :</p>
+
+<pre><code>cloud.resources(:stack_name =&gt; 'TestStack')
+</code></pre>
+</li>
+<li>
+<p>Get the status of a stack :</p>
+
+<pre><code>cloud.status(:stack_name =&gt; 'TestStack')
+</code></pre>
+</li>
+<li>
+<p>Describe the RDS endpoints in a stack :</p>
+
+<pre><code>cloud.get_database_endpoints(:stack_name =&gt; 'TestStack')
+</code></pre>
+</li>
+<li>
+<p>Get the details of all EC2 intances in a stack :</p>
+
+<pre><code>cloud.get_ec2_details(:stack_name =&gt; 'TestStack')
+</code></pre>
+</li>
+<li>
+<p>Get the details of all RDS intances in a stack :</p>
+
+<pre><code>cloud.get_rds_details(:stack_name =&gt; 'TestStack')
+</code></pre>
+</li>
+<li>
+<p>Get the details of all ELB intances in a stack :</p>
+
+<pre><code>cloud.get_elb_details(:stack_name =&gt; 'TestStack')
+</code></pre>
+</li>
+<li>
+<p>Get details of all keypairs created in the AWS account :</p>
+
+<pre><code>cloud.get_key_pairs
+</code></pre>
+</li>
+<li>
+<p>Get details of all Security Groups created in the AWS account :</p>
+
+<pre><code>cloud.get_security_groups
+</code></pre>
+</li>
+</ul><h1>More coming soon !</h1>
+
+<hr><h1>Contribute !</h1>
 
 <p>Got some love for Cloudster? That's great!</p>
 
