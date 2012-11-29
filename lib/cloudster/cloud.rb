@@ -272,44 +272,6 @@ module Cloudster
       return elb_details
     end
 
-    # Returns all keypairs created in the AWS account
-    #
-    # ==== Examples
-    #   cloud = Cloudster::Cloud.new(
-    #    :access_key_id => 'aws_access_key_id'
-    #    :secret_access_key => 'aws_secret_access_key',
-    #   )
-    #   cloud.get_key_pairs
-    #
-    # ==== Parameters
-    # * none
-    #
-    # ==== Returns
-    # * Array of hashes, example: [{"keyName"=>"default", "keyFingerprint"=>"84:67:e2:f8:04:c1:5f:d4:ff"}]
-    def get_key_pairs
-      ec2 = Fog::Compute::AWS.new(:aws_access_key_id => @access_key_id, :aws_secret_access_key => @secret_access_key)
-      return ec2.describe_key_pairs.body["keySet"] rescue []
-    end
-
-    # Returns all SecurityGroups created in the AWS account
-    #
-    # ==== Examples
-    #   cloud = Cloudster::Cloud.new(
-    #    :access_key_id => 'aws_access_key_id'
-    #    :secret_access_key => 'aws_secret_access_key',
-    #   )
-    #   cloud.get_security_groups
-    #
-    # ==== Parameters
-    # * none
-    #
-    # ==== Returns
-    # * Array of hashes containing the security group details
-    def get_security_groups
-      ec2 = Fog::Compute::AWS.new(:aws_access_key_id => @access_key_id, :aws_secret_access_key => @secret_access_key)
-      return ec2.describe_security_groups.body["securityGroupInfo"] rescue []
-    end
-
     # Returns an array containing a list of Resources in a stack
     #
     # ==== Examples
@@ -377,6 +339,44 @@ module Cloudster
       require_options(options, [:stack_name])
       description = describe(options)
       return description["StackStatus"] rescue nil
+    end
+
+    # Returns all keypairs created in the AWS account
+    #
+    # ==== Examples
+    #   cloud = Cloudster::Cloud.new(
+    #    :access_key_id => 'aws_access_key_id'
+    #    :secret_access_key => 'aws_secret_access_key',
+    #   )
+    #   cloud.get_key_pairs
+    #
+    # ==== Parameters
+    # * none
+    #
+    # ==== Returns
+    # * Array of hashes, example: [{"keyName"=>"default", "keyFingerprint"=>"84:67:e2:f8:04:c1:5f:d4:ff"}]
+    def get_key_pairs
+      ec2 = Fog::Compute::AWS.new(:aws_access_key_id => @access_key_id, :aws_secret_access_key => @secret_access_key)
+      return ec2.describe_key_pairs.body["keySet"] rescue []
+    end
+
+    # Returns all SecurityGroups created in the AWS account
+    #
+    # ==== Examples
+    #   cloud = Cloudster::Cloud.new(
+    #    :access_key_id => 'aws_access_key_id'
+    #    :secret_access_key => 'aws_secret_access_key',
+    #   )
+    #   cloud.get_security_groups
+    #
+    # ==== Parameters
+    # * none
+    #
+    # ==== Returns
+    # * Array of hashes containing the security group details
+    def get_security_groups
+      ec2 = Fog::Compute::AWS.new(:aws_access_key_id => @access_key_id, :aws_secret_access_key => @secret_access_key)
+      return ec2.describe_security_groups.body["securityGroupInfo"] rescue []
     end
 
     private
