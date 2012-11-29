@@ -79,6 +79,44 @@ Cloudster can also do things on the AWS Cloud :
 
         cloud.events(:stack_name => 'TestStack')
 
+- Describe the attributes of a stack :
+
+        cloud.describe(:stack_name => 'TestStack')
+
+- Describe all resources of a stack :
+
+        cloud.resources(:stack_name => 'TestStack')
+
+- Get the status of a stack :
+
+        cloud.status(:stack_name => 'TestStack')
+
+- Describe the RDS endpoints in a stack :
+
+        cloud.get_database_endpoints(:stack_name => 'TestStack')
+
+- Get the details of all EC2 intances in a stack :
+
+        cloud.get_ec2_details(:stack_name => 'TestStack')
+
+- Get the details of all RDS intances in a stack :
+
+        cloud.get_rds_details(:stack_name => 'TestStack')
+
+- Get the details of all ELB intances in a stack :
+
+        cloud.get_elb_details(:stack_name => 'TestStack')
+
+- Get details of all keypairs created in the AWS account :
+
+        cloud.get_key_pairs
+
+- Get details of all Security Groups created in the AWS account :
+
+        cloud.get_security_groups
+
+# More coming soon !
+
 ----------------
 
 # Contribute !
