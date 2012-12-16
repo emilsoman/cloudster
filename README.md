@@ -115,7 +115,7 @@ Cloudster can also do things on the AWS Cloud :
 
         cloud.get_security_groups
 
-# More coming soon !
+- ### More coming soon ..
 
 ----------------
 
