@@ -115,7 +115,7 @@ Cloudster can also do things on the AWS Cloud :
 
         cloud.get_security_groups
 
-# More coming soon !
+- ### More coming soon ..
 
 ----------------
 
@@ -153,7 +153,7 @@ can be applied as quickly as possible:
 
 3. **Update the `README`:** If the patch adds or modifies a major feature,
    modify the `README.md` file to reflect that. Again if you're not an
-   expert with Markdown syntax, it's really easy to learn. Check out [Dillinger](http://dillinger.io/) to
+   expert with Markdown syntax, it's really easy to learn. Check out [Prose.io](http://prose.io/) to
    try it out.
 
 4. **Push it:** Once you're ready, push your changes to a topic branch
