@@ -10,8 +10,10 @@ module Cloudster
     #
     # ==== Parameters
     # * options<~Hash>
-    #   * :access_key_id : A string containing the AWS access key ID.
-    #   * :secret_access_key : A string containing the AWS secret access key.
+    #   * :access_key_id : A string containing the AWS access key ID (Required)
+    #   * :secret_access_key : A string containing the AWS secret access key (Required)
+    #   * :region : A string containing the region where the stack should be created/updated (Optional). Can be one of
+    #     us-east-1(default), us-west-1, us-west-2, eu-west-1, ap-southeast-1, ap-northeast-1, ap-southeast-2, sa-east-1
     #
     # ==== Examples
     #   cloud = Cloudster::Cloud.new(
@@ -20,9 +22,14 @@ module Cloudster
     #   )
     def initialize(options = {})
       require_options(options, [:access_key_id, :secret_access_key])
+      @region = options[:region]
       @access_key_id = options[:access_key_id]
       @secret_access_key = options[:secret_access_key]
-      @cloud_formation = Fog::AWS::CloudFormation.new(:aws_access_key_id => @access_key_id, :aws_secret_access_key => @secret_access_key)
+      @cloud_formation = Fog::AWS::CloudFormation.new(
+        :aws_access_key_id => @access_key_id,
+        :aws_secret_access_key => @secret_access_key,
+        :region => @region
+      )
     end
 
     # Generates CloudFormation Template for the stack

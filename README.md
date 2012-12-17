@@ -51,16 +51,16 @@ Create AWS resources :
 
 Make a cloud :
 
-    cloud = Cloudster::Cloud.new(:access_key_id => 'accesskeyid', :secret_access_key => 'topsecretaccesskey')
+    cloud = Cloudster::Cloud.new(:access_key_id => 'accesskeyid', :secret_access_key => 'topsecretaccesskey', :region => 'us-west-1')
 
 Get the CloudFormation template for the stack :
-    
+
         cloud.template(:resources => [app_server, app_server_2, load_balancer, database], :description => 'Description of the stack')
 
 Get the CloudFormation template for a resource as a Ruby Hash :
 
         app_server.template
- 
+
 Cloudster can also do things on the AWS Cloud :
 
 - Provision the stack :

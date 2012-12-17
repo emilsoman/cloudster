@@ -6,7 +6,7 @@ describe Cloudster::Cloud do
       expect { Cloudster::Cloud.new() }.to raise_error(ArgumentError, 'Missing required argument: access_key_id,secret_access_key')
     end
     it "should not raise argument error if all arguments are provided" do
-      expect { Cloudster::Cloud.new(:access_key_id => 'test', :secret_access_key => 'test') }.to_not raise_error
+      expect { Cloudster::Cloud.new(:access_key_id => 'test', :secret_access_key => 'test', :region => 'us-east-1') }.to_not raise_error
     end
   end
   describe '#template' do
@@ -77,10 +77,10 @@ describe Cloudster::Cloud do
     end
     it "should trigger stack creation" do
       cloud_formation = double('CloudFormation')
-      Fog::AWS::CloudFormation.should_receive(:new).with(:aws_access_key_id => 'test', :aws_secret_access_key => 'test').and_return cloud_formation
+      Fog::AWS::CloudFormation.should_receive(:new).with(:aws_access_key_id => 'test', :aws_secret_access_key => 'test', :region => nil).and_return cloud_formation
       ec2 = Cloudster::Ec2.new(:key_name => 'testkey', :image_id => 'image_id', :name => 'name')
       elb = Cloudster::Elb.new(:name => 'ELB', :instance_names => ['name','name1'])
-      rds = Cloudster::Rds.new(:name => 'MySqlDB', :storage_size => '10') 
+      rds = Cloudster::Rds.new(:name => 'MySqlDB', :storage_size => '10')
       cloud = Cloudster::Cloud.new(:access_key_id => 'test', :secret_access_key => 'test')
       cloud_formation.should_receive('create_stack').with('stack_name', 'TemplateBody' => cloud.template(:resources => [ec2, elb, rds], :description => 'testDescription'))
       cloud.provision(:resources => [ec2, elb, rds], :stack_name => 'stack_name', :description => 'testDescription')
@@ -95,7 +95,7 @@ describe Cloudster::Cloud do
     end
     it "should trigger stack update" do
       cloud_formation = double('CloudFormation')
-      Fog::AWS::CloudFormation.should_receive(:new).with(:aws_access_key_id => 'test', :aws_secret_access_key => 'test').and_return cloud_formation
+      Fog::AWS::CloudFormation.should_receive(:new).with(:aws_access_key_id => 'test', :aws_secret_access_key => 'test', :region => nil).and_return cloud_formation
       ec2 = Cloudster::Ec2.new(:key_name => 'testkey', :image_id => 'image_id', :name => 'name')
       cloud = Cloudster::Cloud.new(:access_key_id => 'test', :secret_access_key => 'test')
       cloud_formation.should_receive('update_stack').with('stack_name', 'TemplateBody' => cloud.template(:resources => [ec2], :description => 'testDescription'))
@@ -106,7 +106,7 @@ describe Cloudster::Cloud do
   describe '#events' do
     it "should trigger 'describe stack events' request" do
       cloud_formation = double('CloudFormation')
-      Fog::AWS::CloudFormation.should_receive(:new).with(:aws_access_key_id => 'test', :aws_secret_access_key => 'test').and_return cloud_formation
+      Fog::AWS::CloudFormation.should_receive(:new).with(:aws_access_key_id => 'test', :aws_secret_access_key => 'test', :region => nil).and_return cloud_formation
       cloud = Cloudster::Cloud.new(:access_key_id => 'test', :secret_access_key => 'test')
       cloud_formation.should_receive('describe_stack_events').with('stack_name')
       cloud.events(:stack_name => 'stack_name')
@@ -120,7 +120,7 @@ describe Cloudster::Cloud do
     end
     it "should trigger 'delete stack' request" do
       cloud_formation = double('CloudFormation')
-      Fog::AWS::CloudFormation.should_receive(:new).with(:aws_access_key_id => 'test', :aws_secret_access_key => 'test').and_return cloud_formation
+      Fog::AWS::CloudFormation.should_receive(:new).with(:aws_access_key_id => 'test', :aws_secret_access_key => 'test', :region => nil).and_return cloud_formation
       cloud = Cloudster::Cloud.new(:access_key_id => 'test', :secret_access_key => 'test')
       cloud_formation.should_receive('delete_stack').with('stack_name')
       cloud.delete(:stack_name => 'stack_name')
