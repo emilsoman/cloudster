@@ -1,7 +1,7 @@
 # Cloudster [![Build Status](https://travis-ci.org/emilsoman/cloudster.png)](https://travis-ci.org/emilsoman/cloudster) [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/emilsoman/cloudster) [![Dependency Status](https://gemnasium.com/emilsoman/cloudster.png)](https://gemnasium.com/emilsoman/cloudster)
 
-Cloudster is a Ruby gem that was born to cut the learning curve involved in writing your own CloudFormation templates. If you don't know what 
-a CloudFormation template is, but know about the AWS Cloud offerings, you can still use cloudster to provision your stack. Still in infancy , cloudster 
+Cloudster is a Ruby gem that was born to cut the learning curve involved in writing your own CloudFormation templates. If you don't know what
+a CloudFormation template is, but know about the AWS Cloud offerings, you can still use cloudster to provision your stack. Still in infancy , cloudster
 can create a very basic stack like a breeze. All kinds of contribution welcome !
 
 ##Installation
@@ -132,7 +132,7 @@ helpful.
 
 ## Need help?
 
-You can use the [Issues](https://github.com/emilsoman/cloudster/issues) page to ask a new question. This is how you do it: 
+You can use the [Issues](https://github.com/emilsoman/cloudster/issues) page to ask a new question. This is how you do it:
 1. Click on New Issue
 2. Type in your question
 3. Add a "question" label to the issue

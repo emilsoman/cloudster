@@ -17,8 +17,9 @@ module Cloudster
     #
     # ==== Examples
     #   cloud = Cloudster::Cloud.new(
-    #    :access_key_id => 'aws_access_key_id'
+    #    :access_key_id => 'aws_access_key_id',
     #    :secret_access_key => 'aws_secret_access_key',
+    #    :region => 'us-east-1'
     #   )
     def initialize(options = {})
       require_options(options, [:access_key_id, :secret_access_key])
@@ -36,8 +37,9 @@ module Cloudster
     #
     # ==== Examples
     #   cloud = Cloudster::Cloud.new(
-    #    :access_key_id => 'aws_access_key_id'
+    #    :access_key_id => 'aws_access_key_id',
     #    :secret_access_key => 'aws_secret_access_key',
+    #    :region => 'us-east-1'
     #   )
     #
     #   cloud.template(:resources => [<AWS RESOURCES ARRAY>], :description => 'This is the description for the stack template')
@@ -46,12 +48,12 @@ module Cloudster
     # options parameter must include values for :resources
     #
     # ==== Parameters
-    # * options<~Hash> - 
+    # * options<~Hash> -
     #   * :resources : An array of Cloudster resource instances.  Defaults to {}.
     #   * :description : A string which will be used as the Description of the CloudFormation template.
     #
     # ==== Returns
-    # * JSON cloud formation template 
+    # * JSON cloud formation template
     def template(options = {})
       require_options(options, [:resources])
       resources = options[:resources]
@@ -72,8 +74,9 @@ module Cloudster
     #
     # ==== Examples
     #   cloud = Cloudster::Cloud.new(
-    #    :access_key_id => 'aws_access_key_id'
+    #    :access_key_id => 'aws_access_key_id',
     #    :secret_access_key => 'aws_secret_access_key',
+    #    :region => 'us-east-1'
     #   )
     #
     #   cloud.provision(:resources => [<AWS RESOURCES ARRRAY>],
@@ -103,8 +106,9 @@ module Cloudster
     #
     # ==== Examples
     #   cloud = Cloudster::Cloud.new(
-    #    :access_key_id => 'aws_access_key_id'
+    #    :access_key_id => 'aws_access_key_id',
     #    :secret_access_key => 'aws_secret_access_key',
+    #    :region => 'us-east-1'
     #   )
     #
     #   cloud.update(:resources => [<AWS RESOURCES ARRRAY>],
@@ -134,8 +138,9 @@ module Cloudster
     #
     # ==== Examples
     #   cloud = Cloudster::Cloud.new(
-    #    :access_key_id => 'aws_access_key_id'
+    #    :access_key_id => 'aws_access_key_id',
     #    :secret_access_key => 'aws_secret_access_key',
+    #    :region => 'us-east-1'
     #   )
     #   cloud.events(:stack_name => 'ShittyStack')
     #
@@ -154,8 +159,9 @@ module Cloudster
     #
     # ==== Examples
     #   cloud = Cloudster::Cloud.new(
-    #    :access_key_id => 'aws_access_key_id'
+    #    :access_key_id => 'aws_access_key_id',
     #    :secret_access_key => 'aws_secret_access_key',
+    #    :region => 'us-east-1'
     #   )
     #   cloud.delete(:stack_name => 'ShittyStack')
     #
@@ -175,8 +181,9 @@ module Cloudster
     #
     # ==== Examples
     #   cloud = Cloudster::Cloud.new(
-    #    :access_key_id => 'aws_access_key_id'
+    #    :access_key_id => 'aws_access_key_id',
     #    :secret_access_key => 'aws_secret_access_key',
+    #    :region => 'us-east-1'
     #   )
     #   cloud.get_database_endpoints(:stack_name => 'ShittyStack')
     #
@@ -189,7 +196,7 @@ module Cloudster
     def get_database_endpoints(options = {})
       rds_physical_ids = get_resource_ids(resources(options), "AWS::RDS::DBInstance").values
       return [] if rds_physical_ids.empty?
-      rds = Fog::AWS::RDS.new(:aws_access_key_id => @access_key_id, :aws_secret_access_key => @secret_access_key)
+      rds = Fog::AWS::RDS.new(:aws_access_key_id => @access_key_id, :aws_secret_access_key => @secret_access_key, :region => @region)
       endpoints = []
       rds_physical_ids.each do |rds_physical_id|
         endpoint = rds.describe_db_instances(rds_physical_id).body["DescribeDBInstancesResult"]["DBInstances"][0]["Endpoint"] rescue nil
@@ -202,8 +209,9 @@ module Cloudster
     #
     # ==== Examples
     #   cloud = Cloudster::Cloud.new(
-    #    :access_key_id => 'aws_access_key_id'
+    #    :access_key_id => 'aws_access_key_id',
     #    :secret_access_key => 'aws_secret_access_key',
+    #    :region => 'us-east-1'
     #   )
     #   cloud.get_rds_details(:stack_name => 'ShittyStack')
     #
@@ -216,7 +224,7 @@ module Cloudster
     def get_rds_details(options = {})
       stack_resources = resources(options)
       rds_resource_ids = get_resource_ids(stack_resources, "AWS::RDS::DBInstance")
-      rds = Fog::AWS::RDS.new(:aws_access_key_id => @access_key_id, :aws_secret_access_key => @secret_access_key)
+      rds = Fog::AWS::RDS.new(:aws_access_key_id => @access_key_id, :aws_secret_access_key => @secret_access_key, :region => @region)
       rds_details = {}
       rds_resource_ids.each do |key, value|
         rds_instance_details = rds.describe_db_instances(value)
@@ -229,8 +237,9 @@ module Cloudster
     #
     # ==== Examples
     #   cloud = Cloudster::Cloud.new(
-    #    :access_key_id => 'aws_access_key_id'
+    #    :access_key_id => 'aws_access_key_id',
     #    :secret_access_key => 'aws_secret_access_key',
+    #    :region => 'us-east-1'
     #   )
     #   cloud.get_ec2_details(:stack_name => 'ShittyStack')
     #
@@ -243,7 +252,7 @@ module Cloudster
     def get_ec2_details(options = {})
       stack_resources = resources(options)
       ec2_resource_ids = get_resource_ids(stack_resources, "AWS::EC2::Instance")
-      ec2 = Fog::Compute::AWS.new(:aws_access_key_id => @access_key_id, :aws_secret_access_key => @secret_access_key)
+      ec2 = Fog::Compute::AWS.new(:aws_access_key_id => @access_key_id, :aws_secret_access_key => @secret_access_key, :region => @region)
       ec2_details = {}
       ec2_resource_ids.each do |key, value|
         ec2_instance_details = ec2.describe_instances('instance-id' => value)
@@ -256,8 +265,9 @@ module Cloudster
     #
     # ==== Examples
     #   cloud = Cloudster::Cloud.new(
-    #    :access_key_id => 'aws_access_key_id'
+    #    :access_key_id => 'aws_access_key_id',
     #    :secret_access_key => 'aws_secret_access_key',
+    #    :region => 'us-east-1'
     #   )
     #   cloud.get_elb_details(:stack_name => 'ShittyStack')
     #
@@ -270,7 +280,7 @@ module Cloudster
     def get_elb_details(options = {})
       stack_resources = resources(options)
       elb_resource_ids = get_resource_ids(stack_resources, "AWS::ElasticLoadBalancing::LoadBalancer")
-      elb = Fog::AWS::ELB.new(:aws_access_key_id => @access_key_id, :aws_secret_access_key => @secret_access_key)
+      elb = Fog::AWS::ELB.new(:aws_access_key_id => @access_key_id, :aws_secret_access_key => @secret_access_key, :region => @region)
       elb_details = {}
       elb_resource_ids.each do |key, value|
         elb_instance_details = elb.describe_load_balancers("LoadBalancerNames" => [value])
@@ -283,8 +293,9 @@ module Cloudster
     #
     # ==== Examples
     #   cloud = Cloudster::Cloud.new(
-    #    :access_key_id => 'aws_access_key_id'
+    #    :access_key_id => 'aws_access_key_id',
     #    :secret_access_key => 'aws_secret_access_key',
+    #    :region => 'us-east-1'
     #   )
     #   cloud.resources(:stack_name => 'RDSStack')
     #
@@ -303,8 +314,9 @@ module Cloudster
     #
     # ==== Examples
     #   cloud = Cloudster::Cloud.new(
-    #    :access_key_id => 'aws_access_key_id'
+    #    :access_key_id => 'aws_access_key_id',
     #    :secret_access_key => 'aws_secret_access_key',
+    #    :region => 'us-east-1'
     #   )
     #   cloud.describe(:stack_name => 'RDSStack')
     #
@@ -323,8 +335,9 @@ module Cloudster
     #
     # ==== Examples
     #   cloud = Cloudster::Cloud.new(
-    #    :access_key_id => 'aws_access_key_id'
+    #    :access_key_id => 'aws_access_key_id',
     #    :secret_access_key => 'aws_secret_access_key',
+    #    :region => 'us-east-1'
     #   )
     #   cloud.status(:stack_name => 'RDSStack')
     #
@@ -352,8 +365,9 @@ module Cloudster
     #
     # ==== Examples
     #   cloud = Cloudster::Cloud.new(
-    #    :access_key_id => 'aws_access_key_id'
+    #    :access_key_id => 'aws_access_key_id',
     #    :secret_access_key => 'aws_secret_access_key',
+    #    :region => 'us-east-1'
     #   )
     #   cloud.get_key_pairs
     #
@@ -363,7 +377,7 @@ module Cloudster
     # ==== Returns
     # * Array of hashes, example: [{"keyName"=>"default", "keyFingerprint"=>"84:67:e2:f8:04:c1:5f:d4:ff"}]
     def get_key_pairs
-      ec2 = Fog::Compute::AWS.new(:aws_access_key_id => @access_key_id, :aws_secret_access_key => @secret_access_key)
+      ec2 = Fog::Compute::AWS.new(:aws_access_key_id => @access_key_id, :aws_secret_access_key => @secret_access_key, :region => @region)
       return ec2.describe_key_pairs.body["keySet"] rescue []
     end
 
@@ -371,8 +385,9 @@ module Cloudster
     #
     # ==== Examples
     #   cloud = Cloudster::Cloud.new(
-    #    :access_key_id => 'aws_access_key_id'
+    #    :access_key_id => 'aws_access_key_id',
     #    :secret_access_key => 'aws_secret_access_key',
+    #    :region => 'us-east-1'
     #   )
     #   cloud.get_security_groups
     #
@@ -382,7 +397,7 @@ module Cloudster
     # ==== Returns
     # * Array of hashes containing the security group details
     def get_security_groups
-      ec2 = Fog::Compute::AWS.new(:aws_access_key_id => @access_key_id, :aws_secret_access_key => @secret_access_key)
+      ec2 = Fog::Compute::AWS.new(:aws_access_key_id => @access_key_id, :aws_secret_access_key => @secret_access_key, :region => @region)
       return ec2.describe_security_groups.body["securityGroupInfo"] rescue []
     end
 

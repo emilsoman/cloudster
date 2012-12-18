@@ -62,8 +62,8 @@ module Cloudster
     #   )
     #
     # ==== Parameters
-    # * options<~Hash> - 
-    #   *Keys: 
+    # * options<~Hash> -
+    #   *Keys:
     #     * :name: String containing the name for the Ec2 resource
     #     * :key_name: String containing the name of the keypair to be used for SSH
     #     * :image_id: String containing the AMI image id to be used while creating the Ec2 resource
@@ -81,14 +81,14 @@ module Cloudster
         security_groups = options[:security_groups].to_a
         properties.merge!({"SecurityGroups" => security_groups})
       end
-      template = {'Resources' => { 
-                        options[:name] => { 
+      template = {'Resources' => {
+                        options[:name] => {
                           'Type' => 'AWS::EC2::Instance',
                           'Properties' => properties
                        }
                   }
       }
-      return template 
+      return template
     end
 
   end
