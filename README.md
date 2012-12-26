@@ -49,6 +49,10 @@ Create AWS resources :
         :multi_az => true
     )
 
+    storage = Cloudster::S3.new(
+        :name => 'MyBucket'
+    )
+
 Make a cloud :
 
     cloud = Cloudster::Cloud.new(:access_key_id => 'accesskeyid', :secret_access_key => 'topsecretaccesskey', :region => 'us-west-1')
@@ -148,7 +152,7 @@ can be applied as quickly as possible:
    [cloudster repo](http://github.com/emilsoman/cloudster/).
 
 2. **Write unit tests:** If you add or modify functionality, it must
-   include unit tests. I use RSpec to test cloudster. If you are not an
+   include unit tests. I use RSpec to test cloudster. If you are not a
    RSpec expert, if you let me know, I can help you write the specs.
 
 3. **Update the `README`:** If the patch adds or modifies a major feature,
