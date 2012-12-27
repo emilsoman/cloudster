@@ -49,6 +49,10 @@ Create AWS resources :
         :multi_az => true
     )
 
+    storage = Cloudster::S3.new(
+        :name => 'MyBucket'
+    )
+
 Make a cloud :
 
     cloud = Cloudster::Cloud.new(:access_key_id => 'accesskeyid', :secret_access_key => 'topsecretaccesskey', :region => 'us-west-1')
@@ -132,10 +136,9 @@ helpful.
 
 ## Need help?
 
-You can use the [Issues](https://github.com/emilsoman/cloudster/issues) page to ask a new question. This is how you do it:
-1. Click on New Issue
-2. Type in your question
-3. Add a "question" label to the issue
+You can use the [Issues](https://github.com/emilsoman/cloudster/issues) page to ask a new question for now. This is how you do it:
+1. Click on New Issue.
+2. Type in your question and submit.
 
 ## Have a patch?
 

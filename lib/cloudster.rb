@@ -8,5 +8,6 @@ include OptionsManager
 require 'cloudster/ec2'
 require 'cloudster/elb'
 require 'cloudster/rds'
+require 'cloudster/s3'
 require 'cloudster/cloud'
 require 'cloudster/chef_client'
