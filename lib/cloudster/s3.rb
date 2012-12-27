@@ -59,7 +59,6 @@ module Cloudster
       require_options(options, [:name])
       properties = {}
       properties.merge!({"AccessControl" => options[:access_control]}) unless options[:access_control].nil?
-      #properties.merge!({"WebsiteConfiguration" => options[:website_configuration]}) unless options[:website_configuration].nil?
       unless options[:website_configuration].nil?
         properties.merge!({"WebsiteConfiguration" => {"IndexDocument" => options[:website_configuration]["index_document"], "ErrorDocument" => options[:website_configuration]["error_document"]}})
       end

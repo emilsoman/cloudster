@@ -136,10 +136,9 @@ helpful.
 
 ## Need help?
 
-You can use the [Issues](https://github.com/emilsoman/cloudster/issues) page to ask a new question. This is how you do it:
-1. Click on New Issue
-2. Type in your question
-3. Add a "question" label to the issue
+You can use the [Issues](https://github.com/emilsoman/cloudster/issues) page to ask a new question for now. This is how you do it:
+1. Click on New Issue.
+2. Type in your question and submit.
 
 ## Have a patch?
 
@@ -152,7 +151,7 @@ can be applied as quickly as possible:
    [cloudster repo](http://github.com/emilsoman/cloudster/).
 
 2. **Write unit tests:** If you add or modify functionality, it must
-   include unit tests. I use RSpec to test cloudster. If you are not a
+   include unit tests. I use RSpec to test cloudster. If you are not an
    RSpec expert, if you let me know, I can help you write the specs.
 
 3. **Update the `README`:** If the patch adds or modifies a major feature,
