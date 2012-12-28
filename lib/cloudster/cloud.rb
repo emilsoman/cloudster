@@ -401,6 +401,33 @@ module Cloudster
       return ec2.describe_security_groups.body["securityGroupInfo"] rescue []
     end
 
+    # Returns true if S3 bucket name is available, else returns false
+    #
+    # ==== Examples
+    #   cloud = Cloudster::Cloud.new(
+    #    :access_key_id => 'aws_access_key_id',
+    #    :secret_access_key => 'aws_secret_access_key',
+    #    :region => 'us-east-1'
+    #   )
+    #   cloud.is_s3_bucket_name_available?('test-bucket-name')
+    #
+    # ==== Parameter
+    # * String containing the bucket name
+    #
+    # ==== Returns
+    # * true - If bucket name is available
+    # * false - If bucket name is not available
+    def is_s3_bucket_name_available?(bucket_name)
+      s3 = Fog::Storage::AWS.new(:aws_access_key_id => @access_key_id, :aws_secret_access_key => @secret_access_key)
+      begin
+       response = s3.get_bucket(bucket_name)
+      rescue Exception => e
+        response = e.response
+      end
+      not_found_status = 404
+      return response.status == not_found_status
+    end
+
     private
 
       #Returns a hash {<logical_resource_id> => <physical_resource_id>}
