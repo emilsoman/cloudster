@@ -21,7 +21,7 @@ module Cloudster
    #    :node_type => 'cache.t1.micro',
    #    :cache_security_group_names => ['default'],
    #    :engine => 'memcached',
-   #    :node_count => 3"
+   #    :node_count => 3
    #   )
 
    def initialize(options = {})
@@ -41,7 +41,7 @@ module Cloudster
    #    :node_type => 'cache.t1.micro',
    #    :cache_security_group_names => ['default'],
    #    :engine => 'memcached',
-   #    :node_count => 3"
+   #    :node_count => 3
    #   )
    #   elasticache.template
    #

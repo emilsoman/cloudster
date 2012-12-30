@@ -40,17 +40,25 @@ Create AWS resources :
     )
 
     database = Cloudster::Rds.new(
-        :name => 'MySqlDB',
-        :instance_class => 'db.t1.micro',
-        :storage_class => '100',
-        :username => 'admin',
-        :password => 'admin123',
-        :engine => 'MySQL',
-        :multi_az => true
+      :name => 'MySqlDB',
+      :instance_class => 'db.t1.micro',
+      :storage_class => '100',
+      :username => 'admin',
+      :password => 'admin123',
+      :engine => 'MySQL',
+      :multi_az => true
     )
 
     storage = Cloudster::S3.new(
-        :name => 'MyBucket'
+      :name => 'MyBucket'
+    )
+
+    elasticache = Cloudster::ElastiCache.new(
+      :name => 'CacheResource',
+      :node_type => 'cache.t1.micro',
+      :cache_security_group_names => ['default'],
+      :engine => 'memcached',
+      :node_count => 3
     )
 
 Make a cloud :
@@ -59,7 +67,7 @@ Make a cloud :
 
 Get the CloudFormation template for the stack :
 
-        cloud.template(:resources => [app_server, app_server_2, load_balancer, database], :description => 'Description of the stack')
+        cloud.template(:resources => [app_server, app_server_2, load_balancer, database, storage, elasticache], :description => 'Description of the stack')
 
 Get the CloudFormation template for a resource as a Ruby Hash :
 
