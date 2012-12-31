@@ -16,7 +16,7 @@ module Cloudster
     #   )
     #
     # ==== Parameters
-    # * options<~Hash> - 
+    # * options<~Hash> -
     #     * :instance_name: String containing the name of EC2 element on which chef-client is to be bootstrapped. Mandatory field
     #     * :validation_key: String containing the key used for validating this client with the server. This can be taken from the chef-server validation.pem file. Mandatory field
     #     * :server_url: String containing the fully qualified domain name of the chef-server. Mandatory field
@@ -53,13 +53,12 @@ module Cloudster
     # * instance of EC2
     def add_to(ec2)
       ec2_template = ec2.template
-      @instance_name = ec2.name 
+      @instance_name = ec2.name
       chef_client_template = template
       ec2.template.deep_merge(chef_client_template)
     end
 
     private
-      
       def template
         return "Resources" => {
           @instance_name => {
