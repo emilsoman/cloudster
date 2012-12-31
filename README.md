@@ -189,8 +189,8 @@ above and this can hold things up considerably.
 
 MIT
 
+*Free Software, Forever . YEAH !*
+
 ## Thanks
 
 To Sinatra README for having a nice 'Contribute' section which I'm using(with minor changes) for Cloudster.
-
-*Free Software, Forever . YEAH !*
