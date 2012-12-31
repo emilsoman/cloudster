@@ -2,7 +2,7 @@
 
 Cloudster is a Ruby gem that was born to cut the learning curve involved in writing your own CloudFormation templates. If you don't know what
 a CloudFormation template is, but know about the AWS Cloud offerings, you can still use cloudster to provision your stack. Still in infancy , cloudster
-can create a very basic stack like a breeze. All kinds of contribution welcome !
+can create a basic stack like a breeze. Checkout the Usage section for the supported features.
 
 ##Installation
 
@@ -26,7 +26,10 @@ Create AWS resources :
      :interval => 1800
     )
 
+    elastic_ip = Cloudster::ElasticIp.new
+
     chef_client.add_to(app_server)
+    elastic_ip.add_to(app_server)
 
     app_server_2 = Cloudster::Ec2.new(:name => 'AppServer2',
       :key_name => 'mykey',
@@ -129,11 +132,15 @@ Cloudster can also do things on the AWS Cloud :
 
 - ### More coming soon ..
 
+I'm trying to add every AWS resource to cloudster, one by one. If you don't find what you need,
+let me know and I'll try to get the feature included ASAP, or you can submit a pull request with the feature -
+that would be awesome! Or, you can patiently wait till the feature is added to cloudster.
+
 ----------------
 
-# Contribute !
+# Contribute
 
-Got some love for Cloudster? That's great!
+Got some love for Cloudster? Sweet!
 
 ## Found a bug?
 
@@ -181,5 +188,9 @@ above and this can hold things up considerably.
 ##License
 
 MIT
+
+## Thanks
+
+To Sinatra README for having a nice 'Contribute' section which I'm using(with minor changes) for Cloudster.
 
 *Free Software, Forever . YEAH !*
