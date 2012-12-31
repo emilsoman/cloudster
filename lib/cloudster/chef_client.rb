@@ -17,7 +17,6 @@ module Cloudster
     #
     # ==== Parameters
     # * options<~Hash> -
-    #     * :instance_name: String containing the name of EC2 element on which chef-client is to be bootstrapped. Mandatory field
     #     * :validation_key: String containing the key used for validating this client with the server. This can be taken from the chef-server validation.pem file. Mandatory field
     #     * :server_url: String containing the fully qualified domain name of the chef-server. Mandatory field
     #     * :node_name: String containing the name for the chef node. It has to be unique across all nodes in the particular chef client-server ecosystem. Mandatory field
@@ -35,7 +34,6 @@ module Cloudster
     #
     # ==== Examples
     #   chef_client = Cloudster::ChefClient.new(
-    #    :instance_name => 'AppServer',
     #    :validation_key => 'asd3e33880889098asdnmnnasd8900890a8sdmasdjna9s880808asdnmnasd90-a',
     #    :server_url => 'http://10.50.60.70:4000',
     #    :node_name => 'project.environment.appserver_1'
