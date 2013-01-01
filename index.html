@@ -1,39 +1,49 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
-    <meta charset='utf-8'>
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
-
     <title>Cloudster by emilsoman</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
   </head>
-
   <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/emilsoman/cloudster">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/emilsoman/cloudster/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/emilsoman/cloudster/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
 
-    <header>
-      <div class="container">
-        <h1>Cloudster</h1>
-        <h2>Cloudster gem - Ruby interface to CloudFormation</h2>
+    <div class="wrapper">
 
-        <section id="downloads">
-          <a href="https://github.com/emilsoman/cloudster/zipball/master" class="btn">Download as .zip</a>
-          <a href="https://github.com/emilsoman/cloudster/tarball/master" class="btn">Download as .tar.gz</a>
-          <a href="https://github.com/emilsoman/cloudster" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
-        </section>
-      </div>
-    </header>
+      <section>
+        <div id="title">
+          <h1>Cloudster</h1>
+          <p>Cloudster gem - Ruby interface to CloudFormation</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/emilsoman">emilsoman</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></span>
+        </div>
 
-    <div class="container">
-      <section id="main_content">
         <h1>Cloudster <a href="https://travis-ci.org/emilsoman/cloudster"><img src="https://travis-ci.org/emilsoman/cloudster.png" alt="Build Status"></a> <a href="https://codeclimate.com/github/emilsoman/cloudster"><img src="https://codeclimate.com/badge.png" alt="Code Climate"></a> <a href="https://gemnasium.com/emilsoman/cloudster"><img src="https://gemnasium.com/emilsoman/cloudster.png" alt="Dependency Status"></a>
 </h1>
 
-<p>Cloudster is a Ruby gem that was born to cut the learning curve involved in writing your own CloudFormation templates. If you don't know what 
-a CloudFormation template is, but know about the AWS Cloud offerings, you can still use cloudster to provision your stack. Still in infancy , cloudster 
-can create a very basic stack like a breeze. All kinds of contribution welcome !</p>
+<p>Cloudster is a Ruby gem that was born to cut the learning curve involved in writing your own CloudFormation templates. If you don't know what
+a CloudFormation template is, but know about the AWS Cloud offerings, you can still use cloudster to provision your stack. Still in infancy , cloudster
+can create a basic stack like a breeze. Checkout the Usage section for the supported features.</p>
 
 <h2>Installation</h2>
 
@@ -58,7 +68,10 @@ chef_client = Cloudster::ChefClient.new(
  :interval =&gt; 1800
 )
 
+elastic_ip = Cloudster::ElasticIp.new
+
 chef_client.add_to(app_server)
+elastic_ip.add_to(app_server)
 
 app_server_2 = Cloudster::Ec2.new(:name =&gt; 'AppServer2',
   :key_name =&gt; 'mykey',
@@ -72,24 +85,36 @@ load_balancer = Cloudster::Elb.new(:name =&gt; 'LoadBalancer',
 )
 
 database = Cloudster::Rds.new(
-    :name =&gt; 'MySqlDB',
-    :instance_class =&gt; 'db.t1.micro',
-    :storage_class =&gt; '100',
-    :username =&gt; 'admin',
-    :password =&gt; 'admin123',
-    :engine =&gt; 'MySQL',
-    :multi_az =&gt; true
+  :name =&gt; 'MySqlDB',
+  :instance_class =&gt; 'db.t1.micro',
+  :storage_class =&gt; '100',
+  :username =&gt; 'admin',
+  :password =&gt; 'admin123',
+  :engine =&gt; 'MySQL',
+  :multi_az =&gt; true
+)
+
+storage = Cloudster::S3.new(
+  :name =&gt; 'MyBucket'
+)
+
+elasticache = Cloudster::ElastiCache.new(
+  :name =&gt; 'CacheResource',
+  :node_type =&gt; 'cache.t1.micro',
+  :cache_security_group_names =&gt; ['default'],
+  :engine =&gt; 'memcached',
+  :node_count =&gt; 3
 )
 </code></pre>
 
 <p>Make a cloud :</p>
 
-<pre><code>cloud = Cloudster::Cloud.new(:access_key_id =&gt; 'accesskeyid', :secret_access_key =&gt; 'topsecretaccesskey')
+<pre><code>cloud = Cloudster::Cloud.new(:access_key_id =&gt; 'accesskeyid', :secret_access_key =&gt; 'topsecretaccesskey', :region =&gt; 'us-west-1')
 </code></pre>
 
 <p>Get the CloudFormation template for the stack :</p>
 
-<pre><code>    cloud.template(:resources =&gt; [app_server, app_server_2, load_balancer, database], :description =&gt; 'Description of the stack')
+<pre><code>    cloud.template(:resources =&gt; [app_server, app_server_2, load_balancer, database, storage, elasticache], :description =&gt; 'Description of the stack')
 </code></pre>
 
 <p>Get the CloudFormation template for a resource as a Ruby Hash :</p>
@@ -178,11 +203,14 @@ database = Cloudster::Rds.new(
 <pre><code>cloud.get_security_groups
 </code></pre>
 </li>
-</ul><h1>More coming soon !</h1>
+<li><h3>More coming soon ..</h3></li>
+</ul><p>I'm trying to add every AWS resource to cloudster, one by one. If you don't find what you need,
+let me know and I'll try to get the feature included ASAP, or you can submit a pull request with the feature -
+that would be awesome! Or, you can patiently wait till the feature is added to cloudster.</p>
 
-<hr><h1>Contribute !</h1>
+<hr><h1>Contribute</h1>
 
-<p>Got some love for Cloudster? That's great!</p>
+<p>Got some love for Cloudster? Sweet!</p>
 
 <h2>Found a bug?</h2>
 
@@ -193,10 +221,9 @@ helpful.</p>
 
 <h2>Need help?</h2>
 
-<p>You can use the <a href="https://github.com/emilsoman/cloudster/issues">Issues</a> page to ask a new question. This is how you do it: 
-1. Click on New Issue
-2. Type in your question
-3. Add a "question" label to the issue</p>
+<p>You can use the <a href="https://github.com/emilsoman/cloudster/issues">Issues</a> page to ask a new question for now. This is how you do it:
+1. Click on New Issue.
+2. Type in your question and submit.</p>
 
 <h2>Have a patch?</h2>
 
@@ -213,7 +240,7 @@ include unit tests. I use RSpec to test cloudster. If you are not an
 RSpec expert, if you let me know, I can help you write the specs.</p></li>
 <li><p><strong>Update the <code>README</code>:</strong> If the patch adds or modifies a major feature,
 modify the <code>README.md</code> file to reflect that. Again if you're not an
-expert with Markdown syntax, it's really easy to learn. Check out <a href="http://dillinger.io/">Dillinger</a> to
+expert with Markdown syntax, it's really easy to learn. Check out <a href="http://prose.io/">Prose.io</a> to
 try it out.</p></li>
 <li><p><strong>Push it:</strong> Once you're ready, push your changes to a topic branch
 and add a note to the ticket with the URL to your branch. Or, say
@@ -229,9 +256,14 @@ above and this can hold things up considerably.</p>
 <p>MIT</p>
 
 <p><em>Free Software, Forever . YEAH !</em></p>
-      </section>
-    </div>
 
+<h2>Thanks</h2>
+
+<p>To Sinatra README for having a nice 'Contribute' section which I'm using(with minor changes) for Cloudster.</p>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
               <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
