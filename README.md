@@ -56,6 +56,9 @@ Create AWS resources :
       :name => 'MyBucket'
     )
 
+    cloud_front = Cloudster::CloudFront.new(:name => 'CloudFrontResource')
+    cloud_front.add_to storage
+
     elasticache = Cloudster::ElastiCache.new(
       :name => 'CacheResource',
       :node_type => 'cache.t1.micro',
@@ -76,7 +79,7 @@ Get the CloudFormation template for a resource as a Ruby Hash :
 
         app_server.template
 
-Cloudster can also do things on the AWS Cloud :
+Cloudster can also interact with the provisioned AWS Cloud :
 
 - Provision the stack :
 

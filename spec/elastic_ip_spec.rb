@@ -22,7 +22,7 @@ describe Cloudster::ChefClient do
               "Properties"=>{
                 "KeyName"=>"testkey",
                 "ImageId"=>"image_id",
-                "InstanceType"=>"t1.micro",
+                "InstanceType"=>"t1.micro"
               }
             },
             "ElasticIp"=>{
