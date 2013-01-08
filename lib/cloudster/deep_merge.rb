@@ -1,4 +1,4 @@
-# Stolen shamelessly from here http://apidock.com/rails/Hash/deep_merge!
+# Stolen shamelessly from Rails : http://apidock.com/rails/Hash/deep_merge!
 class Hash
   def deep_merge(other_hash)
     other_hash.each_pair do |k,v|

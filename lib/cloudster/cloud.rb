@@ -257,7 +257,7 @@ module Cloudster
       ec2_resource_ids.each do |key, value|
         ec2_instance_details = ec2.describe_instances('instance-id' => value)
         ec2_details[key] = ec2_instance_details.body["reservationSet"][0]["instancesSet"][0] rescue nil
-      end 
+      end
       return ec2_details
     end
 
