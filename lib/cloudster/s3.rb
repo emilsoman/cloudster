@@ -1,6 +1,8 @@
 module Cloudster
   #S3 Resource
+  #Output values : bucket_name, dns_name, website_url
   class S3
+    extend Cloudster::Output
 
     attr_accessor :name, :template
     # Initialize a s3 bucket
@@ -38,7 +40,12 @@ module Cloudster
     # ==== Returns
     # * Ruby hash version of the Cloud Formation template for the s3 resource
     def template
-      @template ||= S3.template({:name => @name, :access_control => @access_control, :website_configuration => @website_configuration})
+      @template ||= S3.template({
+        :name => @name,
+        :access_control => @access_control,
+        :website_configuration => @website_configuration,
+        :outputs => @outputs
+      })
     end
 
     # Class method that returns a Ruby hash version of the Cloud Formation template
@@ -63,13 +70,22 @@ module Cloudster
       unless options[:website_configuration].nil?
         properties.merge!({"WebsiteConfiguration" => {"IndexDocument" => options[:website_configuration]["index_document"], "ErrorDocument" => options[:website_configuration]["error_document"]}})
       end
-      template = {'Resources' => {
-                        options[:name] => {
-                          'Type' => 'AWS::S3::Bucket',
-                          'Properties' => properties
-                       }
-                  }
+      outputs = {
+        options[:name] => {
+          'bucket_name' => { 'Ref' => options[:name] },
+          'dns_name' => {'Fn::GetAtt' => [options[:name], 'DomainName']},
+          'website_url' => {'Fn::GetAtt' => [options[:name], 'WebsiteURL']}
+        }
       }
+      template = {
+        'Resources' => {
+          options[:name] => {
+            'Type' => 'AWS::S3::Bucket',
+            'Properties' => properties
+          }
+        }
+      }
+      template['Outputs'] = output_template(outputs)
       return template
     end
   end

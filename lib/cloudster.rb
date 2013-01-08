@@ -2,6 +2,7 @@
 #This file requires all dependencies
 require 'json'
 require 'fog'
+require 'cloudster/output'
 require 'cloudster/options_manager'
 require 'cloudster/deep_merge'
 include OptionsManager

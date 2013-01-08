@@ -59,14 +59,17 @@ module Cloudster
       resources = options[:resources]
       description = options[:description] || 'This stack is created by Cloudster'
       resource_template = {}
+      output_template = {}
       resources.each do |resource|
         resource_template.merge!(resource.template['Resources'])
+        output_template.merge!(resource.template['Outputs']) unless resource.template['Outputs'].nil?
       end
 
       cloud_template = {'AWSTemplateFormatVersion' => '2010-09-09',
-                  'Description' => description,
-                  'Resources' => resource_template
+                  'Description' => description
       }
+      cloud_template['Resources'] = resource_template if !resource_template.empty?
+      cloud_template['Outputs'] = output_template if !output_template.empty?
       return cloud_template.to_json
     end
 
