@@ -98,6 +98,9 @@ storage = Cloudster::S3.new(
   :name =&gt; 'MyBucket'
 )
 
+cloud_front = Cloudster::CloudFront.new(:name =&gt; 'CloudFrontResource')
+cloud_front.add_to storage
+
 elasticache = Cloudster::ElastiCache.new(
   :name =&gt; 'CacheResource',
   :node_type =&gt; 'cache.t1.micro',
@@ -122,7 +125,7 @@ elasticache = Cloudster::ElastiCache.new(
 <pre><code>    app_server.template
 </code></pre>
 
-<p>Cloudster can also do things on the AWS Cloud :</p>
+<p>Cloudster can also interact with the provisioned AWS Cloud :</p>
 
 <ul>
 <li>
