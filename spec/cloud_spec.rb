@@ -127,6 +127,40 @@ describe Cloudster::Cloud do
     end
   end
 
+  describe '#outputs' do
+    it "should raise argument error if resources not provided" do
+      cloud = Cloudster::Cloud.new(:access_key_id => 'test', :secret_access_key => 'test')
+      expect { cloud.outputs() }.to raise_error(ArgumentError, 'Missing required argument: stack_name')
+    end
+    it "should trigger 'describe stack' request" do
+      cloud_formation = double('CloudFormation')
+      Fog::AWS::CloudFormation.should_receive(:new).with(:aws_access_key_id => 'test', :aws_secret_access_key => 'test', :region => nil).and_return cloud_formation
+      cloud = Cloudster::Cloud.new(:access_key_id => 'test', :secret_access_key => 'test')
+      cloud.should_receive(:describe).with(:stack_name => 'stack_name').and_return ({
+        "Outputs"=>[{
+          "OutputValue"=>"bucket_name|teststack3-testbucket1,dns_name|teststack3-testbucket1.s3.amazonaws.com,website_url|http://teststack3-testbucket1.s3-website-us-east-1.amazonaws.com",
+          "OutputKey"=>"TestBucket1"
+        },{
+          "OutputValue"=>"bucket_name|teststack3-testbucket2,dns_name|teststack3-testbucket2.s3.amazonaws.com,website_url|http://teststack3-testbucket2.s3-website-us-east-1.amazonaws.com",
+          "OutputKey"=>"TestBucket2"
+        }]
+      })
+      output_hash = cloud.outputs(:stack_name => 'stack_name')
+      output_hash.should == ({
+        "TestBucket1" => {
+            "bucket_name" => "teststack3-testbucket1",
+            "dns_name" => "teststack3-testbucket1.s3.amazonaws.com",
+            "website_url" => "http://teststack3-testbucket1.s3-website-us-east-1.amazonaws.com"
+        },
+        "TestBucket2" => {
+            "bucket_name" => "teststack3-testbucket2",
+            "dns_name" => "teststack3-testbucket2.s3.amazonaws.com",
+            "website_url" => "http://teststack3-testbucket2.s3-website-us-east-1.amazonaws.com"
+        }
+      })
+    end
+  end
+
   describe "#is_s3_bucket_name_available?" do
     it "should return true if bucket is available" do
       cloud = Cloudster::Cloud.new(:access_key_id => 'test', :secret_access_key => 'test')

@@ -1,6 +1,7 @@
 module Cloudster
   #Cloud objects have many resources. This class can generate the cloudformation template and provision the stack.
   class Cloud
+    include Output
 
     # Initialize a Cloud instance
     #
@@ -332,6 +333,33 @@ module Cloudster
     def describe(options = {})
       require_options(options, [:stack_name])
       return @cloud_formation.describe_stacks('StackName' => options[:stack_name]).body["Stacks"][0] rescue nil
+    end
+
+    # Returns a hash containing the output values of each resource in the Stack
+    #
+    # ==== Examples
+    #   cloud = Cloudster::Cloud.new(
+    #    :access_key_id => 'aws_access_key_id',
+    #    :secret_access_key => 'aws_secret_access_key',
+    #    :region => 'us-east-1'
+    #   )
+    #   cloud.outputs(:stack_name => 'RDSStack')
+    #
+    # ==== Parameters
+    # * options<~Hash>
+    #   * :stack_name : A string which will contain the name of the stack
+    #
+    # ==== Returns
+    # * Hash containing outputs of the stack
+    def outputs(options = {})
+      require_options(options, [:stack_name])
+      stack_description = describe(:stack_name => options[:stack_name])
+      outputs = stack_description["Outputs"] rescue nil
+      outputs_hash = {}
+      outputs.each do |output|
+        outputs_hash[output["OutputKey"]] = parse_outputs(output["OutputValue"])
+      end
+      return outputs_hash
     end
 
     # Returns the status of the stack

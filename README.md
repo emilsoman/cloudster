@@ -93,6 +93,10 @@ Cloudster can also interact with the provisioned AWS Cloud :
 
         cloud.delete(:stack_name => 'TestStack')
 
+- Get the output attributes of each resource in the stack :
+
+        cloud.outputs(:stack_name => 'TestStack')
+
 - Describe the events of a stack :
 
         cloud.events(:stack_name => 'TestStack')

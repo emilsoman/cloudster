@@ -40,9 +40,9 @@ describe Cloudster::ChefClient do
               "Value"=>{
                 "Fn::Join"=>[",",
                   [
-                    {"Fn::Join"=>[":", ["bucket_name", {"Ref"=>"S3ResourceName"}]]},
-                    {"Fn::Join"=>[":", ["dns_name", {"Fn::GetAtt"=>["S3ResourceName", "DomainName"]}]]},
-                    {"Fn::Join"=>[":", ["website_url", {"Fn::GetAtt"=>["S3ResourceName", "WebsiteURL"]}]]}
+                    {"Fn::Join"=>["|", ["bucket_name", {"Ref"=>"S3ResourceName"}]]},
+                    {"Fn::Join"=>["|", ["dns_name", {"Fn::GetAtt"=>["S3ResourceName", "DomainName"]}]]},
+                    {"Fn::Join"=>["|", ["website_url", {"Fn::GetAtt"=>["S3ResourceName", "WebsiteURL"]}]]}
                   ]
                 ]
               }
