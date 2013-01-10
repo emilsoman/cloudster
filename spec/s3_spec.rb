@@ -13,17 +13,17 @@ describe Cloudster::S3 do
   describe '#template' do
     it "should return a ruby hash for the resource cloudformation template with only mandatory fields" do
       s3 = Cloudster::S3.new(:name => 'bucket_name')
-      s3.template.should == {
+      s3.template.should include({
         'Resources' => {'bucket_name' => {'Type' => 'AWS::S3::Bucket', 'Properties' => {}}},
         "Outputs" => {"bucket_name"=>{"Value"=>{"Fn::Join"=>[",", [{"Fn::Join"=>["|", ["bucket_name", {"Ref"=>"bucket_name"}]]}, {"Fn::Join"=>["|", ["dns_name", {"Fn::GetAtt"=>["bucket_name", "DomainName"]}]]}, {"Fn::Join"=>["|", ["website_url", {"Fn::GetAtt"=>["bucket_name", "WebsiteURL"]}]]}]]}}}
-      }
+      })
     end
     it "should return a ruby hash for the resource cloudformation template" do
       s3 = Cloudster::S3.new(:name => 'bucket_name', :access_control => "PublicRead", :website_configuration => {"index_document" => "index.html", "error_document" => "error.html"} )
-      s3.template.should == {
+      s3.template.should include({
         'Resources' => {'bucket_name' => {'Type' => 'AWS::S3::Bucket', 'Properties' => {"AccessControl" => "PublicRead", "WebsiteConfiguration" => { "IndexDocument" => "index.html", "ErrorDocument" => "error.html" } }}},
         "Outputs" => {"bucket_name"=>{"Value"=>{"Fn::Join"=>[",", [{"Fn::Join"=>["|", ["bucket_name", {"Ref"=>"bucket_name"}]]}, {"Fn::Join"=>["|", ["dns_name", {"Fn::GetAtt"=>["bucket_name", "DomainName"]}]]}, {"Fn::Join"=>["|", ["website_url", {"Fn::GetAtt"=>["bucket_name", "WebsiteURL"]}]]}]]}}}
-      }
+      })
     end
   end
 
@@ -33,10 +33,10 @@ describe Cloudster::S3 do
     end
     it "should return a ruby hash for the resource cloudformation template" do
       hash = Cloudster::S3.template(:name => 'bucket_name', :access_control => "PublicRead", :website_configuration => {"index_document" => "index.html", "error_document" => "error.html"} )
-      hash.should == {
+      hash.should include({
         'Resources' => {'bucket_name' => {'Type' => 'AWS::S3::Bucket', 'Properties' => {"AccessControl" => "PublicRead", "WebsiteConfiguration" => { "IndexDocument" => "index.html", "ErrorDocument" => "error.html" } }}},
         "Outputs" => {"bucket_name"=>{"Value"=>{"Fn::Join"=>[",", [{"Fn::Join"=>["|", ["bucket_name", {"Ref"=>"bucket_name"}]]}, {"Fn::Join"=>["|", ["dns_name", {"Fn::GetAtt"=>["bucket_name", "DomainName"]}]]}, {"Fn::Join"=>["|", ["website_url", {"Fn::GetAtt"=>["bucket_name", "WebsiteURL"]}]]}]]}}}
-      }
+      })
     end
   end
 
