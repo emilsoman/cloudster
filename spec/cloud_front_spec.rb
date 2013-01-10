@@ -14,7 +14,7 @@ describe Cloudster::ChefClient do
       bucket = bucket = Cloudster::S3.new(:name => 'S3ResourceName',:access_control => 'PublicRead')
       cloud_front = Cloudster::CloudFront.new(:name => 'CloudFront')
       cloud_front.add_to bucket
-      bucket.template.should ==
+      bucket.template.should include(
         {
           "Resources"=>{
             "S3ResourceName"=>{
@@ -49,6 +49,7 @@ describe Cloudster::ChefClient do
             }
           }
         }
+      )
     end
   end
 end

@@ -15,7 +15,7 @@ describe Cloudster::Output do
       }
       class Resource;end
       Resource.extend(Cloudster::Output)
-      Resource.output_template(outputs).should == {
+      Resource.output_template(outputs).should include({
         resource_name => {
           "Value" => {
             "Fn::Join" => [ ",",[
@@ -24,7 +24,7 @@ describe Cloudster::Output do
             ]]
           }
         }
-      }
+      })
     end
   end
 
