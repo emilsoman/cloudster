@@ -15,7 +15,6 @@ describe Cloudster::ChefClient do
       cloud_front = Cloudster::CloudFront.new(:name => 'CloudFront')
       cloud_front.add_to bucket
       bucket.template.should include(
-        {
           "Resources"=>{
             "S3ResourceName"=>{
               "Type"=>"AWS::S3::Bucket",
@@ -48,7 +47,6 @@ describe Cloudster::ChefClient do
               }
             }
           }
-        }
       )
     end
   end
