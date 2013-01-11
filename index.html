@@ -38,8 +38,12 @@
           <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></span>
         </div>
 
-        <h1>Cloudster <a href="https://travis-ci.org/emilsoman/cloudster"><img src="https://travis-ci.org/emilsoman/cloudster.png" alt="Build Status"></a> <a href="https://codeclimate.com/github/emilsoman/cloudster"><img src="https://codeclimate.com/badge.png" alt="Code Climate"></a> <a href="https://gemnasium.com/emilsoman/cloudster"><img src="https://gemnasium.com/emilsoman/cloudster.png" alt="Dependency Status"></a>
-</h1>
+        <h1>Cloudster</h1>
+
+<p><a href="https://travis-ci.org/emilsoman/cloudster"><img src="https://travis-ci.org/emilsoman/cloudster.png" alt="Build Status"></a>
+<a href="https://codeclimate.com/github/emilsoman/cloudster"><img src="https://codeclimate.com/badge.png" alt="Code Climate"></a>
+<a href="https://gemnasium.com/emilsoman/cloudster"><img src="https://gemnasium.com/emilsoman/cloudster.png" alt="Dependency Status"></a>
+<a href="http://stillmaintained.com/emilsoman/cloudster"><img src="http://stillmaintained.com/emilsoman/cloudster.png" alt="still maintained"></a></p>
 
 <p>Cloudster is a Ruby gem that was born to cut the learning curve involved in writing your own CloudFormation templates. If you don't know what
 a CloudFormation template is, but know about the AWS Cloud offerings, you can still use cloudster to provision your stack. Still in infancy , cloudster
@@ -144,6 +148,12 @@ elasticache = Cloudster::ElastiCache.new(
 <p>Delete the stack and it's attached resources :</p>
 
 <pre><code>cloud.delete(:stack_name =&gt; 'TestStack')
+</code></pre>
+</li>
+<li>
+<p>Get the output attributes of each resource in the stack :</p>
+
+<pre><code>cloud.outputs(:stack_name =&gt; 'TestStack')
 </code></pre>
 </li>
 <li>
