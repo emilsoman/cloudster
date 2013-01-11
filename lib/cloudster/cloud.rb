@@ -354,7 +354,7 @@ module Cloudster
     def outputs(options = {})
       require_options(options, [:stack_name])
       stack_description = describe(:stack_name => options[:stack_name])
-      outputs = stack_description["Outputs"] rescue nil
+      outputs = stack_description["Outputs"] rescue []
       outputs_hash = {}
       outputs.each do |output|
         outputs_hash[output["OutputKey"]] = parse_outputs(output["OutputValue"])
