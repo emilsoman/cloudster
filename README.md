@@ -30,7 +30,7 @@ Create AWS resources :
      :interval => 1800
     )
 
-    elastic_ip = Cloudster::ElasticIp.new
+    elastic_ip = Cloudster::ElasticIp.new(:name => 'AppServerElasticIp')
 
     chef_client.add_to(app_server)
     elastic_ip.add_to(app_server)
