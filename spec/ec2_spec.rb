@@ -15,7 +15,34 @@ describe Cloudster::Ec2 do
   describe '#template' do
     it "should return a ruby hash for the resource cloudformation template" do
       ec2 = Cloudster::Ec2.new(:key_name => 'testkey', :image_id => 'image_id', :name => 'name', :instance_type => 't1.micro', :security_groups => ["testSecurityGroup1", "testSecurityGroup2"] )
-      ec2.template.should == {'Resources' => {'name' => {'Type' => 'AWS::EC2::Instance', 'Properties' => {"KeyName" => 'testkey', "ImageId" => 'image_id', "InstanceType" => 't1.micro', "SecurityGroups" => ["testSecurityGroup1", "testSecurityGroup2"]} }}}
+      ec2.template.should == {
+        'Resources' => {
+          'name' => {
+            'Type' => 'AWS::EC2::Instance',
+            'Properties' => {
+              "KeyName" => 'testkey',
+              "ImageId" => 'image_id',
+              "InstanceType" => 't1.micro',
+              "SecurityGroups" => ["testSecurityGroup1", "testSecurityGroup2"]
+            }
+          }
+        },
+        "Outputs" => {
+          "name"=>{
+            "Value"=>{
+              "Fn::Join"=>[",", 
+                [
+                  {"Fn::Join"=>["|", ["availablity_zone", {"Fn::GetAtt"=>["name", "AvailabilityZone"]}]]},
+                  {"Fn::Join"=>["|", ["private_dns_name", {"Fn::GetAtt"=>["name", "PrivateDnsName"]}]]},
+                  {"Fn::Join"=>["|", ["public_dns_name", {"Fn::GetAtt"=>["name", "PublicDnsName"]}]]},
+                  {"Fn::Join"=>["|", ["private_ip", {"Fn::GetAtt"=>["name", "PrivateIp"]}]]},
+                  {"Fn::Join"=>["|", ["public_ip", {"Fn::GetAtt"=>["name", "PublicIp"]}]]}
+                ]
+              ]
+            }
+          }
+        }
+      }
     end
   end
   describe '.template' do
@@ -24,7 +51,34 @@ describe Cloudster::Ec2 do
     end
     it "should return a ruby hash for the resource cloudformation template" do
       hash = Cloudster::Ec2.template(:key_name => 'testkey', :image_id => 'image_id', :name => 'name', :instance_type => 't1.micro', :security_groups => ["testSecurityGroup1"])
-      hash.should == {'Resources' => {'name' => {'Type' => 'AWS::EC2::Instance', 'Properties' => {"KeyName" => 'testkey', "ImageId" => 'image_id', "InstanceType" => 't1.micro', "SecurityGroups" => ["testSecurityGroup1"]} }}}
+      hash.should == {
+        'Resources' => {
+          'name' => {
+            'Type' => 'AWS::EC2::Instance',
+            'Properties' => {
+              "KeyName" => 'testkey',
+              "ImageId" => 'image_id',
+              "InstanceType" => 't1.micro',
+              "SecurityGroups" => ["testSecurityGroup1"]
+            }
+          }
+        },
+        "Outputs" => {
+          "name"=>{
+            "Value"=>{
+              "Fn::Join"=>[",", 
+                [
+                  {"Fn::Join"=>["|", ["availablity_zone", {"Fn::GetAtt"=>["name", "AvailabilityZone"]}]]},
+                  {"Fn::Join"=>["|", ["private_dns_name", {"Fn::GetAtt"=>["name", "PrivateDnsName"]}]]},
+                  {"Fn::Join"=>["|", ["public_dns_name", {"Fn::GetAtt"=>["name", "PublicDnsName"]}]]},
+                  {"Fn::Join"=>["|", ["private_ip", {"Fn::GetAtt"=>["name", "PrivateIp"]}]]},
+                  {"Fn::Join"=>["|", ["public_ip", {"Fn::GetAtt"=>["name", "PublicIp"]}]]}
+                ]
+              ]
+            }
+          }
+        }
+      }
     end
   end
 end

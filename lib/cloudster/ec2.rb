@@ -1,6 +1,8 @@
 module Cloudster
   #==Ec2 resource
+  #Output values : availability_zone, private_dns_name, public_dns_name, private_ip, public_ip
   class Ec2
+    extend Cloudster::Output
 
     attr_accessor :template, :name
     # Initialize an Ec2 instance
@@ -88,6 +90,16 @@ module Cloudster
                        }
                   }
       }
+      outputs = {
+        options[:name] => {
+          'availablity_zone' => {'Fn::GetAtt' => [options[:name], 'AvailabilityZone']},
+          'private_dns_name' => {'Fn::GetAtt' => [options[:name], 'PrivateDnsName']},
+          'public_dns_name' => {'Fn::GetAtt' => [options[:name], 'PublicDnsName']},
+          'private_ip' => {'Fn::GetAtt' => [options[:name], 'PrivateIp']},
+          'public_ip' => {'Fn::GetAtt' => [options[:name], 'PublicIp']}
+        }
+      }
+      template['Outputs'] = output_template(outputs)
       return template
     end
 

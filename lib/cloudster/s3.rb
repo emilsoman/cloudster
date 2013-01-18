@@ -43,8 +43,7 @@ module Cloudster
       @template ||= S3.template({
         :name => @name,
         :access_control => @access_control,
-        :website_configuration => @website_configuration,
-        :outputs => @outputs
+        :website_configuration => @website_configuration
       })
     end
 
@@ -70,19 +69,19 @@ module Cloudster
       unless options[:website_configuration].nil?
         properties.merge!({"WebsiteConfiguration" => {"IndexDocument" => options[:website_configuration]["index_document"], "ErrorDocument" => options[:website_configuration]["error_document"]}})
       end
-      outputs = {
-        options[:name] => {
-          'bucket_name' => { 'Ref' => options[:name] },
-          'dns_name' => {'Fn::GetAtt' => [options[:name], 'DomainName']},
-          'website_url' => {'Fn::GetAtt' => [options[:name], 'WebsiteURL']}
-        }
-      }
       template = {
         'Resources' => {
           options[:name] => {
             'Type' => 'AWS::S3::Bucket',
             'Properties' => properties
           }
+        }
+      }
+      outputs = {
+        options[:name] => {
+          'bucket_name' => { 'Ref' => options[:name] },
+          'dns_name' => {'Fn::GetAtt' => [options[:name], 'DomainName']},
+          'website_url' => {'Fn::GetAtt' => [options[:name], 'WebsiteURL']}
         }
       }
       template['Outputs'] = output_template(outputs)

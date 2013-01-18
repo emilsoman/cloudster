@@ -80,6 +80,21 @@ describe Cloudster::ChefClient do
                 }
               }
             }
+          },
+          "Outputs" => {
+            "AppServer"=>{
+              "Value"=>{
+                "Fn::Join"=>[",", 
+                  [
+                    {"Fn::Join"=>["|", ["availablity_zone", {"Fn::GetAtt"=>["AppServer", "AvailabilityZone"]}]]},
+                    {"Fn::Join"=>["|", ["private_dns_name", {"Fn::GetAtt"=>["AppServer", "PrivateDnsName"]}]]},
+                    {"Fn::Join"=>["|", ["public_dns_name", {"Fn::GetAtt"=>["AppServer", "PublicDnsName"]}]]},
+                    {"Fn::Join"=>["|", ["private_ip", {"Fn::GetAtt"=>["AppServer", "PrivateIp"]}]]},
+                    {"Fn::Join"=>["|", ["public_ip", {"Fn::GetAtt"=>["AppServer", "PublicIp"]}]]}
+                  ]
+                ]
+              }
+            }
           }
         }
     end

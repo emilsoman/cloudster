@@ -11,21 +11,21 @@ describe Cloudster::Cloud do
   end
   describe '#template' do
     it "should return a ruby hash for the stack cloudformation template" do
-      ec2 = Cloudster::Ec2.new(:key_name => 'testkey', :image_id => 'image_id', :name => 'name')
-      ec2_1 = Cloudster::Ec2.new(:key_name => 'testkey1', :image_id => 'image_id1', :name => 'name1')
+      ec2 = Cloudster::Ec2.new(:key_name => 'testkey', :image_id => 'image_id', :name => 'Ec2Instance1')
+      ec2_1 = Cloudster::Ec2.new(:key_name => 'testkey1', :image_id => 'image_id1', :name => 'Ec2Instance2')
       rds = Cloudster::Rds.new(:name => 'MySqlDB', :storage_size => '10') 
-      elb = Cloudster::Elb.new(:name => 'ELB', :instance_names => ['name','name1'])
+      elb = Cloudster::Elb.new(:name => 'ELB', :instance_names => ['Ec2Instance1','Ec2Instance2'])
       cloud = Cloudster::Cloud.new(:access_key_id => 'test', :secret_access_key => 'test')
       cloud.template(:resources => [ec2, ec2_1, rds, elb], :description => 'test template').should == {"AWSTemplateFormatVersion"=>"2010-09-09", 
         "Description"=>"test template",
         "Resources"=>{
-          "name"=>{
+          "Ec2Instance1"=>{
             "Type"=>"AWS::EC2::Instance",
             "Properties"=>{
               "KeyName"=>"testkey",
               "ImageId"=>"image_id"}
             },
-           "name1"=>{
+           "Ec2Instance2"=>{
              "Type"=>"AWS::EC2::Instance",
              "Properties"=>{
                 "KeyName"=>"testkey1", 
@@ -62,7 +62,35 @@ describe Cloudster::Cloud do
                  "UnhealthyThreshold" => "5",
                  "Interval" => "30", "Timeout" => "5" 
                },
-               "Instances" => [{ "Ref" => "name"}, {"Ref" => "name1"}]}
+               "Instances" => [{ "Ref" => "Ec2Instance1"}, {"Ref" => "Ec2Instance2"}]}
+            }
+          },
+          "Outputs" => {
+            "Ec2Instance1"=> {
+              "Value" => {
+                "Fn::Join" => ["," ,
+                  [
+                    {"Fn::Join" => ["|", ["availablity_zone", {'Fn::GetAtt' => ['Ec2Instance1', 'AvailabilityZone']}]]},
+                    {"Fn::Join" => ["|", ["private_dns_name", {'Fn::GetAtt' => ['Ec2Instance1', 'PrivateDnsName']}]]},
+                    {"Fn::Join" => ["|", ["public_dns_name", {'Fn::GetAtt' => ['Ec2Instance1', 'PublicDnsName']}]]},
+                    {"Fn::Join" => ["|", ["private_ip", {'Fn::GetAtt' => ['Ec2Instance1', 'PrivateIp']}]]},
+                    {"Fn::Join" => ["|", ["public_ip", {'Fn::GetAtt' => ['Ec2Instance1', 'PublicIp']}]]}
+                  ]
+                ]
+              }
+            },
+            "Ec2Instance2"=> {
+              "Value" => {
+                "Fn::Join" => ["," ,
+                  [
+                    {"Fn::Join" => ["|", ["availablity_zone", {'Fn::GetAtt' => ['Ec2Instance2', 'AvailabilityZone']}]]},
+                    {"Fn::Join" => ["|", ["private_dns_name", {'Fn::GetAtt' => ['Ec2Instance2', 'PrivateDnsName']}]]},
+                    {"Fn::Join" => ["|", ["public_dns_name", {'Fn::GetAtt' => ['Ec2Instance2', 'PublicDnsName']}]]},
+                    {"Fn::Join" => ["|", ["private_ip", {'Fn::GetAtt' => ['Ec2Instance2', 'PrivateIp']}]]},
+                    {"Fn::Join" => ["|", ["public_ip", {'Fn::GetAtt' => ['Ec2Instance2', 'PublicIp']}]]}
+                  ]
+                ]
+              }
             }
           }
       }.to_json
@@ -71,15 +99,15 @@ describe Cloudster::Cloud do
 
   describe '#provision' do
     it "should raise argument error if resources not provided" do
-      ec2 = Cloudster::Ec2.new(:key_name => 'testkey', :image_id => 'image_id', :name => 'name')
+      ec2 = Cloudster::Ec2.new(:key_name => 'testkey', :image_id => 'image_id', :name => 'Ec2Instance1')
       cloud = Cloudster::Cloud.new(:access_key_id => 'test', :secret_access_key => 'test')
       expect { cloud.provision(:description => 'test') }.to raise_error(ArgumentError, 'Missing required argument: resources,stack_name' )
     end
     it "should trigger stack creation" do
       cloud_formation = double('CloudFormation')
       Fog::AWS::CloudFormation.should_receive(:new).with(:aws_access_key_id => 'test', :aws_secret_access_key => 'test', :region => nil).and_return cloud_formation
-      ec2 = Cloudster::Ec2.new(:key_name => 'testkey', :image_id => 'image_id', :name => 'name')
-      elb = Cloudster::Elb.new(:name => 'ELB', :instance_names => ['name','name1'])
+      ec2 = Cloudster::Ec2.new(:key_name => 'testkey', :image_id => 'image_id', :name => 'Ec2Instance1')
+      elb = Cloudster::Elb.new(:name => 'ELB', :instance_names => ['Ec2Instance1','Ec2Instance2'])
       rds = Cloudster::Rds.new(:name => 'MySqlDB', :storage_size => '10')
       cloud = Cloudster::Cloud.new(:access_key_id => 'test', :secret_access_key => 'test')
       cloud_formation.should_receive('create_stack').with('stack_name', 'TemplateBody' => cloud.template(:resources => [ec2, elb, rds], :description => 'testDescription'))
@@ -89,14 +117,14 @@ describe Cloudster::Cloud do
 
   describe '#update' do
     it "should raise argument error if resources not provided" do
-      ec2 = Cloudster::Ec2.new(:key_name => 'testkey', :image_id => 'image_id', :name => 'name')
+      ec2 = Cloudster::Ec2.new(:key_name => 'testkey', :image_id => 'image_id', :name => 'Ec2Instance1')
       cloud = Cloudster::Cloud.new(:access_key_id => 'test', :secret_access_key => 'test')
       expect { cloud.update(:description => 'test') }.to raise_error(ArgumentError, 'Missing required argument: resources,stack_name' )
     end
     it "should trigger stack update" do
       cloud_formation = double('CloudFormation')
       Fog::AWS::CloudFormation.should_receive(:new).with(:aws_access_key_id => 'test', :aws_secret_access_key => 'test', :region => nil).and_return cloud_formation
-      ec2 = Cloudster::Ec2.new(:key_name => 'testkey', :image_id => 'image_id', :name => 'name')
+      ec2 = Cloudster::Ec2.new(:key_name => 'testkey', :image_id => 'image_id', :name => 'Ec2Instance1')
       cloud = Cloudster::Cloud.new(:access_key_id => 'test', :secret_access_key => 'test')
       cloud_formation.should_receive('update_stack').with('stack_name', 'TemplateBody' => cloud.template(:resources => [ec2], :description => 'testDescription'))
       cloud.update(:resources => [ec2], :stack_name => 'stack_name', :description => 'testDescription')
