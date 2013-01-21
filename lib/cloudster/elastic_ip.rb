@@ -1,6 +1,8 @@
 module Cloudster
   #==ElasticIp resource
+  #Output values : public_ip
   class ElasticIp
+    include Cloudster::Output
 
     # Initialize an ElasticIp
     #
@@ -43,7 +45,7 @@ module Cloudster
 
     private
       def template
-        return "Resources" => {
+        template = { "Resources" => {
           @name => {
             "Type" => "AWS::EC2::EIP",
               "Properties" => {
@@ -51,8 +53,16 @@ module Cloudster
                   "Ref" => @instance_name
                 }
               }
+            }
           }
         }
+        outputs = {
+          @name => {
+            'public_ip' => {'Ref' => @name}
+          }
+        }
+        template['Outputs'] = output_template(outputs)
+        return template
       end
 
   end
