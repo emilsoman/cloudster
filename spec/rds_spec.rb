@@ -12,7 +12,7 @@ describe Cloudster::Rds do
   describe '#template' do
     it "should return a ruby hash for the resource cloudformation template" do
       rds = Cloudster::Rds.new(:name => 'MySqlDB', :storage_size => '10', :multi_az => true) 
-      template = {'Resources' => { 
+      template = {'Resources' => {
                     'MySqlDB' => {
                       "Type" => "AWS::RDS::DBInstance",
                       "Properties" => {
@@ -22,6 +22,18 @@ describe Cloudster::Rds do
                         "DBInstanceClass" => 'db.t1.micro',
                         "AllocatedStorage" => '10',
                         "MultiAZ" => true
+                      }
+                    }
+                  },
+                  "Outputs" => {
+                    "MySqlDB"=>{
+                      "Value"=>{
+                        "Fn::Join"=>[",", 
+                          [
+                            {"Fn::Join" => ["|", ["endpoint_address", {'Fn::GetAtt' => ['MySqlDB', 'Endpoint.Address']}]]},
+                            {"Fn::Join" => ["|", ["endpoint_port", {'Fn::GetAtt' => ['MySqlDB', 'Endpoint.Port']}]]}
+                          ]
+                        ]
                       }
                     }
                   }
@@ -35,7 +47,7 @@ describe Cloudster::Rds do
     end
     it "should return a ruby hash for the resource cloudformation template" do
       hash = Cloudster::Rds.template(:name => 'MySqlDB', :storage_size => '10')
-      template = {'Resources' => { 
+      template = {'Resources' => {
                     'MySqlDB' => {
                       "Type" => "AWS::RDS::DBInstance",
                       "Properties" => {
@@ -45,6 +57,18 @@ describe Cloudster::Rds do
                         "DBInstanceClass" => 'db.t1.micro',
                         "AllocatedStorage" => '10',
                         "MultiAZ" => false
+                      }
+                    }
+                  },
+                  "Outputs" => {
+                    "MySqlDB"=>{
+                      "Value"=>{
+                        "Fn::Join"=>[",", 
+                          [
+                            {"Fn::Join" => ["|", ["endpoint_address", {'Fn::GetAtt' => ['MySqlDB', 'Endpoint.Address']}]]},
+                            {"Fn::Join" => ["|", ["endpoint_port", {'Fn::GetAtt' => ['MySqlDB', 'Endpoint.Port']}]]}
+                          ]
+                        ]
                       }
                     }
                   }

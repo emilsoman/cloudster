@@ -91,6 +91,29 @@ describe Cloudster::Cloud do
                   ]
                 ]
               }
+            },
+            "MySqlDB"=> {
+              "Value" => {
+                "Fn::Join" => ["," ,
+                  [
+                    {"Fn::Join" => ["|", ["endpoint_address", {'Fn::GetAtt' => ['MySqlDB', 'Endpoint.Address']}]]},
+                    {"Fn::Join" => ["|", ["endpoint_port", {'Fn::GetAtt' => ['MySqlDB', 'Endpoint.Port']}]]}
+                  ]
+                ]
+              }
+            },
+            "ELB"=> {
+              "Value" => {
+                "Fn::Join" => ["," ,
+                  [
+                    {"Fn::Join" => ["|", ["canonical_hosted_zone_name", {'Fn::GetAtt' => ['ELB', 'CanonicalHostedZoneName']}]]},
+                    {"Fn::Join" => ["|", ["canonical_hosted_zone_name_id", {'Fn::GetAtt' => ['ELB', 'CanonicalHostedZoneNameID']}]]},
+                    {"Fn::Join" => ["|", ["dns_name", {'Fn::GetAtt' => ['ELB', 'DNSName']}]]},
+                    {"Fn::Join" => ["|", ["source_security_group_name", {'Fn::GetAtt' => ['ELB', 'SourceSecurityGroup.GroupName']}]]},
+                    {"Fn::Join" => ["|", ["source_security_group_owner", {'Fn::GetAtt' => ['ELB', 'SourceSecurityGroup.OwnerAlias']}]]}
+                  ]
+                ]
+              }
             }
           }
       }.to_json

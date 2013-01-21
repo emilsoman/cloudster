@@ -46,6 +46,15 @@ describe Cloudster::ChefClient do
                   ]
                 ]
               }
+            },
+            "CloudFront"=>{
+              "Value"=>{
+                "Fn::Join"=>[",",
+                  [
+                    {"Fn::Join"=>["|", ["domain_name", {"Fn::GetAtt"=>["CloudFront", "DomainName"]}]]}
+                  ]
+                ]
+              }
             }
           }
         }

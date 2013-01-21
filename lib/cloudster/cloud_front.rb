@@ -1,6 +1,8 @@
 module Cloudster
   #==CloudFront resource
+  #Output values : domain_name
   class CloudFront
+    include Cloudster::Output
 
     # Initialize CloudFront
     #
@@ -41,19 +43,27 @@ module Cloudster
 
     private
       def template
-        return "Resources" => {
-          @name => {
-              "Type" => "AWS::CloudFront::Distribution",
-              "Properties" => {
-                "DistributionConfig" => {
-                  "S3Origin" => {
-                    "DNSName"=> {"Fn::GetAtt" => [@instance_name, "DomainName"]},
-                  },
-                  "Enabled" => "true"
+        template = { "Resources" => {
+            @name => {
+                "Type" => "AWS::CloudFront::Distribution",
+                "Properties" => {
+                  "DistributionConfig" => {
+                    "S3Origin" => {
+                      "DNSName"=> {"Fn::GetAtt" => [@instance_name, "DomainName"]},
+                    },
+                    "Enabled" => "true"
+                  }
                 }
-              }
+            }
           }
         }
+        outputs = {
+          @name => {
+            'domain_name' => {'Fn::GetAtt' => [@name, 'DomainName']}
+          }
+        }
+        template['Outputs'] = output_template(outputs)
+        return template
 
       end
 

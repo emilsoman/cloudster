@@ -1,6 +1,8 @@
 module Cloudster
   #==Rds resource
+  #Output values : endpoint_address, endpoint_port
   class Rds
+    extend Cloudster::Output
 
     # Initialize an Rds instance
     #
@@ -101,7 +103,7 @@ module Cloudster
       options[:engine] ||= 'MySQL'
       options[:instance_class] ||= 'db.t1.micro'
       options[:multi_az] ||= false
-      template = {'Resources' => { 
+      template = {'Resources' => {
                     options[:name] => {
                       "Type" => "AWS::RDS::DBInstance",
                       "Properties" => {
@@ -115,7 +117,14 @@ module Cloudster
                     }
                   }
       }
-      return template 
+      outputs = {
+        options[:name] => {
+          'endpoint_address' => {'Fn::GetAtt' => [options[:name], 'Endpoint.Address']},
+          'endpoint_port' => {'Fn::GetAtt' => [options[:name], 'Endpoint.Port']}
+        }
+      }
+      template['Outputs'] = output_template(outputs)
+      return template
     end
 
   end

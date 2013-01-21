@@ -1,6 +1,8 @@
 module Cloudster
   #==Elb resource
+  #Output values : canonical_hosted_zone_name, canonical_hosted_zone_name_id, dns_name, source_security_group_name, source_security_group_owner
   class Elb
+    extend Cloudster::Output
 
     # Initialize an Elb instance
     #
@@ -71,14 +73,24 @@ module Cloudster
         }
       }
       properties.merge!({"Instances" => get_instance_name_list_for_template(options[:instance_names])})
-      template = {'Resources' => { 
-                        options[:name] => { 
+      template = {'Resources' => {
+                        options[:name] => {
                           'Type' => 'AWS::ElasticLoadBalancing::LoadBalancer',
                           'Properties' => properties
                        }
                   }
       }
-      return template 
+      outputs = {
+        options[:name] => {
+          'canonical_hosted_zone_name' => {'Fn::GetAtt' => [options[:name], 'CanonicalHostedZoneName']},
+          'canonical_hosted_zone_name_id' => {'Fn::GetAtt' => [options[:name], 'CanonicalHostedZoneNameID']},
+          'dns_name' => {'Fn::GetAtt' => [options[:name], 'DNSName']},
+          'source_security_group_name' => {'Fn::GetAtt' => [options[:name], 'SourceSecurityGroup.GroupName']},
+          'source_security_group_owner' => {'Fn::GetAtt' => [options[:name], 'SourceSecurityGroup.OwnerAlias']}
+        }
+      }
+      template['Outputs'] = output_template(outputs)
+      return template
     end
 
     private
