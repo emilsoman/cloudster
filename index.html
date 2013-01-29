@@ -32,7 +32,7 @@
       <section>
         <div id="title">
           <h1>Cloudster</h1>
-          <p>Cloudster gem - Ruby interface to CloudFormation</p>
+          <p>The fastest way to provision your AWS stack</p>
           <hr>
           <span class="credits left">Project maintained by <a href="https://github.com/emilsoman">emilsoman</a></span>
           <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></span>
@@ -40,14 +40,17 @@
 
         <h1>Cloudster</h1>
 
+<h3>The fastest way to provision your AWS stack !</h3>
+
 <p><a href="https://travis-ci.org/emilsoman/cloudster"><img src="https://travis-ci.org/emilsoman/cloudster.png" alt="Build Status"></a>
 <a href="https://codeclimate.com/github/emilsoman/cloudster"><img src="https://codeclimate.com/badge.png" alt="Code Climate"></a>
 <a href="https://gemnasium.com/emilsoman/cloudster"><img src="https://gemnasium.com/emilsoman/cloudster.png" alt="Dependency Status"></a>
 <a href="http://stillmaintained.com/emilsoman/cloudster"><img src="http://stillmaintained.com/emilsoman/cloudster.png" alt="still maintained"></a></p>
 
-<p>Cloudster is a Ruby gem that was born to cut the learning curve involved in writing your own CloudFormation templates. If you don't know what
-a CloudFormation template is, but know about the AWS Cloud offerings, you can still use cloudster to provision your stack. Still in infancy , cloudster
-can create a basic stack like a breeze. Checkout the Usage section for the supported features.</p>
+<p>Cloudster is a Ruby gem that was born to cut the learning curve involved in writing your own CloudFormation templates.
+If you don't know what a CloudFormation template is, but know about the AWS Cloud,
+you can still use cloudster to provision your stack like a boss.
+Checkout the Usage section.</p>
 
 <h2>Installation</h2>
 
@@ -62,19 +65,19 @@ can create a basic stack like a breeze. Checkout the Usage section for the suppo
   :key_name =&gt; 'mykey',
   :image_id =&gt; 'ami_image_id',
   :instance_type =&gt; 't1.micro',
-  :security_groups =&gt; ["TopSecurityGroup"]
+  :security_groups =&gt; ["DevSecurityGroup"]
 )
 
+#Well I wanted to add chef clients to my app servers , so ..
 chef_client = Cloudster::ChefClient.new(
  :validation_key =&gt; 'asd3e33880889098asdnmnnasd8900890a8sdmasdjna9s880808asdnmnasd90-a',
  :server_url =&gt; 'http://10.50.60.70:4000',
  :node_name =&gt; 'project.environment.appserver_1',
  :interval =&gt; 1800
 )
-
-elastic_ip = Cloudster::ElasticIp.new
-
 chef_client.add_to(app_server)
+
+elastic_ip = Cloudster::ElasticIp.new(:name =&gt; 'AppServerElasticIp')
 elastic_ip.add_to(app_server)
 
 app_server_2 = Cloudster::Ec2.new(:name =&gt; 'AppServer2',
@@ -114,9 +117,14 @@ elasticache = Cloudster::ElastiCache.new(
 )
 </code></pre>
 
-<p>Make a cloud :</p>
+<p>Create an instance for your cloud :</p>
 
 <pre><code>cloud = Cloudster::Cloud.new(:access_key_id =&gt; 'accesskeyid', :secret_access_key =&gt; 'topsecretaccesskey', :region =&gt; 'us-west-1')
+</code></pre>
+
+<p>Provision the stack :</p>
+
+<pre><code>cloud.provision(:resources =&gt; [app_server, app_server_2, load_balancer, database], :stack_name =&gt; 'TestStack', :description =&gt; 'Description of the stack')
 </code></pre>
 
 <p>Get the CloudFormation template for the stack :</p>
@@ -132,12 +140,6 @@ elasticache = Cloudster::ElastiCache.new(
 <p>Cloudster can also interact with the provisioned AWS Cloud :</p>
 
 <ul>
-<li>
-<p>Provision the stack :</p>
-
-<pre><code>cloud.provision(:resources =&gt; [app_server, app_server_2, load_balancer, database], :stack_name =&gt; 'TestStack', :description =&gt; 'Description of the stack')
-</code></pre>
-</li>
 <li>
 <p>Update the stack :</p>
 
@@ -219,7 +221,7 @@ elasticache = Cloudster::ElastiCache.new(
 <li><h3>More coming soon ..</h3></li>
 </ul><p>I'm trying to add every AWS resource to cloudster, one by one. If you don't find what you need,
 let me know and I'll try to get the feature included ASAP, or you can submit a pull request with the feature -
-that would be awesome! Or, you can patiently wait till the feature is added to cloudster.</p>
+that would be awesome!</p>
 
 <hr><h1>Contribute</h1>
 
