@@ -1,12 +1,14 @@
 # Cloudster
+### Fastest way to provision your AWS stack !
 [![Build Status](https://travis-ci.org/emilsoman/cloudster.png)](https://travis-ci.org/emilsoman/cloudster)
 [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/emilsoman/cloudster)
 [![Dependency Status](https://gemnasium.com/emilsoman/cloudster.png)](https://gemnasium.com/emilsoman/cloudster)
 [![still maintained](http://stillmaintained.com/emilsoman/cloudster.png)](http://stillmaintained.com/emilsoman/cloudster)
 
-Cloudster is a Ruby gem that was born to cut the learning curve involved in writing your own CloudFormation templates. If you don't know what
-a CloudFormation template is, but know about the AWS Cloud offerings, you can still use cloudster to provision your stack. Still in infancy , cloudster
-can create a basic stack like a breeze. Checkout the Usage section for the supported features.
+Cloudster is a Ruby gem that was born to cut the learning curve involved in writing your own CloudFormation templates.
+If you don't know what a CloudFormation template is, but know about the AWS Cloud,
+you can still use cloudster to provision your stack.
+Cloudster can create a basic AWS stack like a breeze. Checkout the Usage section.
 
 ##Installation
 
@@ -20,19 +22,19 @@ Create AWS resources :
       :key_name => 'mykey',
       :image_id => 'ami_image_id',
       :instance_type => 't1.micro',
-      :security_groups => ["TopSecurityGroup"]
+      :security_groups => ["DevSecurityGroup"]
     )
 
+    #Well I wanted to add chef clients to my app servers , so ..
     chef_client = Cloudster::ChefClient.new(
      :validation_key => 'asd3e33880889098asdnmnnasd8900890a8sdmasdjna9s880808asdnmnasd90-a',
      :server_url => 'http://10.50.60.70:4000',
      :node_name => 'project.environment.appserver_1',
      :interval => 1800
     )
-
-    elastic_ip = Cloudster::ElasticIp.new(:name => 'AppServerElasticIp')
-
     chef_client.add_to(app_server)
+    
+    elastic_ip = Cloudster::ElasticIp.new(:name => 'AppServerElasticIp')
     elastic_ip.add_to(app_server)
 
     app_server_2 = Cloudster::Ec2.new(:name => 'AppServer2',
@@ -71,9 +73,14 @@ Create AWS resources :
       :node_count => 3
     )
 
-Make a cloud :
+Create an instance for your cloud :
 
     cloud = Cloudster::Cloud.new(:access_key_id => 'accesskeyid', :secret_access_key => 'topsecretaccesskey', :region => 'us-west-1')
+    
+Provision the stack :
+
+    cloud.provision(:resources => [app_server, app_server_2, load_balancer, database], :stack_name => 'TestStack', :description => 'Description of the stack')
+
 
 Get the CloudFormation template for the stack :
 
@@ -85,9 +92,6 @@ Get the CloudFormation template for a resource as a Ruby Hash :
 
 Cloudster can also interact with the provisioned AWS Cloud :
 
-- Provision the stack :
-
-        cloud.provision(:resources => [app_server, app_server_2, load_balancer, database], :stack_name => 'TestStack', :description => 'Description of the stack')
 
 - Update the stack :
 
@@ -145,7 +149,7 @@ Cloudster can also interact with the provisioned AWS Cloud :
 
 I'm trying to add every AWS resource to cloudster, one by one. If you don't find what you need,
 let me know and I'll try to get the feature included ASAP, or you can submit a pull request with the feature -
-that would be awesome! Or, you can patiently wait till the feature is added to cloudster.
+that would be awesome!
 
 ----------------
 
