@@ -1,5 +1,5 @@
 # Cloudster
-### Fastest way to provision your AWS stack !
+### The fastest way to provision your AWS stack !
 [![Build Status](https://travis-ci.org/emilsoman/cloudster.png)](https://travis-ci.org/emilsoman/cloudster)
 [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/emilsoman/cloudster)
 [![Dependency Status](https://gemnasium.com/emilsoman/cloudster.png)](https://gemnasium.com/emilsoman/cloudster)
