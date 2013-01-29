@@ -7,8 +7,8 @@
 
 Cloudster is a Ruby gem that was born to cut the learning curve involved in writing your own CloudFormation templates.
 If you don't know what a CloudFormation template is, but know about the AWS Cloud,
-you can still use cloudster to provision your stack.
-Cloudster can create a basic AWS stack like a breeze. Checkout the Usage section.
+you can still use cloudster to provision your stack like a boss.
+Checkout the Usage section.
 
 ##Installation
 
