@@ -18,132 +18,167 @@ Checkout the Usage section.
 
 Create AWS resources :
 
-    app_server = Cloudster::Ec2.new(:name => 'AppServer',
-      :key_name => 'mykey',
-      :image_id => 'ami_image_id',
-      :instance_type => 't1.micro',
-      :security_groups => ["DevSecurityGroup"]
-    )
+```ruby
+app_server = Cloudster::Ec2.new(:name => 'AppServer',
+  :key_name => 'mykey',
+  :image_id => 'ami_image_id',
+  :instance_type => 't1.micro',
+  :security_groups => ["DevSecurityGroup"]
+)
 
-    #Well I wanted to add chef clients to my app servers , so ..
-    chef_client = Cloudster::ChefClient.new(
-     :validation_key => 'asd3e33880889098asdnmnnasd8900890a8sdmasdjna9s880808asdnmnasd90-a',
-     :server_url => 'http://10.50.60.70:4000',
-     :node_name => 'project.environment.appserver_1',
-     :interval => 1800
-    )
-    chef_client.add_to(app_server)
-    
-    elastic_ip = Cloudster::ElasticIp.new(:name => 'AppServerElasticIp')
-    elastic_ip.add_to(app_server)
+#Well I wanted to add chef clients to my app servers , so ..
+chef_client = Cloudster::ChefClient.new(
+ :validation_key => 'asd3e33880889098asdnmnnasd8900890a8sdmasdjna9s880808asdnmnasd90-a',
+ :server_url => 'http://10.50.60.70:4000',
+ :node_name => 'project.environment.appserver_1',
+ :interval => 1800
+)
+chef_client.add_to(app_server)
 
-    app_server_2 = Cloudster::Ec2.new(:name => 'AppServer2',
-      :key_name => 'mykey',
-      :image_id => 'ami_image_id'
-    )
+elastic_ip = Cloudster::ElasticIp.new(:name => 'AppServerElasticIp')
+elastic_ip.add_to(app_server)
 
-    #Add your app servers to the ElasticLoadBalancer
-    load_balancer = Cloudster::Elb.new(:name => 'LoadBalancer',
-      :instance_names => ['AppServer', 'AppServer2'],
-      :listeners => [{:port => 80, :instance_port => 8080, :protocol => 'HTTP'}]
-    )
+app_server_2 = Cloudster::Ec2.new(:name => 'AppServer2',
+  :key_name => 'mykey',
+  :image_id => 'ami_image_id'
+)
 
-    database = Cloudster::Rds.new(
-      :name => 'MySqlDB',
-      :instance_class => 'db.t1.micro',
-      :storage_class => '100',
-      :username => 'admin',
-      :password => 'admin123',
-      :engine => 'MySQL',
-      :multi_az => true
-    )
+#Add your app servers to the ElasticLoadBalancer
+load_balancer = Cloudster::Elb.new(:name => 'LoadBalancer',
+  :instance_names => ['AppServer', 'AppServer2'],
+  :listeners => [{:port => 80, :instance_port => 8080, :protocol => 'HTTP'}]
+)
 
-    storage = Cloudster::S3.new(
-      :name => 'MyBucket'
-    )
+database = Cloudster::Rds.new(
+  :name => 'MySqlDB',
+  :instance_class => 'db.t1.micro',
+  :storage_class => '100',
+  :username => 'admin',
+  :password => 'admin123',
+  :engine => 'MySQL',
+  :multi_az => true
+)
 
-    cloud_front = Cloudster::CloudFront.new(:name => 'CloudFrontResource')
-    cloud_front.add_to storage
+storage = Cloudster::S3.new(
+  :name => 'MyBucket'
+)
 
-    elasticache = Cloudster::ElastiCache.new(
-      :name => 'CacheResource',
-      :node_type => 'cache.t1.micro',
-      :cache_security_group_names => ['default'],
-      :engine => 'memcached',
-      :node_count => 3
-    )
+cloud_front = Cloudster::CloudFront.new(:name => 'CloudFrontResource')
+cloud_front.add_to storage
+
+elasticache = Cloudster::ElastiCache.new(
+  :name => 'CacheResource',
+  :node_type => 'cache.t1.micro',
+  :cache_security_group_names => ['default'],
+  :engine => 'memcached',
+  :node_count => 3
+)
+```
 
 Create an instance for your cloud :
 
-    cloud = Cloudster::Cloud.new(:access_key_id => 'accesskeyid', :secret_access_key => 'topsecretaccesskey', :region => 'us-west-1')
-    
+```ruby
+cloud = Cloudster::Cloud.new(:access_key_id => 'accesskeyid', :secret_access_key => 'topsecretaccesskey', :region => 'us-west-1')
+```
+
 Provision the stack :
 
-    cloud.provision(:resources => [app_server, app_server_2, load_balancer, database], :stack_name => 'TestStack', :description => 'Description of the stack')
-
+```ruby
+cloud.provision(:resources => [app_server, app_server_2, load_balancer, database], :stack_name => 'TestStack', :description => 'Description of the stack')
+```
 
 Get the CloudFormation template for the stack :
 
-        cloud.template(:resources => [app_server, app_server_2, load_balancer, database, storage, elasticache], :description => 'Description of the stack')
+```ruby
+cloud.template(:resources => [app_server, app_server_2, load_balancer, database, storage, elasticache], :description => 'Description of the stack')
+```
 
 Get the CloudFormation template for a resource as a Ruby Hash :
 
-        app_server.template
+```ruby
+app_server.template
+```
 
 Cloudster can also interact with the provisioned AWS Cloud :
 
 
 - Update the stack :
 
-        cloud.update(:resources => [app_server, app_server_2], :stack_name => 'TestStack', :description => 'Description of the stack')
+```ruby
+cloud.update(:resources => [app_server, app_server_2], :stack_name => 'TestStack', :description => 'Description of the stack')
+```
 
 - Delete the stack and it's attached resources :
 
-        cloud.delete(:stack_name => 'TestStack')
+```ruby
+cloud.delete(:stack_name => 'TestStack')
+```
 
 - Get the output attributes of each resource in the stack :
 
-        cloud.outputs(:stack_name => 'TestStack')
+```ruby
+cloud.outputs(:stack_name => 'TestStack')
+```
 
 - Describe the events of a stack :
 
-        cloud.events(:stack_name => 'TestStack')
+```ruby
+cloud.events(:stack_name => 'TestStack')
+```
 
 - Describe the attributes of a stack :
 
-        cloud.describe(:stack_name => 'TestStack')
+```ruby
+cloud.describe(:stack_name => 'TestStack')
+```
 
 - Describe all resources of a stack :
 
-        cloud.resources(:stack_name => 'TestStack')
+```ruby
+cloud.resources(:stack_name => 'TestStack')
+```
 
 - Get the status of a stack :
 
-        cloud.status(:stack_name => 'TestStack')
+```ruby
+cloud.status(:stack_name => 'TestStack')
+```
 
 - Describe the RDS endpoints in a stack :
 
-        cloud.get_database_endpoints(:stack_name => 'TestStack')
+```ruby
+cloud.get_database_endpoints(:stack_name => 'TestStack')
+```
 
 - Get the details of all EC2 intances in a stack :
 
-        cloud.get_ec2_details(:stack_name => 'TestStack')
+```ruby
+cloud.get_ec2_details(:stack_name => 'TestStack')
+```
 
 - Get the details of all RDS intances in a stack :
 
-        cloud.get_rds_details(:stack_name => 'TestStack')
+```ruby
+cloud.get_rds_details(:stack_name => 'TestStack')
+```
 
 - Get the details of all ELB intances in a stack :
 
-        cloud.get_elb_details(:stack_name => 'TestStack')
+```ruby
+cloud.get_elb_details(:stack_name => 'TestStack')
+```
 
 - Get details of all keypairs created in the AWS account :
 
-        cloud.get_key_pairs
+```ruby
+cloud.get_key_pairs
+```
 
 - Get details of all Security Groups created in the AWS account :
 
-        cloud.get_security_groups
+```ruby
+cloud.get_security_groups
+```
 
 - ### More coming soon ..
 
