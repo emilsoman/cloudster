@@ -180,7 +180,7 @@ cloud.get_key_pairs
 cloud.get_security_groups
 ```
 
-- ### More coming soon ..
+### More coming soon ..
 
 I'm trying to add every AWS resource to cloudster, one by one. If you don't find what you need,
 let me know and I'll try to get the feature included ASAP, or you can submit a pull request with the feature -
