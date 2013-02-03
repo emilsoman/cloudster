@@ -1,43 +1,33 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
+    <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
     <title>Cloudster by emilsoman</title>
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="javascripts/respond.js"></script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <!--[if lt IE 8]>
-    <link rel="stylesheet" href="stylesheets/ie.css">
-    <![endif]-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-
   </head>
+
   <body>
-      <div id="header">
-        <nav>
-          <li class="fork"><a href="https://github.com/emilsoman/cloudster">View On GitHub</a></li>
-          <li class="downloads"><a href="https://github.com/emilsoman/cloudster/zipball/master">ZIP</a></li>
-          <li class="downloads"><a href="https://github.com/emilsoman/cloudster/tarball/master">TAR</a></li>
-          <li class="title">DOWNLOADS</li>
-        </nav>
-      </div><!-- end header -->
 
-    <div class="wrapper">
+    <header>
+      <div class="container">
+        <h1>Cloudster</h1>
+        <h2>The fastest way to provision your AWS stack</h2>
 
-      <section>
-        <div id="title">
-          <h1>Cloudster</h1>
-          <p>The fastest way to provision your AWS stack</p>
-          <hr>
-          <span class="credits left">Project maintained by <a href="https://github.com/emilsoman">emilsoman</a></span>
-          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></span>
-        </div>
+        <section id="downloads">
+          <a href="https://github.com/emilsoman/cloudster/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/emilsoman/cloudster/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/emilsoman/cloudster" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
 
+    <div class="container">
+      <section id="main_content">
         <h1>Cloudster</h1>
 
 <h3>The fastest way to provision your AWS stack !</h3>
@@ -61,165 +51,152 @@ Checkout the Usage section.</p>
 
 <p>Create AWS resources :</p>
 
-<pre><code>app_server = Cloudster::Ec2.new(:name =&gt; 'AppServer',
-  :key_name =&gt; 'mykey',
-  :image_id =&gt; 'ami_image_id',
-  :instance_type =&gt; 't1.micro',
-  :security_groups =&gt; ["DevSecurityGroup"]
-)
+<div class="highlight"><pre><span class="n">app_server</span> <span class="o">=</span> <span class="no">Cloudster</span><span class="o">::</span><span class="no">Ec2</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s1">'AppServer'</span><span class="p">,</span>
+  <span class="ss">:key_name</span> <span class="o">=&gt;</span> <span class="s1">'mykey'</span><span class="p">,</span>
+  <span class="ss">:image_id</span> <span class="o">=&gt;</span> <span class="s1">'ami_image_id'</span><span class="p">,</span>
+  <span class="ss">:instance_type</span> <span class="o">=&gt;</span> <span class="s1">'t1.micro'</span><span class="p">,</span>
+  <span class="ss">:security_groups</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="s2">"DevSecurityGroup"</span><span class="o">]</span>
+<span class="p">)</span>
 
-#Well I wanted to add chef clients to my app servers , so ..
-chef_client = Cloudster::ChefClient.new(
- :validation_key =&gt; 'asd3e33880889098asdnmnnasd8900890a8sdmasdjna9s880808asdnmnasd90-a',
- :server_url =&gt; 'http://10.50.60.70:4000',
- :node_name =&gt; 'project.environment.appserver_1',
- :interval =&gt; 1800
-)
-chef_client.add_to(app_server)
+<span class="c1">#Well I wanted to add chef clients to my app servers , so ..</span>
+<span class="n">chef_client</span> <span class="o">=</span> <span class="no">Cloudster</span><span class="o">::</span><span class="no">ChefClient</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
+ <span class="ss">:validation_key</span> <span class="o">=&gt;</span> <span class="s1">'asd3e33880889098asdnmnnasd8900890a8sdmasdjna9s880808asdnmnasd90-a'</span><span class="p">,</span>
+ <span class="ss">:server_url</span> <span class="o">=&gt;</span> <span class="s1">'http://10.50.60.70:4000'</span><span class="p">,</span>
+ <span class="ss">:node_name</span> <span class="o">=&gt;</span> <span class="s1">'project.environment.appserver_1'</span><span class="p">,</span>
+ <span class="ss">:interval</span> <span class="o">=&gt;</span> <span class="mi">1800</span>
+<span class="p">)</span>
+<span class="n">chef_client</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">app_server</span><span class="p">)</span>
 
-elastic_ip = Cloudster::ElasticIp.new(:name =&gt; 'AppServerElasticIp')
-elastic_ip.add_to(app_server)
+<span class="n">elastic_ip</span> <span class="o">=</span> <span class="no">Cloudster</span><span class="o">::</span><span class="no">ElasticIp</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s1">'AppServerElasticIp'</span><span class="p">)</span>
+<span class="n">elastic_ip</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">app_server</span><span class="p">)</span>
 
-app_server_2 = Cloudster::Ec2.new(:name =&gt; 'AppServer2',
-  :key_name =&gt; 'mykey',
-  :image_id =&gt; 'ami_image_id'
-)
+<span class="n">app_server_2</span> <span class="o">=</span> <span class="no">Cloudster</span><span class="o">::</span><span class="no">Ec2</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s1">'AppServer2'</span><span class="p">,</span>
+  <span class="ss">:key_name</span> <span class="o">=&gt;</span> <span class="s1">'mykey'</span><span class="p">,</span>
+  <span class="ss">:image_id</span> <span class="o">=&gt;</span> <span class="s1">'ami_image_id'</span>
+<span class="p">)</span>
 
-#Add your app servers to the ElasticLoadBalancer
-load_balancer = Cloudster::Elb.new(:name =&gt; 'LoadBalancer',
-  :instance_names =&gt; ['AppServer', 'AppServer2'],
-  :listeners =&gt; [{:port =&gt; 80, :instance_port =&gt; 8080, :protocol =&gt; 'HTTP'}]
-)
+<span class="c1">#Add your app servers to the ElasticLoadBalancer</span>
+<span class="n">load_balancer</span> <span class="o">=</span> <span class="no">Cloudster</span><span class="o">::</span><span class="no">Elb</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s1">'LoadBalancer'</span><span class="p">,</span>
+  <span class="ss">:instance_names</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="s1">'AppServer'</span><span class="p">,</span> <span class="s1">'AppServer2'</span><span class="o">]</span><span class="p">,</span>
+  <span class="ss">:listeners</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="p">{</span><span class="ss">:port</span> <span class="o">=&gt;</span> <span class="mi">80</span><span class="p">,</span> <span class="ss">:instance_port</span> <span class="o">=&gt;</span> <span class="mi">8080</span><span class="p">,</span> <span class="ss">:protocol</span> <span class="o">=&gt;</span> <span class="s1">'HTTP'</span><span class="p">}</span><span class="o">]</span>
+<span class="p">)</span>
 
-database = Cloudster::Rds.new(
-  :name =&gt; 'MySqlDB',
-  :instance_class =&gt; 'db.t1.micro',
-  :storage_class =&gt; '100',
-  :username =&gt; 'admin',
-  :password =&gt; 'admin123',
-  :engine =&gt; 'MySQL',
-  :multi_az =&gt; true
-)
+<span class="n">database</span> <span class="o">=</span> <span class="no">Cloudster</span><span class="o">::</span><span class="no">Rds</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
+  <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s1">'MySqlDB'</span><span class="p">,</span>
+  <span class="ss">:instance_class</span> <span class="o">=&gt;</span> <span class="s1">'db.t1.micro'</span><span class="p">,</span>
+  <span class="ss">:storage_class</span> <span class="o">=&gt;</span> <span class="s1">'100'</span><span class="p">,</span>
+  <span class="ss">:username</span> <span class="o">=&gt;</span> <span class="s1">'admin'</span><span class="p">,</span>
+  <span class="ss">:password</span> <span class="o">=&gt;</span> <span class="s1">'admin123'</span><span class="p">,</span>
+  <span class="ss">:engine</span> <span class="o">=&gt;</span> <span class="s1">'MySQL'</span><span class="p">,</span>
+  <span class="ss">:multi_az</span> <span class="o">=&gt;</span> <span class="kp">true</span>
+<span class="p">)</span>
 
-storage = Cloudster::S3.new(
-  :name =&gt; 'MyBucket'
-)
+<span class="n">storage</span> <span class="o">=</span> <span class="no">Cloudster</span><span class="o">::</span><span class="no">S3</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
+  <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s1">'MyBucket'</span>
+<span class="p">)</span>
 
-cloud_front = Cloudster::CloudFront.new(:name =&gt; 'CloudFrontResource')
-cloud_front.add_to storage
+<span class="n">cloud_front</span> <span class="o">=</span> <span class="no">Cloudster</span><span class="o">::</span><span class="no">CloudFront</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s1">'CloudFrontResource'</span><span class="p">)</span>
+<span class="n">cloud_front</span><span class="o">.</span><span class="n">add_to</span> <span class="n">storage</span>
 
-elasticache = Cloudster::ElastiCache.new(
-  :name =&gt; 'CacheResource',
-  :node_type =&gt; 'cache.t1.micro',
-  :cache_security_group_names =&gt; ['default'],
-  :engine =&gt; 'memcached',
-  :node_count =&gt; 3
-)
-</code></pre>
+<span class="n">elasticache</span> <span class="o">=</span> <span class="no">Cloudster</span><span class="o">::</span><span class="no">ElastiCache</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
+  <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s1">'CacheResource'</span><span class="p">,</span>
+  <span class="ss">:node_type</span> <span class="o">=&gt;</span> <span class="s1">'cache.t1.micro'</span><span class="p">,</span>
+  <span class="ss">:cache_security_group_names</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="s1">'default'</span><span class="o">]</span><span class="p">,</span>
+  <span class="ss">:engine</span> <span class="o">=&gt;</span> <span class="s1">'memcached'</span><span class="p">,</span>
+  <span class="ss">:node_count</span> <span class="o">=&gt;</span> <span class="mi">3</span>
+<span class="p">)</span>
+</pre></div>
 
 <p>Create an instance for your cloud :</p>
 
-<pre><code>cloud = Cloudster::Cloud.new(:access_key_id =&gt; 'accesskeyid', :secret_access_key =&gt; 'topsecretaccesskey', :region =&gt; 'us-west-1')
-</code></pre>
+<div class="highlight"><pre><span class="n">cloud</span> <span class="o">=</span> <span class="no">Cloudster</span><span class="o">::</span><span class="no">Cloud</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:access_key_id</span> <span class="o">=&gt;</span> <span class="s1">'accesskeyid'</span><span class="p">,</span> <span class="ss">:secret_access_key</span> <span class="o">=&gt;</span> <span class="s1">'topsecretaccesskey'</span><span class="p">,</span> <span class="ss">:region</span> <span class="o">=&gt;</span> <span class="s1">'us-west-1'</span><span class="p">)</span>
+</pre></div>
 
 <p>Provision the stack :</p>
 
-<pre><code>cloud.provision(:resources =&gt; [app_server, app_server_2, load_balancer, database], :stack_name =&gt; 'TestStack', :description =&gt; 'Description of the stack')
-</code></pre>
+<div class="highlight"><pre><span class="n">cloud</span><span class="o">.</span><span class="n">provision</span><span class="p">(</span><span class="ss">:resources</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="n">app_server</span><span class="p">,</span> <span class="n">app_server_2</span><span class="p">,</span> <span class="n">load_balancer</span><span class="p">,</span> <span class="n">database</span><span class="o">]</span><span class="p">,</span> <span class="ss">:stack_name</span> <span class="o">=&gt;</span> <span class="s1">'TestStack'</span><span class="p">,</span> <span class="ss">:description</span> <span class="o">=&gt;</span> <span class="s1">'Description of the stack'</span><span class="p">)</span>
+</pre></div>
 
 <p>Get the CloudFormation template for the stack :</p>
 
-<pre><code>    cloud.template(:resources =&gt; [app_server, app_server_2, load_balancer, database, storage, elasticache], :description =&gt; 'Description of the stack')
-</code></pre>
+<div class="highlight"><pre><span class="n">cloud</span><span class="o">.</span><span class="n">template</span><span class="p">(</span><span class="ss">:resources</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="n">app_server</span><span class="p">,</span> <span class="n">app_server_2</span><span class="p">,</span> <span class="n">load_balancer</span><span class="p">,</span> <span class="n">database</span><span class="p">,</span> <span class="n">storage</span><span class="p">,</span> <span class="n">elasticache</span><span class="o">]</span><span class="p">,</span> <span class="ss">:description</span> <span class="o">=&gt;</span> <span class="s1">'Description of the stack'</span><span class="p">)</span>
+</pre></div>
 
 <p>Get the CloudFormation template for a resource as a Ruby Hash :</p>
 
-<pre><code>    app_server.template
-</code></pre>
+<div class="highlight"><pre><span class="n">app_server</span><span class="o">.</span><span class="n">template</span>
+</pre></div>
 
 <p>Cloudster can also interact with the provisioned AWS Cloud :</p>
 
 <ul>
-<li>
-<p>Update the stack :</p>
+<li>Update the stack :</li>
+</ul><div class="highlight"><pre><span class="n">cloud</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="ss">:resources</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="n">app_server</span><span class="p">,</span> <span class="n">app_server_2</span><span class="o">]</span><span class="p">,</span> <span class="ss">:stack_name</span> <span class="o">=&gt;</span> <span class="s1">'TestStack'</span><span class="p">,</span> <span class="ss">:description</span> <span class="o">=&gt;</span> <span class="s1">'Description of the stack'</span><span class="p">)</span>
+</pre></div>
 
-<pre><code>cloud.update(:resources =&gt; [app_server, app_server_2], :stack_name =&gt; 'TestStack', :description =&gt; 'Description of the stack')
-</code></pre>
-</li>
-<li>
-<p>Delete the stack and it's attached resources :</p>
+<ul>
+<li>Delete the stack and it's attached resources :</li>
+</ul><div class="highlight"><pre><span class="n">cloud</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="ss">:stack_name</span> <span class="o">=&gt;</span> <span class="s1">'TestStack'</span><span class="p">)</span>
+</pre></div>
 
-<pre><code>cloud.delete(:stack_name =&gt; 'TestStack')
-</code></pre>
-</li>
-<li>
-<p>Get the output attributes of each resource in the stack :</p>
+<ul>
+<li>Get the output attributes of each resource in the stack :</li>
+</ul><div class="highlight"><pre><span class="n">cloud</span><span class="o">.</span><span class="n">outputs</span><span class="p">(</span><span class="ss">:stack_name</span> <span class="o">=&gt;</span> <span class="s1">'TestStack'</span><span class="p">)</span>
+</pre></div>
 
-<pre><code>cloud.outputs(:stack_name =&gt; 'TestStack')
-</code></pre>
-</li>
-<li>
-<p>Describe the events of a stack :</p>
+<ul>
+<li>Describe the events of a stack :</li>
+</ul><div class="highlight"><pre><span class="n">cloud</span><span class="o">.</span><span class="n">events</span><span class="p">(</span><span class="ss">:stack_name</span> <span class="o">=&gt;</span> <span class="s1">'TestStack'</span><span class="p">)</span>
+</pre></div>
 
-<pre><code>cloud.events(:stack_name =&gt; 'TestStack')
-</code></pre>
-</li>
-<li>
-<p>Describe the attributes of a stack :</p>
+<ul>
+<li>Describe the attributes of a stack :</li>
+</ul><div class="highlight"><pre><span class="n">cloud</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="ss">:stack_name</span> <span class="o">=&gt;</span> <span class="s1">'TestStack'</span><span class="p">)</span>
+</pre></div>
 
-<pre><code>cloud.describe(:stack_name =&gt; 'TestStack')
-</code></pre>
-</li>
-<li>
-<p>Describe all resources of a stack :</p>
+<ul>
+<li>Describe all resources of a stack :</li>
+</ul><div class="highlight"><pre><span class="n">cloud</span><span class="o">.</span><span class="n">resources</span><span class="p">(</span><span class="ss">:stack_name</span> <span class="o">=&gt;</span> <span class="s1">'TestStack'</span><span class="p">)</span>
+</pre></div>
 
-<pre><code>cloud.resources(:stack_name =&gt; 'TestStack')
-</code></pre>
-</li>
-<li>
-<p>Get the status of a stack :</p>
+<ul>
+<li>Get the status of a stack :</li>
+</ul><div class="highlight"><pre><span class="n">cloud</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="ss">:stack_name</span> <span class="o">=&gt;</span> <span class="s1">'TestStack'</span><span class="p">)</span>
+</pre></div>
 
-<pre><code>cloud.status(:stack_name =&gt; 'TestStack')
-</code></pre>
-</li>
-<li>
-<p>Describe the RDS endpoints in a stack :</p>
+<ul>
+<li>Describe the RDS endpoints in a stack :</li>
+</ul><div class="highlight"><pre><span class="n">cloud</span><span class="o">.</span><span class="n">get_database_endpoints</span><span class="p">(</span><span class="ss">:stack_name</span> <span class="o">=&gt;</span> <span class="s1">'TestStack'</span><span class="p">)</span>
+</pre></div>
 
-<pre><code>cloud.get_database_endpoints(:stack_name =&gt; 'TestStack')
-</code></pre>
-</li>
-<li>
-<p>Get the details of all EC2 intances in a stack :</p>
+<ul>
+<li>Get the details of all EC2 intances in a stack :</li>
+</ul><div class="highlight"><pre><span class="n">cloud</span><span class="o">.</span><span class="n">get_ec2_details</span><span class="p">(</span><span class="ss">:stack_name</span> <span class="o">=&gt;</span> <span class="s1">'TestStack'</span><span class="p">)</span>
+</pre></div>
 
-<pre><code>cloud.get_ec2_details(:stack_name =&gt; 'TestStack')
-</code></pre>
-</li>
-<li>
-<p>Get the details of all RDS intances in a stack :</p>
+<ul>
+<li>Get the details of all RDS intances in a stack :</li>
+</ul><div class="highlight"><pre><span class="n">cloud</span><span class="o">.</span><span class="n">get_rds_details</span><span class="p">(</span><span class="ss">:stack_name</span> <span class="o">=&gt;</span> <span class="s1">'TestStack'</span><span class="p">)</span>
+</pre></div>
 
-<pre><code>cloud.get_rds_details(:stack_name =&gt; 'TestStack')
-</code></pre>
-</li>
-<li>
-<p>Get the details of all ELB intances in a stack :</p>
+<ul>
+<li>Get the details of all ELB intances in a stack :</li>
+</ul><div class="highlight"><pre><span class="n">cloud</span><span class="o">.</span><span class="n">get_elb_details</span><span class="p">(</span><span class="ss">:stack_name</span> <span class="o">=&gt;</span> <span class="s1">'TestStack'</span><span class="p">)</span>
+</pre></div>
 
-<pre><code>cloud.get_elb_details(:stack_name =&gt; 'TestStack')
-</code></pre>
-</li>
-<li>
-<p>Get details of all keypairs created in the AWS account :</p>
+<ul>
+<li>Get details of all keypairs created in the AWS account :</li>
+</ul><div class="highlight"><pre><span class="n">cloud</span><span class="o">.</span><span class="n">get_key_pairs</span>
+</pre></div>
 
-<pre><code>cloud.get_key_pairs
-</code></pre>
-</li>
-<li>
-<p>Get details of all Security Groups created in the AWS account :</p>
+<ul>
+<li>Get details of all Security Groups created in the AWS account :</li>
+</ul><div class="highlight"><pre><span class="n">cloud</span><span class="o">.</span><span class="n">get_security_groups</span>
+</pre></div>
 
-<pre><code>cloud.get_security_groups
-</code></pre>
-</li>
-<li><h3>More coming soon ..</h3></li>
-</ul><p>I'm trying to add every AWS resource to cloudster, one by one. If you don't find what you need,
+<h3>More coming soon ..</h3>
+
+<p>I'm trying to add every AWS resource to cloudster, one by one. If you don't find what you need,
 let me know and I'll try to get the feature included ASAP, or you can submit a pull request with the feature -
 that would be awesome!</p>
 
@@ -276,9 +253,8 @@ above and this can hold things up considerably.</p>
 
 <p>To Sinatra README for having a nice 'Contribute' section which I'm using(with minor changes) for Cloudster.</p>
       </section>
-
     </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
               <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
