@@ -9,7 +9,7 @@ gem "fog"
 gem "json"
 group :development do
   gem "rspec"
-  gem "rdoc", "~> 3.12"
+  gem "rdoc"
   gem "bundler"
   gem "jeweler", "~> 1.8.4"
 end
