@@ -6,7 +6,7 @@ source "http://rubygems.org"
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.
 gem "fog"
-gem "json"
+gem "json", "~>1.7.7"
 group :development do
   gem "rspec"
   gem "rdoc"

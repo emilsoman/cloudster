@@ -34,7 +34,7 @@ GEM
       highline (>= 1.6.15)
       rake
       rdoc
-    json (1.7.6)
+    json (1.7.7)
     jwt (0.1.5)
       multi_json (>= 1.0)
     mime-types (1.20.1)
@@ -71,6 +71,6 @@ DEPENDENCIES
   bundler
   fog
   jeweler (~> 1.8.4)
-  json
+  json (~> 1.7.7)
   rdoc
   rspec
