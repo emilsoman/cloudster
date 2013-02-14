@@ -12,6 +12,7 @@ module Cloudster
     #    :validation_key => 'asd3e33880889098asdnmnnasd8900890a8sdmasdjna9s880808asdnmnasd90-a',
     #    :server_url => 'http://10.50.60.70:4000',
     #    :node_name => 'project.environment.appserver_1',
+    #    :validation_client_name => 'chef-validator',
     #    :interval => 1800
     #   )
     #
@@ -20,13 +21,15 @@ module Cloudster
     #     * :validation_key: String containing the key used for validating this client with the server. This can be taken from the chef-server validation.pem file. Mandatory field
     #     * :server_url: String containing the fully qualified domain name of the chef-server. Mandatory field
     #     * :node_name: String containing the name for the chef node. It has to be unique across all nodes in the particular chef client-server ecosystem. Mandatory field
-    #     * :interval: Integer containing the interval(in seconds) between chef-client runs. Degault value : 1800 seconds
+    #     * :interval: Integer containing the interval(in seconds) between chef-client runs. Default value : 1800 seconds
+    #     * :validation_client_name: String containing the name of the validation client. "ORGNAME-validator" if using hosted chef server. Default: 'chef-validator'
     def initialize(options = {})
       require_options(options, [:validation_key, :server_url, :node_name])
       @validation_key = options[:validation_key]
       @server_url = options[:server_url]
       @node_name = options[:node_name]
       @interval = options[:interval] || 1800
+      @validation_client_name = options[:validation_client_name] || 'chef-validator'
     end
 
     # Merges the required CloudFormation template for installing the Chef Client to the template of the EC2 instance
@@ -92,6 +95,17 @@ module Cloudster
                 "  exit 1\n",
                 "}\n",
 
+                #Install aws sfn scripts to run cfn-init
+                "apt-get -y install python-setuptools\n",
+                "easy_install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz\n",
+                "cfn-init -v --region ", { "Ref" => "AWS::Region" },
+                " -s ", { "Ref" => "AWS::StackId" }, " -r #{@instance_name}",
+                " || error_exit 'Failed to run cfn-init'\n",
+
+                # Fixup path and links for the bootstrap script
+                "export PATH=$PATH:/var/lib/gems/1.8/bin\n",
+
+                #Bootstrap chef client
                 "mkdir /etc/chef\n",
                 "cat << EOF > /etc/chef/solo.rb\n",
                 "file_cache_path \"/tmp/chef-solo\"\n",
@@ -102,6 +116,7 @@ module Cloudster
                 "{\n",
                 "\"chef_client\": {\n",
                 "  \"server_url\": \"#{@server_url}\",\n",
+                "  \"validation_client_name\": \"#{@validation_client_name}\",\n",
                 "  \"interval\": \"#{@interval}\"\n",
                 "},\n",
                 "\"run_list\": [\"recipe[chef-client::config]\", \"recipe[chef-client]\"]\n",
