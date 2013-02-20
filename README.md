@@ -242,5 +242,5 @@ MIT
 *Free Software, Forever . YEAH !*
 
 ## Thanks
-
+To [Fog](https://github.com/fog/fog) for making AWS APIs simple  
 To Sinatra README for having a nice 'Contribute' section which I'm using(with minor changes) for Cloudster.
