@@ -215,30 +215,24 @@ describe Cloudster::Cloud do
   describe "#is_s3_bucket_name_available?" do
     it "should return true if bucket is available" do
       cloud = Cloudster::Cloud.new(:access_key_id => 'test', :secret_access_key => 'test')
-      response = double('Response')
-      response.stub(:status).and_return(404)
       s3 = double('S3')
-      s3.should_receive(:get_bucket).and_raise(Excon::Errors.status_error({:expects => 200}, response))
+      s3.should_receive(:get_bucket).and_raise(Excon::Errors.status_error({:expects => 200}, {:status => 404}))
       Fog::Storage::AWS.should_receive(:new).and_return(s3)
       cloud.is_s3_bucket_name_available?('test-bucket-name').should be_true
     end
 
     it "should return false if bucket access is forbidden" do
       cloud = Cloudster::Cloud.new(:access_key_id => 'test', :secret_access_key => 'test')
-      response = double('Response')
-      response.stub(:status).and_return(403)
       s3 = double('S3')
-      s3.should_receive(:get_bucket).and_raise(Excon::Errors.status_error({:expects => 200}, response))
+      s3.should_receive(:get_bucket).and_raise(Excon::Errors.status_error({:expects => 200}, {:status => 403}))
       Fog::Storage::AWS.should_receive(:new).and_return(s3)
       cloud.is_s3_bucket_name_available?('test-bucket-name').should be_false
     end
 
     it "should return false if bucket is already owned by user" do
       cloud = Cloudster::Cloud.new(:access_key_id => 'test', :secret_access_key => 'test')
-      response = double('Response')
-      response.stub(:status).and_return(200)
       s3 = double('S3')
-      s3.should_receive(:get_bucket).and_return response
+      s3.should_receive(:get_bucket).and_return({:status => 200})
       Fog::Storage::AWS.should_receive(:new).and_return(s3)
       cloud.is_s3_bucket_name_available?('test-bucket-name').should be_false
     end

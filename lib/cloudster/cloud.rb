@@ -456,7 +456,7 @@ module Cloudster
         response = e.response
       end
       not_found_status = 404
-      return response.status == not_found_status
+      return response[:status] == not_found_status
     end
 
     private
