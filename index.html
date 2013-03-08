@@ -3,37 +3,39 @@
   <head>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
 
     <title>Cloudster by emilsoman</title>
   </head>
 
   <body>
-
     <header>
-      <div class="container">
+      <div class="inner">
         <h1>Cloudster</h1>
         <h2>The fastest way to provision your AWS stack</h2>
-
-        <section id="downloads">
-          <a href="https://github.com/emilsoman/cloudster/zipball/master" class="btn">Download as .zip</a>
-          <a href="https://github.com/emilsoman/cloudster/tarball/master" class="btn">Download as .tar.gz</a>
-          <a href="https://github.com/emilsoman/cloudster" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
-        </section>
+        <a href="https://github.com/emilsoman/cloudster" class="button"><small>View project on</small>GitHub</a>
       </div>
     </header>
 
-    <div class="container">
-      <section id="main_content">
-        <h1>Cloudster</h1>
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>Cloudster</h1>
 
 <h3>The fastest way to provision your AWS stack !</h3>
 
-<p><a href="https://travis-ci.org/emilsoman/cloudster"><img src="https://travis-ci.org/emilsoman/cloudster.png" alt="Build Status"></a>
-<a href="https://codeclimate.com/github/emilsoman/cloudster"><img src="https://codeclimate.com/badge.png" alt="Code Climate"></a>
+<p><a href="https://rubygems.org/gems/cloudster"><img src="https://badge.fury.io/rb/cloudster.png" alt="Gem Version"></a>
+<a href="https://travis-ci.org/emilsoman/cloudster"><img src="https://travis-ci.org/emilsoman/cloudster.png" alt="Build Status"></a>
+<a href="https://coveralls.io/r/emilsoman/cloudster"><img src="https://coveralls.io/repos/emilsoman/cloudster/badge.png?branch=master" alt="Coverage Status"></a>
+<a href="https://codeclimate.com/github/emilsoman/cloudster"><img src="https://codeclimate.com/github/emilsoman/cloudster.png" alt="Code Climate"></a>
 <a href="https://gemnasium.com/emilsoman/cloudster"><img src="https://gemnasium.com/emilsoman/cloudster.png" alt="Dependency Status"></a>
 <a href="http://stillmaintained.com/emilsoman/cloudster"><img src="http://stillmaintained.com/emilsoman/cloudster.png" alt="still maintained"></a></p>
 
@@ -51,7 +53,7 @@ Checkout the Usage section.</p>
 
 <p>Create AWS resources :</p>
 
-<div class="highlight"><pre><span class="n">app_server</span> <span class="o">=</span> <span class="no">Cloudster</span><span class="o">::</span><span class="no">Ec2</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s1">'AppServer'</span><span class="p">,</span>
+<div class="highlight"><pre><span class="n">app_server</span> <span class="o">=</span> <span class="ss">Cloudster</span><span class="p">:</span><span class="ss">:Ec2</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s1">'AppServer'</span><span class="p">,</span>
   <span class="ss">:key_name</span> <span class="o">=&gt;</span> <span class="s1">'mykey'</span><span class="p">,</span>
   <span class="ss">:image_id</span> <span class="o">=&gt;</span> <span class="s1">'ami_image_id'</span><span class="p">,</span>
   <span class="ss">:instance_type</span> <span class="o">=&gt;</span> <span class="s1">'t1.micro'</span><span class="p">,</span>
@@ -59,7 +61,7 @@ Checkout the Usage section.</p>
 <span class="p">)</span>
 
 <span class="c1">#Well I wanted to add chef clients to my app servers , so ..</span>
-<span class="n">chef_client</span> <span class="o">=</span> <span class="no">Cloudster</span><span class="o">::</span><span class="no">ChefClient</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
+<span class="n">chef_client</span> <span class="o">=</span> <span class="ss">Cloudster</span><span class="p">:</span><span class="ss">:ChefClient</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
  <span class="ss">:validation_key</span> <span class="o">=&gt;</span> <span class="s1">'asd3e33880889098asdnmnnasd8900890a8sdmasdjna9s880808asdnmnasd90-a'</span><span class="p">,</span>
  <span class="ss">:server_url</span> <span class="o">=&gt;</span> <span class="s1">'http://10.50.60.70:4000'</span><span class="p">,</span>
  <span class="ss">:node_name</span> <span class="o">=&gt;</span> <span class="s1">'project.environment.appserver_1'</span><span class="p">,</span>
@@ -67,21 +69,21 @@ Checkout the Usage section.</p>
 <span class="p">)</span>
 <span class="n">chef_client</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">app_server</span><span class="p">)</span>
 
-<span class="n">elastic_ip</span> <span class="o">=</span> <span class="no">Cloudster</span><span class="o">::</span><span class="no">ElasticIp</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s1">'AppServerElasticIp'</span><span class="p">)</span>
+<span class="n">elastic_ip</span> <span class="o">=</span> <span class="ss">Cloudster</span><span class="p">:</span><span class="ss">:ElasticIp</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s1">'AppServerElasticIp'</span><span class="p">)</span>
 <span class="n">elastic_ip</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">app_server</span><span class="p">)</span>
 
-<span class="n">app_server_2</span> <span class="o">=</span> <span class="no">Cloudster</span><span class="o">::</span><span class="no">Ec2</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s1">'AppServer2'</span><span class="p">,</span>
+<span class="n">app_server_2</span> <span class="o">=</span> <span class="ss">Cloudster</span><span class="p">:</span><span class="ss">:Ec2</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s1">'AppServer2'</span><span class="p">,</span>
   <span class="ss">:key_name</span> <span class="o">=&gt;</span> <span class="s1">'mykey'</span><span class="p">,</span>
   <span class="ss">:image_id</span> <span class="o">=&gt;</span> <span class="s1">'ami_image_id'</span>
 <span class="p">)</span>
 
 <span class="c1">#Add your app servers to the ElasticLoadBalancer</span>
-<span class="n">load_balancer</span> <span class="o">=</span> <span class="no">Cloudster</span><span class="o">::</span><span class="no">Elb</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s1">'LoadBalancer'</span><span class="p">,</span>
+<span class="n">load_balancer</span> <span class="o">=</span> <span class="ss">Cloudster</span><span class="p">:</span><span class="ss">:Elb</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s1">'LoadBalancer'</span><span class="p">,</span>
   <span class="ss">:instance_names</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="s1">'AppServer'</span><span class="p">,</span> <span class="s1">'AppServer2'</span><span class="o">]</span><span class="p">,</span>
   <span class="ss">:listeners</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="p">{</span><span class="ss">:port</span> <span class="o">=&gt;</span> <span class="mi">80</span><span class="p">,</span> <span class="ss">:instance_port</span> <span class="o">=&gt;</span> <span class="mi">8080</span><span class="p">,</span> <span class="ss">:protocol</span> <span class="o">=&gt;</span> <span class="s1">'HTTP'</span><span class="p">}</span><span class="o">]</span>
 <span class="p">)</span>
 
-<span class="n">database</span> <span class="o">=</span> <span class="no">Cloudster</span><span class="o">::</span><span class="no">Rds</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
+<span class="n">database</span> <span class="o">=</span> <span class="ss">Cloudster</span><span class="p">:</span><span class="ss">:Rds</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
   <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s1">'MySqlDB'</span><span class="p">,</span>
   <span class="ss">:instance_class</span> <span class="o">=&gt;</span> <span class="s1">'db.t1.micro'</span><span class="p">,</span>
   <span class="ss">:storage_class</span> <span class="o">=&gt;</span> <span class="s1">'100'</span><span class="p">,</span>
@@ -91,14 +93,14 @@ Checkout the Usage section.</p>
   <span class="ss">:multi_az</span> <span class="o">=&gt;</span> <span class="kp">true</span>
 <span class="p">)</span>
 
-<span class="n">storage</span> <span class="o">=</span> <span class="no">Cloudster</span><span class="o">::</span><span class="no">S3</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
+<span class="n">storage</span> <span class="o">=</span> <span class="ss">Cloudster</span><span class="p">:</span><span class="ss">:S3</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
   <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s1">'MyBucket'</span>
 <span class="p">)</span>
 
-<span class="n">cloud_front</span> <span class="o">=</span> <span class="no">Cloudster</span><span class="o">::</span><span class="no">CloudFront</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s1">'CloudFrontResource'</span><span class="p">)</span>
+<span class="n">cloud_front</span> <span class="o">=</span> <span class="ss">Cloudster</span><span class="p">:</span><span class="ss">:CloudFront</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s1">'CloudFrontResource'</span><span class="p">)</span>
 <span class="n">cloud_front</span><span class="o">.</span><span class="n">add_to</span> <span class="n">storage</span>
 
-<span class="n">elasticache</span> <span class="o">=</span> <span class="no">Cloudster</span><span class="o">::</span><span class="no">ElastiCache</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
+<span class="n">elasticache</span> <span class="o">=</span> <span class="ss">Cloudster</span><span class="p">:</span><span class="ss">:ElastiCache</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
   <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s1">'CacheResource'</span><span class="p">,</span>
   <span class="ss">:node_type</span> <span class="o">=&gt;</span> <span class="s1">'cache.t1.micro'</span><span class="p">,</span>
   <span class="ss">:cache_security_group_names</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="s1">'default'</span><span class="o">]</span><span class="p">,</span>
@@ -109,7 +111,7 @@ Checkout the Usage section.</p>
 
 <p>Create an instance for your cloud :</p>
 
-<div class="highlight"><pre><span class="n">cloud</span> <span class="o">=</span> <span class="no">Cloudster</span><span class="o">::</span><span class="no">Cloud</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:access_key_id</span> <span class="o">=&gt;</span> <span class="s1">'accesskeyid'</span><span class="p">,</span> <span class="ss">:secret_access_key</span> <span class="o">=&gt;</span> <span class="s1">'topsecretaccesskey'</span><span class="p">,</span> <span class="ss">:region</span> <span class="o">=&gt;</span> <span class="s1">'us-west-1'</span><span class="p">)</span>
+<div class="highlight"><pre><span class="n">cloud</span> <span class="o">=</span> <span class="ss">Cloudster</span><span class="p">:</span><span class="ss">:Cloud</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:access_key_id</span> <span class="o">=&gt;</span> <span class="s1">'accesskeyid'</span><span class="p">,</span> <span class="ss">:secret_access_key</span> <span class="o">=&gt;</span> <span class="s1">'topsecretaccesskey'</span><span class="p">,</span> <span class="ss">:region</span> <span class="o">=&gt;</span> <span class="s1">'us-west-1'</span><span class="p">)</span>
 </pre></div>
 
 <p>Provision the stack :</p>
@@ -251,11 +253,28 @@ above and this can hold things up considerably.</p>
 
 <h2>Thanks</h2>
 
-<p>To Sinatra README for having a nice 'Contribute' section which I'm using(with minor changes) for Cloudster.</p>
-      </section>
+<p>To <a href="https://github.com/fog/fog">Fog</a> for making AWS APIs simple<br>
+To Sinatra README for having a nice 'Contribute' section which I'm using(with minor changes) for Cloudster.</p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/emilsoman/cloudster/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/emilsoman/cloudster/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/emilsoman/cloudster"></a> is maintained by <a href="https://github.com/emilsoman">emilsoman</a>.</p>
+
+          <p>This page was generated by <a href="pages.github.com">GitHub Pages</a> using the Architect theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
     </div>
 
-              <script type="text/javascript">
+            <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
           </script>
