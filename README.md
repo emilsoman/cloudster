@@ -3,7 +3,7 @@
 [![Gem Version](https://badge.fury.io/rb/cloudster.png)](https://rubygems.org/gems/cloudster)
 [![Build Status](https://travis-ci.org/emilsoman/cloudster.png)](https://travis-ci.org/emilsoman/cloudster)
 [![Coverage Status](https://coveralls.io/repos/emilsoman/cloudster/badge.png?branch=master)](https://coveralls.io/r/emilsoman/cloudster)
-[![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/emilsoman/cloudster)
+[![Code Climate](https://codeclimate.com/github/emilsoman/cloudster.png)](https://codeclimate.com/github/emilsoman/cloudster)
 [![Dependency Status](https://gemnasium.com/emilsoman/cloudster.png)](https://gemnasium.com/emilsoman/cloudster)
 [![still maintained](http://stillmaintained.com/emilsoman/cloudster.png)](http://stillmaintained.com/emilsoman/cloudster)
 
@@ -244,5 +244,5 @@ MIT
 *Free Software, Forever . YEAH !*
 
 ## Thanks
-
+To [Fog](https://github.com/fog/fog) for making AWS APIs simple  
 To Sinatra README for having a nice 'Contribute' section which I'm using(with minor changes) for Cloudster.
