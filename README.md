@@ -1,6 +1,8 @@
 # Cloudster
 ### The fastest way to provision your AWS stack !
+[![Gem Version](https://badge.fury.io/rb/cloudster.png)](https://rubygems.org/gems/cloudster)
 [![Build Status](https://travis-ci.org/emilsoman/cloudster.png)](https://travis-ci.org/emilsoman/cloudster)
+[![Coverage Status](https://coveralls.io/repos/emilsoman/cloudster/badge.png?branch=master)](https://coveralls.io/r/emilsoman/cloudster)
 [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/emilsoman/cloudster)
 [![Dependency Status](https://gemnasium.com/emilsoman/cloudster.png)](https://gemnasium.com/emilsoman/cloudster)
 [![still maintained](http://stillmaintained.com/emilsoman/cloudster.png)](http://stillmaintained.com/emilsoman/cloudster)

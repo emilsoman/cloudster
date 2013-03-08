@@ -8,8 +8,12 @@ source "http://rubygems.org"
 gem "fog"
 gem "json", "~>1.7.7"
 group :development do
-  gem "rspec"
   gem "rdoc"
   gem "bundler"
   gem "jeweler", "~> 1.8.4"
+end
+
+group :test do
+  gem "rspec"
+  gem 'coveralls', '>=0.5.7', :require => false
 end
