@@ -43,7 +43,8 @@ describe Cloudster::ChefClient do
                     {"Fn::Join"=>["|", ["private_dns_name", {"Fn::GetAtt"=>["AppServer", "PrivateDnsName"]}]]},
                     {"Fn::Join"=>["|", ["public_dns_name", {"Fn::GetAtt"=>["AppServer", "PublicDnsName"]}]]},
                     {"Fn::Join"=>["|", ["private_ip", {"Fn::GetAtt"=>["AppServer", "PrivateIp"]}]]},
-                    {"Fn::Join"=>["|", ["public_ip", {"Fn::GetAtt"=>["AppServer", "PublicIp"]}]]}
+                    {"Fn::Join"=>["|", ["public_ip", {"Fn::GetAtt"=>["AppServer", "PublicIp"]}]]},
+		     {"Fn::Join"=>["|", ["instance_id", {"Ref"=> "AppServer"}]]}
                   ]
                 ]
               }

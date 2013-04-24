@@ -74,7 +74,8 @@ describe Cloudster::Cloud do
                     {"Fn::Join" => ["|", ["private_dns_name", {'Fn::GetAtt' => ['Ec2Instance1', 'PrivateDnsName']}]]},
                     {"Fn::Join" => ["|", ["public_dns_name", {'Fn::GetAtt' => ['Ec2Instance1', 'PublicDnsName']}]]},
                     {"Fn::Join" => ["|", ["private_ip", {'Fn::GetAtt' => ['Ec2Instance1', 'PrivateIp']}]]},
-                    {"Fn::Join" => ["|", ["public_ip", {'Fn::GetAtt' => ['Ec2Instance1', 'PublicIp']}]]}
+                    {"Fn::Join" => ["|", ["public_ip", {'Fn::GetAtt' => ['Ec2Instance1', 'PublicIp']}]]},
+		     {"Fn::Join"=>["|", ["instance_id", {"Ref"=> "Ec2Instance1"}]]}
                   ]
                 ]
               }
@@ -87,7 +88,8 @@ describe Cloudster::Cloud do
                     {"Fn::Join" => ["|", ["private_dns_name", {'Fn::GetAtt' => ['Ec2Instance2', 'PrivateDnsName']}]]},
                     {"Fn::Join" => ["|", ["public_dns_name", {'Fn::GetAtt' => ['Ec2Instance2', 'PublicDnsName']}]]},
                     {"Fn::Join" => ["|", ["private_ip", {'Fn::GetAtt' => ['Ec2Instance2', 'PrivateIp']}]]},
-                    {"Fn::Join" => ["|", ["public_ip", {'Fn::GetAtt' => ['Ec2Instance2', 'PublicIp']}]]}
+                    {"Fn::Join" => ["|", ["public_ip", {'Fn::GetAtt' => ['Ec2Instance2', 'PublicIp']}]]},
+		     {"Fn::Join"=>["|", ["instance_id", {"Ref"=> "Ec2Instance2"}]]}
                   ]
                 ]
               }
