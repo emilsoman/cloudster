@@ -74,7 +74,7 @@ describe Cloudster::Ec2 do
                   {"Fn::Join"=>["|", ["public_dns_name", {"Fn::GetAtt"=>["name", "PublicDnsName"]}]]},
                   {"Fn::Join"=>["|", ["private_ip", {"Fn::GetAtt"=>["name", "PrivateIp"]}]]},
                   {"Fn::Join"=>["|", ["public_ip", {"Fn::GetAtt"=>["name", "PublicIp"]}]]},
-		   {"Fn::Join"=>["|", ["instance_id", {"Ref"=> "name"}]]}
+                  {"Fn::Join"=>["|", ["instance_id", {"Ref"=> "name"}]]}
                 ]
               ]
             }
