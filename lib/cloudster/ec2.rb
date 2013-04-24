@@ -96,7 +96,8 @@ module Cloudster
           'private_dns_name' => {'Fn::GetAtt' => [options[:name], 'PrivateDnsName']},
           'public_dns_name' => {'Fn::GetAtt' => [options[:name], 'PublicDnsName']},
           'private_ip' => {'Fn::GetAtt' => [options[:name], 'PrivateIp']},
-          'public_ip' => {'Fn::GetAtt' => [options[:name], 'PublicIp']}
+          'public_ip' => {'Fn::GetAtt' => [options[:name], 'PublicIp']},
+          'instance_id' => { "Ref" => options[:name] }
         }
       }
       template['Outputs'] = output_template(outputs)
