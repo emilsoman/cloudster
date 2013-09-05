@@ -10,7 +10,7 @@ gem "json", "~>1.7.7"
 group :development do
   gem "rdoc"
   gem "bundler"
-  gem "jeweler", "~> 1.8.4"
+  gem "jeweler", "~> 1.8.7"
 end
 
 group :test do
