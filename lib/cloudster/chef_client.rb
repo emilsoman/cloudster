@@ -56,7 +56,7 @@ module Cloudster
       ec2_template = ec2.template
       @instance_name = ec2.name
       chef_client_template = template
-      ec2.template.deep_merge(chef_client_template)
+      ec2.template.inner_merge(chef_client_template)
     end
 
     private

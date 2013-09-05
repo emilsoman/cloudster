@@ -38,7 +38,7 @@ module Cloudster
       s3_template = s3.template
       @instance_name = s3.name
       cloud_front_template = template
-      s3.template.deep_merge(cloud_front_template)
+      s3.template.inner_merge(cloud_front_template)
     end
 
     private

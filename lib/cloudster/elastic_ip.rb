@@ -40,7 +40,7 @@ module Cloudster
       ec2_template = ec2.template
       @instance_name = ec2.name
       elastic_ip_template = template
-      ec2.template.deep_merge(elastic_ip_template)
+      ec2.template.inner_merge(elastic_ip_template)
     end
 
     private
