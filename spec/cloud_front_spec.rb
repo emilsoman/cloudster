@@ -11,8 +11,11 @@ describe Cloudster::ChefClient do
   end
   describe '#add_to' do
     it "should add elastic ip configuration to ec2 template" do
-      bucket = bucket = Cloudster::S3.new(:name => 'S3ResourceName',:access_control => 'PublicRead')
-      cloud_front = Cloudster::CloudFront.new(:name => 'CloudFront')
+      bucket = Cloudster::S3.new(:name => 'S3ResourceName',:access_control => 'PublicRead')
+      cloud_front = Cloudster::CloudFront.new(:name => 'CloudFront',
+                                              :default_root_object => 'index.html',
+                                              :aliases => ['mysite.example.com', 'yoursite.example.com'],
+                                              :enabled => true)
       cloud_front.add_to bucket
       bucket.template.should ==
         {
@@ -27,9 +30,20 @@ describe Cloudster::ChefClient do
               "Type"=>"AWS::CloudFront::Distribution",
               "Properties"=>{
                 "DistributionConfig"=> {
-                  "S3Origin" => {
-                    "DNSName"=>{"Fn::GetAtt"=>["S3ResourceName", "DomainName"]}
+                  "Origins"=>[{
+                    "DomainName"=> {"Fn::GetAtt" => ["S3ResourceName", "DomainName"]},
+                    "Id"=>"S3ResourceName",
+                    "S3OriginConfig"=> {}
+                  }],
+                  "DefaultRootObject"=>"index.html",
+                  "DefaultCacheBehavior" => {
+                    "TargetOriginId" => "S3ResourceName",
+                    "ForwardedValues" => {
+                      "QueryString" => "false"
+                    },
+                    "ViewerProtocolPolicy" => "allow-all"
                   },
+                  "Aliases"=>["mysite.example.com", "yoursite.example.com"],
                   "Enabled"=>"true"
                 }
               }
@@ -51,7 +65,8 @@ describe Cloudster::ChefClient do
               "Value"=>{
                 "Fn::Join"=>[",",
                   [
-                    {"Fn::Join"=>["|", ["domain_name", {"Fn::GetAtt"=>["CloudFront", "DomainName"]}]]}
+                    {"Fn::Join"=>["|", ["domain_name", {"Fn::GetAtt"=>["CloudFront", "DomainName"]}]]},
+                    {"Fn::Join"=>["|", ["distribution_id", {"Ref"=>"CloudFront"}]]}
                   ]
                 ]
               }

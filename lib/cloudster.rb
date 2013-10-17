@@ -4,7 +4,7 @@ require 'json'
 require 'fog'
 require 'cloudster/output'
 require 'cloudster/options_manager'
-require 'cloudster/inner_merge'
+require 'cloudster/hash_additions'
 include OptionsManager
 require 'cloudster/ec2'
 require 'cloudster/elb'

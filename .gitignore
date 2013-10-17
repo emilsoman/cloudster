@@ -1,6 +1,7 @@
 # rcov generated
 coverage
 coverage.data
+/test.rb
 
 # rdoc generated
 rdoc

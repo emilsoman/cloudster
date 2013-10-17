@@ -7,4 +7,7 @@ class Hash
     end
     self
   end
+  def delete_nil
+    delete_if{|k, v| v.nil? or v.instance_of?(Hash) && v.delete_nil.nil? }
+  end
 end

@@ -14,7 +14,7 @@ module Cloudster
     # * options<~Hash>
     #   * :name : String representing the resource name (Required)
     #   * :access_control : String consisting of one of the predefined permission values: Private | PublicRead | PublicReadWrite | AuthenticatedRead | BucketOwnerRead | BucketOwnerFullControl
-    #   * :website_configuration : A hash containing the name of the index document and name of the error document. ( Example: {"index_document" => "index.html", "error_document" => "error.html"} )
+    #   * :website_configuration : A hash containing the name of the index document and name of the error document. ( Example: {:index_document => "index.html", :error_document => "error.html"} )
     #
     # ==== Examples
     #   bucket = Cloudster::S3.new(
@@ -58,7 +58,7 @@ module Cloudster
     # * options<~Hash>
     #   * :name : String representing the resource name (Required)
     #   * :access_control : String consisting of one of the predefined permission value. ( Example: PublicRead )
-    #   * :website_configuration : A hash containing the name of the index document and name of the error document. ( Example: {"index_document" => "index.html", "error_document" => "error.html"} )
+    #   * :website_configuration : A hash containing the name of the index document and name of the error document. ( Example: {:index_document => "index.html", :error_document => "error.html"} )
     #
     # ==== Returns
     # * Ruby hash version of the Cloud Formation template for S3
@@ -67,7 +67,7 @@ module Cloudster
       properties = {}
       properties.merge!({"AccessControl" => options[:access_control]}) unless options[:access_control].nil?
       unless options[:website_configuration].nil?
-        properties.merge!({"WebsiteConfiguration" => {"IndexDocument" => options[:website_configuration]["index_document"], "ErrorDocument" => options[:website_configuration]["error_document"]}})
+        properties.merge!({"WebsiteConfiguration" => {"IndexDocument" => options[:website_configuration][:index_document], "ErrorDocument" => options[:website_configuration][:error_document]}})
       end
       template = {
         'Resources' => {

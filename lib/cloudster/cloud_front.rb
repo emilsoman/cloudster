@@ -18,6 +18,9 @@ module Cloudster
     def initialize(options = {})
       require_options(options, [:name])
       @name = options[:name]
+      @enabled = options[:enabled] || true
+      @default_root_object = options[:default_root_object] || 'index.html'
+      @aliases = options[:aliases] || []
     end
 
     # Merges the required CloudFormation template for adding an CloudFront to an s3 instance
@@ -47,11 +50,22 @@ module Cloudster
             @name => {
                 "Type" => "AWS::CloudFront::Distribution",
                 "Properties" => {
-                  "DistributionConfig" => {
-                    "S3Origin" => {
-                      "DNSName"=> {"Fn::GetAtt" => [@instance_name, "DomainName"]},
+                  "DistributionConfig"=> {
+                    "Origins"=>[{
+                      "DomainName"=> {"Fn::GetAtt" => [@instance_name, "DomainName"]},
+                      "Id"=>@instance_name,
+                      "S3OriginConfig"=> {}
+                    }],
+                    "DefaultRootObject" => @default_root_object,
+                    "DefaultCacheBehavior" => {
+                      "TargetOriginId" => @instance_name,
+                      "ForwardedValues" => {
+                        "QueryString" => "false"
+                      },
+                      "ViewerProtocolPolicy" => "allow-all"
                     },
-                    "Enabled" => "true"
+                    "Aliases"=> @aliases,
+                    "Enabled"=> @enabled.to_s
                   }
                 }
             }
@@ -59,7 +73,8 @@ module Cloudster
         }
         outputs = {
           @name => {
-            'domain_name' => {'Fn::GetAtt' => [@name, 'DomainName']}
+            'domain_name' => {'Fn::GetAtt' => [@name, 'DomainName']},
+            'distribution_id' => { "Ref" => @name }
           }
         }
         template['Outputs'] = output_template(outputs)

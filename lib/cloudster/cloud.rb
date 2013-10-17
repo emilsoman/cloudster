@@ -71,7 +71,7 @@ module Cloudster
       }
       cloud_template['Resources'] = resource_template if !resource_template.empty?
       cloud_template['Outputs'] = output_template if !output_template.empty?
-      return cloud_template.to_json
+      return cloud_template.delete_nil.to_json
     end
 
     # Triggers the stack creation

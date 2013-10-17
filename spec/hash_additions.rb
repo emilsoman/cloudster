@@ -28,4 +28,26 @@ describe "Hash" do
       }
     end
   end
+  describe "#delete_nil" do
+    it "should delete keys which have nil values recursively" do
+      hash = {
+        'key1' => 'value1',
+        'key2' => {
+          'inner_key1' =>'inner_value1',
+          'inner_key2' =>nil
+        },
+        'key3' => nil,
+        'key4' => {
+          'key5' => nil
+        }
+      }
+      hash.delete_nil.should == {
+        'key1' => 'value1',
+        'key2' => {
+          'inner_key1' =>'inner_value1'
+        },
+        'key4' => {}
+      }
+    end
+  end
 end
