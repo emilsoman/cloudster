@@ -12,7 +12,7 @@ If you don't know what a CloudFormation template is, but know about the AWS Clou
 you can still use cloudster to provision your stack like a boss.
 Checkout the Usage section.
 
-##Installation
+## Installation
 
     gem install cloudster
 
@@ -237,7 +237,7 @@ that _someone_ will need to take the diff through the process described
 above and this can hold things up considerably.
 
 
-##License
+## License
 
 MIT
 
